@@ -9,38 +9,154 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RestaurantRouteImport } from './routes/restaurant'
+import { Route as GalerieRouteImport } from './routes/galerie'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ChambresRouteImport } from './routes/chambres'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ChambresIdRouteImport } from './routes/chambres.$id'
 
+const RestaurantRoute = RestaurantRouteImport.update({
+  id: '/restaurant',
+  path: '/restaurant',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalerieRoute = GalerieRouteImport.update({
+  id: '/galerie',
+  path: '/galerie',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChambresRoute = ChambresRouteImport.update({
+  id: '/chambres',
+  path: '/chambres',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChambresIdRoute = ChambresIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ChambresRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/chambres': typeof ChambresRouteWithChildren
+  '/contact': typeof ContactRoute
+  '/galerie': typeof GalerieRoute
+  '/restaurant': typeof RestaurantRoute
+  '/chambres/$id': typeof ChambresIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/chambres': typeof ChambresRouteWithChildren
+  '/contact': typeof ContactRoute
+  '/galerie': typeof GalerieRoute
+  '/restaurant': typeof RestaurantRoute
+  '/chambres/$id': typeof ChambresIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/chambres': typeof ChambresRouteWithChildren
+  '/contact': typeof ContactRoute
+  '/galerie': typeof GalerieRoute
+  '/restaurant': typeof RestaurantRoute
+  '/chambres/$id': typeof ChambresIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/chambres'
+    | '/contact'
+    | '/galerie'
+    | '/restaurant'
+    | '/chambres/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/chambres'
+    | '/contact'
+    | '/galerie'
+    | '/restaurant'
+    | '/chambres/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/chambres'
+    | '/contact'
+    | '/galerie'
+    | '/restaurant'
+    | '/chambres/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
+  ChambresRoute: typeof ChambresRouteWithChildren
+  ContactRoute: typeof ContactRoute
+  GalerieRoute: typeof GalerieRoute
+  RestaurantRoute: typeof RestaurantRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/restaurant': {
+      id: '/restaurant'
+      path: '/restaurant'
+      fullPath: '/restaurant'
+      preLoaderRoute: typeof RestaurantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/galerie': {
+      id: '/galerie'
+      path: '/galerie'
+      fullPath: '/galerie'
+      preLoaderRoute: typeof GalerieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chambres': {
+      id: '/chambres'
+      path: '/chambres'
+      fullPath: '/chambres'
+      preLoaderRoute: typeof ChambresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +164,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/chambres/$id': {
+      id: '/chambres/$id'
+      path: '/$id'
+      fullPath: '/chambres/$id'
+      preLoaderRoute: typeof ChambresIdRouteImport
+      parentRoute: typeof ChambresRoute
+    }
   }
 }
 
+interface ChambresRouteChildren {
+  ChambresIdRoute: typeof ChambresIdRoute
+}
+
+const ChambresRouteChildren: ChambresRouteChildren = {
+  ChambresIdRoute: ChambresIdRoute,
+}
+
+const ChambresRouteWithChildren = ChambresRoute._addFileChildren(
+  ChambresRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
+  ChambresRoute: ChambresRouteWithChildren,
+  ContactRoute: ContactRoute,
+  GalerieRoute: GalerieRoute,
+  RestaurantRoute: RestaurantRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
