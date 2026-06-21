@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { formatXOF } from "@/lib/rooms";
@@ -193,8 +193,11 @@ function EditDatesDialog({ reservation, onClose, onSaved }: { reservation: any |
   const [co, setCo] = useState("");
   const [busy, setBusy] = useState(false);
 
+  useEffect(() => {
+    if (reservation) { setCi(reservation.check_in); setCo(reservation.check_out); }
+  }, [reservation]);
+
   if (!reservation) return null;
-  if (!ci && reservation) { setCi(reservation.check_in); setCo(reservation.check_out); }
 
   async function save() {
     setBusy(true);
@@ -229,8 +232,11 @@ function PayDialog({ reservation, onClose, onSaved }: { reservation: any | null;
   const [amount, setAmount] = useState<number>(0);
   const [busy, setBusy] = useState(false);
 
+  useEffect(() => {
+    if (reservation) setAmount(Number(reservation.total_price));
+  }, [reservation]);
+
   if (!reservation) return null;
-  if (!amount) setAmount(Number(reservation.total_price));
 
   async function save() {
     setBusy(true);
