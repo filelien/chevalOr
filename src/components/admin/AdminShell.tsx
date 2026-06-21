@@ -50,19 +50,22 @@ export function AdminShell() {
             <nav className="flex-1 space-y-1 px-3 py-4">
               {visible.map((it) => {
                 const active = location.pathname === it.to || (it.to !== "/admin" && location.pathname.startsWith(it.to));
-                return (
-                  <Link
-                    key={it.to}
-                    to={it.to as any}
-                    onClick={() => setOpen(false)}
-                    disabled={it.soon}
-                    className={`flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm transition ${active ? "bg-onyx text-white" : "text-foreground/80 hover:bg-secondary"} ${it.soon ? "opacity-50 pointer-events-none" : ""}`}
-                  >
+                const className = `flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm transition ${active ? "bg-onyx text-white" : "text-foreground/80 hover:bg-secondary"} ${it.soon ? "pointer-events-none opacity-50" : ""}`;
+                const inner = (
+                  <>
                     <span className="flex items-center gap-3">
                       <it.Icon className="size-4" />
                       {it.label}
                     </span>
                     {it.soon && <span className="rounded-full bg-gold/20 px-2 py-0.5 text-[10px] uppercase tracking-wider text-gold-deep">Bientôt</span>}
+                  </>
+                );
+                if (it.soon) {
+                  return <div key={it.to} className={className}>{inner}</div>;
+                }
+                return (
+                  <Link key={it.to} to={it.to as any} onClick={() => setOpen(false)} className={className}>
+                    {inner}
                   </Link>
                 );
               })}

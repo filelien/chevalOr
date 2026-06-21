@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { STAFF_ROLES, type AppRole } from "@/lib/auth";
@@ -39,6 +39,3 @@ function AdminGate() {
   }
   return <AdminShell />;
 }
-
-// AdminShell renders <Outlet /> for children below.
-export { Outlet };

@@ -14,8 +14,13 @@ import { Route as GalerieRouteImport } from './routes/galerie'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ChambresRouteImport } from './routes/chambres'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ChambresIdRouteImport } from './routes/chambres.$id'
+import { Route as AuthenticatedMesReservationsRouteImport } from './routes/_authenticated/mes-reservations'
+import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminChambresRouteImport } from './routes/_authenticated/admin/chambres'
 
 const RestaurantRoute = RestaurantRouteImport.update({
   id: '/restaurant',
@@ -42,6 +47,10 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -52,6 +61,28 @@ const ChambresIdRoute = ChambresIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => ChambresRoute,
 } as any)
+const AuthenticatedMesReservationsRoute =
+  AuthenticatedMesReservationsRouteImport.update({
+    id: '/mes-reservations',
+    path: '/mes-reservations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
+const AuthenticatedAdminChambresRoute =
+  AuthenticatedAdminChambresRouteImport.update({
+    id: '/chambres',
+    path: '/chambres',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,7 +91,11 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/galerie': typeof GalerieRoute
   '/restaurant': typeof RestaurantRoute
+  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/mes-reservations': typeof AuthenticatedMesReservationsRoute
   '/chambres/$id': typeof ChambresIdRoute
+  '/admin/chambres': typeof AuthenticatedAdminChambresRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -69,17 +104,25 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/galerie': typeof GalerieRoute
   '/restaurant': typeof RestaurantRoute
+  '/mes-reservations': typeof AuthenticatedMesReservationsRoute
   '/chambres/$id': typeof ChambresIdRoute
+  '/admin/chambres': typeof AuthenticatedAdminChambresRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/chambres': typeof ChambresRouteWithChildren
   '/contact': typeof ContactRoute
   '/galerie': typeof GalerieRoute
   '/restaurant': typeof RestaurantRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/_authenticated/mes-reservations': typeof AuthenticatedMesReservationsRoute
   '/chambres/$id': typeof ChambresIdRoute
+  '/_authenticated/admin/chambres': typeof AuthenticatedAdminChambresRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -90,7 +133,11 @@ export interface FileRouteTypes {
     | '/contact'
     | '/galerie'
     | '/restaurant'
+    | '/admin'
+    | '/mes-reservations'
     | '/chambres/$id'
+    | '/admin/chambres'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -99,20 +146,29 @@ export interface FileRouteTypes {
     | '/contact'
     | '/galerie'
     | '/restaurant'
+    | '/mes-reservations'
     | '/chambres/$id'
+    | '/admin/chambres'
+    | '/admin'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/auth'
     | '/chambres'
     | '/contact'
     | '/galerie'
     | '/restaurant'
+    | '/_authenticated/admin'
+    | '/_authenticated/mes-reservations'
     | '/chambres/$id'
+    | '/_authenticated/admin/chambres'
+    | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ChambresRoute: typeof ChambresRouteWithChildren
   ContactRoute: typeof ContactRoute
@@ -157,6 +213,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -171,8 +234,65 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChambresIdRouteImport
       parentRoute: typeof ChambresRoute
     }
+    '/_authenticated/mes-reservations': {
+      id: '/_authenticated/mes-reservations'
+      path: '/mes-reservations'
+      fullPath: '/mes-reservations'
+      preLoaderRoute: typeof AuthenticatedMesReservationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/chambres': {
+      id: '/_authenticated/admin/chambres'
+      path: '/chambres'
+      fullPath: '/admin/chambres'
+      preLoaderRoute: typeof AuthenticatedAdminChambresRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
   }
 }
+
+interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminChambresRoute: typeof AuthenticatedAdminChambresRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
+  {
+    AuthenticatedAdminChambresRoute: AuthenticatedAdminChambresRoute,
+    AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  }
+
+const AuthenticatedAdminRouteRouteWithChildren =
+  AuthenticatedAdminRouteRoute._addFileChildren(
+    AuthenticatedAdminRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
+  AuthenticatedMesReservationsRoute: typeof AuthenticatedMesReservationsRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
+  AuthenticatedMesReservationsRoute: AuthenticatedMesReservationsRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface ChambresRouteChildren {
   ChambresIdRoute: typeof ChambresIdRoute
@@ -188,6 +308,7 @@ const ChambresRouteWithChildren = ChambresRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ChambresRoute: ChambresRouteWithChildren,
   ContactRoute: ContactRoute,
