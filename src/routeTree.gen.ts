@@ -21,6 +21,7 @@ import { Route as ChambresIdRouteImport } from './routes/chambres.$id'
 import { Route as AuthenticatedMesReservationsRouteImport } from './routes/_authenticated/mes-reservations'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminReservationsRouteImport } from './routes/_authenticated/admin/reservations'
 import { Route as AuthenticatedAdminChambresRouteImport } from './routes/_authenticated/admin/chambres'
 
 const RestaurantRoute = RestaurantRouteImport.update({
@@ -83,6 +84,12 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedAdminReservationsRoute =
+  AuthenticatedAdminReservationsRouteImport.update({
+    id: '/reservations',
+    path: '/reservations',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminChambresRoute =
   AuthenticatedAdminChambresRouteImport.update({
     id: '/chambres',
@@ -102,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/mes-reservations': typeof AuthenticatedMesReservationsRoute
   '/chambres/$id': typeof ChambresIdRoute
   '/admin/chambres': typeof AuthenticatedAdminChambresRoute
+  '/admin/reservations': typeof AuthenticatedAdminReservationsRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -115,6 +123,7 @@ export interface FileRoutesByTo {
   '/mes-reservations': typeof AuthenticatedMesReservationsRoute
   '/chambres/$id': typeof ChambresIdRoute
   '/admin/chambres': typeof AuthenticatedAdminChambresRoute
+  '/admin/reservations': typeof AuthenticatedAdminReservationsRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -131,6 +140,7 @@ export interface FileRoutesById {
   '/_authenticated/mes-reservations': typeof AuthenticatedMesReservationsRoute
   '/chambres/$id': typeof ChambresIdRoute
   '/_authenticated/admin/chambres': typeof AuthenticatedAdminChambresRoute
+  '/_authenticated/admin/reservations': typeof AuthenticatedAdminReservationsRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/mes-reservations'
     | '/chambres/$id'
     | '/admin/chambres'
+    | '/admin/reservations'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/mes-reservations'
     | '/chambres/$id'
     | '/admin/chambres'
+    | '/admin/reservations'
     | '/admin'
   id:
     | '__root__'
@@ -175,6 +187,7 @@ export interface FileRouteTypes {
     | '/_authenticated/mes-reservations'
     | '/chambres/$id'
     | '/_authenticated/admin/chambres'
+    | '/_authenticated/admin/reservations'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -275,6 +288,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/reservations': {
+      id: '/_authenticated/admin/reservations'
+      path: '/reservations'
+      fullPath: '/admin/reservations'
+      preLoaderRoute: typeof AuthenticatedAdminReservationsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/chambres': {
       id: '/_authenticated/admin/chambres'
       path: '/chambres'
@@ -287,12 +307,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminChambresRoute: typeof AuthenticatedAdminChambresRoute
+  AuthenticatedAdminReservationsRoute: typeof AuthenticatedAdminReservationsRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
     AuthenticatedAdminChambresRoute: AuthenticatedAdminChambresRoute,
+    AuthenticatedAdminReservationsRoute: AuthenticatedAdminReservationsRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   }
 
