@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RestaurantRouteImport } from './routes/restaurant'
+import { Route as ReserverRouteImport } from './routes/reserver'
 import { Route as GalerieRouteImport } from './routes/galerie'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ChambresRouteImport } from './routes/chambres'
@@ -25,6 +26,11 @@ import { Route as AuthenticatedAdminChambresRouteImport } from './routes/_authen
 const RestaurantRoute = RestaurantRouteImport.update({
   id: '/restaurant',
   path: '/restaurant',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReserverRoute = ReserverRouteImport.update({
+  id: '/reserver',
+  path: '/reserver',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GalerieRoute = GalerieRouteImport.update({
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/chambres': typeof ChambresRouteWithChildren
   '/contact': typeof ContactRoute
   '/galerie': typeof GalerieRoute
+  '/reserver': typeof ReserverRoute
   '/restaurant': typeof RestaurantRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/mes-reservations': typeof AuthenticatedMesReservationsRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/chambres': typeof ChambresRouteWithChildren
   '/contact': typeof ContactRoute
   '/galerie': typeof GalerieRoute
+  '/reserver': typeof ReserverRoute
   '/restaurant': typeof RestaurantRoute
   '/mes-reservations': typeof AuthenticatedMesReservationsRoute
   '/chambres/$id': typeof ChambresIdRoute
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/chambres': typeof ChambresRouteWithChildren
   '/contact': typeof ContactRoute
   '/galerie': typeof GalerieRoute
+  '/reserver': typeof ReserverRoute
   '/restaurant': typeof RestaurantRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/mes-reservations': typeof AuthenticatedMesReservationsRoute
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/chambres'
     | '/contact'
     | '/galerie'
+    | '/reserver'
     | '/restaurant'
     | '/admin'
     | '/mes-reservations'
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
     | '/chambres'
     | '/contact'
     | '/galerie'
+    | '/reserver'
     | '/restaurant'
     | '/mes-reservations'
     | '/chambres/$id'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/chambres'
     | '/contact'
     | '/galerie'
+    | '/reserver'
     | '/restaurant'
     | '/_authenticated/admin'
     | '/_authenticated/mes-reservations'
@@ -173,6 +185,7 @@ export interface RootRouteChildren {
   ChambresRoute: typeof ChambresRouteWithChildren
   ContactRoute: typeof ContactRoute
   GalerieRoute: typeof GalerieRoute
+  ReserverRoute: typeof ReserverRoute
   RestaurantRoute: typeof RestaurantRoute
 }
 
@@ -183,6 +196,13 @@ declare module '@tanstack/react-router' {
       path: '/restaurant'
       fullPath: '/restaurant'
       preLoaderRoute: typeof RestaurantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reserver': {
+      id: '/reserver'
+      path: '/reserver'
+      fullPath: '/reserver'
+      preLoaderRoute: typeof ReserverRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/galerie': {
@@ -313,6 +333,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChambresRoute: ChambresRouteWithChildren,
   ContactRoute: ContactRoute,
   GalerieRoute: GalerieRoute,
+  ReserverRoute: ReserverRoute,
   RestaurantRoute: RestaurantRoute,
 }
 export const routeTree = rootRouteImport
