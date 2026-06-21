@@ -63,76 +63,112 @@ export type Database = {
       }
       profiles: {
         Row: {
+          address: string | null
           avatar_url: string | null
+          city: string | null
+          country: string | null
           created_at: string
+          email: string | null
           full_name: string | null
           id: string
           phone: string | null
+          preferences: string | null
           updated_at: string
         }
         Insert: {
+          address?: string | null
           avatar_url?: string | null
+          city?: string | null
+          country?: string | null
           created_at?: string
+          email?: string | null
           full_name?: string | null
           id: string
           phone?: string | null
+          preferences?: string | null
           updated_at?: string
         }
         Update: {
+          address?: string | null
           avatar_url?: string | null
+          city?: string | null
+          country?: string | null
           created_at?: string
+          email?: string | null
           full_name?: string | null
           id?: string
           phone?: string | null
+          preferences?: string | null
           updated_at?: string
         }
         Relationships: []
       }
       reservations: {
         Row: {
+          cancellation_reason: string | null
+          cancelled_at: string | null
           check_in: string
           check_out: string
+          confirmed_at: string | null
           created_at: string
           guest_id: string | null
           guests_count: number
           id: string
           nights: number
           notes: string | null
+          paid_at: string | null
+          payment_amount: number | null
+          payment_method: string | null
           profile_id: string | null
           reference: string
           room_id: string
+          special_requests: string | null
           status: Database["public"]["Enums"]["reservation_status"]
           total_price: number
           updated_at: string
         }
         Insert: {
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
           check_in: string
           check_out: string
+          confirmed_at?: string | null
           created_at?: string
           guest_id?: string | null
           guests_count?: number
           id?: string
           nights: number
           notes?: string | null
+          paid_at?: string | null
+          payment_amount?: number | null
+          payment_method?: string | null
           profile_id?: string | null
           reference?: string
           room_id: string
+          special_requests?: string | null
           status?: Database["public"]["Enums"]["reservation_status"]
           total_price: number
           updated_at?: string
         }
         Update: {
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
           check_in?: string
           check_out?: string
+          confirmed_at?: string | null
           created_at?: string
           guest_id?: string | null
           guests_count?: number
           id?: string
           nights?: number
           notes?: string | null
+          paid_at?: string | null
+          payment_amount?: number | null
+          payment_method?: string | null
           profile_id?: string | null
           reference?: string
           room_id?: string
+          special_requests?: string | null
           status?: Database["public"]["Enums"]["reservation_status"]
           total_price?: number
           updated_at?: string
@@ -270,6 +306,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      find_available_room: {
+        Args: {
+          _capacity: number
+          _check_in: string
+          _check_out: string
+          _type?: string
+        }
+        Returns: string
+      }
       has_any_role: {
         Args: {
           _roles: Database["public"]["Enums"]["app_role"][]
@@ -281,6 +326,15 @@ export type Database = {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
+        }
+        Returns: boolean
+      }
+      is_room_available: {
+        Args: {
+          _check_in: string
+          _check_out: string
+          _exclude_id?: string
+          _room_id: string
         }
         Returns: boolean
       }
