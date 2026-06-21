@@ -10,8 +10,8 @@ type Item = { to: string; label: string; Icon: typeof LayoutDashboard; roles?: A
 const items: Item[] = [
   { to: "/admin", label: "Vue d'ensemble", Icon: LayoutDashboard },
   { to: "/admin/chambres", label: "Chambres", Icon: BedDouble, roles: ["super_admin", "manager", "reception", "cleaning_staff"] },
-  { to: "/admin/reservations", label: "Réservations", Icon: CalendarCheck, roles: ["super_admin", "manager", "reception"], soon: true },
-  { to: "/admin/clients", label: "Clients", Icon: Users, roles: ["super_admin", "manager", "reception"], soon: true },
+  { to: "/admin/reservations", label: "Réservations", Icon: CalendarCheck, roles: ["super_admin", "manager", "reception"] },
+  { to: "/admin/clients", label: "Clients", Icon: Users, roles: ["super_admin", "manager", "reception"] },
   { to: "/admin/restaurant", label: "Restaurant", Icon: UtensilsCrossed, roles: ["super_admin", "manager", "restaurant_staff"], soon: true },
   { to: "/admin/stock", label: "Stock", Icon: Boxes, roles: ["super_admin", "manager"], soon: true },
   { to: "/admin/finance", label: "Finance", Icon: Wallet, roles: ["super_admin", "manager", "accountant"], soon: true },
