@@ -52,7 +52,11 @@ export async function markPaid(id: string, method: string, amount: number) {
 }
 
 export async function setReservationStatus(id: string, status: ReservationStatus) {
-  const patch: Record<string, unknown> = { status };
+  const patch: {
+    status: ReservationStatus;
+    confirmed_at?: string;
+    cancelled_at?: string;
+  } = { status };
   if (status === "confirmed") patch.confirmed_at = new Date().toISOString();
   if (status === "cancelled") patch.cancelled_at = new Date().toISOString();
   const { error } = await supabase.from("reservations").update(patch).eq("id", id);
@@ -66,7 +70,7 @@ export async function isRoomAvailable(
     _room_id: roomId,
     _check_in: checkIn,
     _check_out: checkOut,
-    _exclude_id: excludeId ?? null,
+    _exclude_id: excludeId,
   });
   if (error) throw error;
   return data as boolean;
@@ -79,7 +83,7 @@ export async function findAvailableRoom(
     _check_in: checkIn,
     _check_out: checkOut,
     _capacity: capacity,
-    _type: type ?? null,
+    _type: type ?? undefined,
   });
   if (error) throw error;
   return (data as string | null) ?? null;
