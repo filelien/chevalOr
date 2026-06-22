@@ -1,5 +1,9 @@
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
+<<<<<<< HEAD
 import { LayoutDashboard, BedDouble, CalendarCheck, CalendarRange, Users, UtensilsCrossed, Boxes, Wallet, BarChart3, Settings, LogOut, Menu, X, Inbox } from "lucide-react";
+=======
+import { LayoutDashboard, BedDouble, CalendarCheck, Users, UtensilsCrossed, Boxes, Wallet, BarChart3, Settings, LogOut, Menu, X } from "lucide-react";
+>>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 import { useState } from "react";
 import { useAuth, signOut, type AppRole } from "@/lib/auth";
 import logo from "@/assets/logo.png";
@@ -10,6 +14,7 @@ type Item = { to: string; label: string; Icon: typeof LayoutDashboard; roles?: A
 const items: Item[] = [
   { to: "/admin", label: "Vue d'ensemble", Icon: LayoutDashboard },
   { to: "/admin/chambres", label: "Chambres", Icon: BedDouble, roles: ["super_admin", "manager", "reception", "cleaning_staff"] },
+<<<<<<< HEAD
   { to: "/admin/planning", label: "Planning", Icon: CalendarRange, roles: ["super_admin", "manager", "reception"] },
   { to: "/admin/reservations", label: "Réservations", Icon: CalendarCheck, roles: ["super_admin", "manager", "reception"] },
   { to: "/admin/clients", label: "Clients", Icon: Users, roles: ["super_admin", "manager", "reception"] },
@@ -19,6 +24,15 @@ const items: Item[] = [
   { to: "/admin/finance", label: "Finance", Icon: Wallet, roles: ["super_admin", "manager", "accountant"] },
   { to: "/admin/rapports", label: "Rapports", Icon: BarChart3, roles: ["super_admin", "manager"] },
   { to: "/admin/utilisateurs", label: "Utilisateurs", Icon: Settings, roles: ["super_admin"] },
+=======
+  { to: "/admin/reservations", label: "Réservations", Icon: CalendarCheck, roles: ["super_admin", "manager", "reception"] },
+  { to: "/admin/clients", label: "Clients", Icon: Users, roles: ["super_admin", "manager", "reception"] },
+  { to: "/admin/restaurant", label: "Restaurant", Icon: UtensilsCrossed, roles: ["super_admin", "manager", "restaurant_staff"], soon: true },
+  { to: "/admin/stock", label: "Stock", Icon: Boxes, roles: ["super_admin", "manager"], soon: true },
+  { to: "/admin/finance", label: "Finance", Icon: Wallet, roles: ["super_admin", "manager", "accountant"], soon: true },
+  { to: "/admin/rapports", label: "Rapports", Icon: BarChart3, roles: ["super_admin", "manager"], soon: true },
+  { to: "/admin/utilisateurs", label: "Utilisateurs", Icon: Settings, roles: ["super_admin"], soon: true },
+>>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 ];
 
 export function AdminShell() {

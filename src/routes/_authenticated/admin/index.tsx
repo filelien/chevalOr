@@ -54,6 +54,7 @@ function Dashboard() {
       </div>
 
       <div className="mt-10 rounded-xl border border-border bg-card p-8">
+<<<<<<< HEAD
         <h2 className="font-display text-2xl">PMS Cheval d'Or — opérationnel</h2>
         <p className="mt-2 text-muted-foreground">
           Tous les modules sont actifs : chambres, planning, réservations, CRM clients, restaurant/POS,
@@ -65,6 +66,14 @@ function Dashboard() {
           <li>✓ Factures PDF client</li>
           <li>✓ Gestion des messages entrants</li>
         </ul>
+=======
+        <h2 className="font-display text-2xl">Bienvenue dans votre PMS</h2>
+        <p className="mt-2 text-muted-foreground">
+          Le socle est en place : authentification, rôles, gestion des chambres et site client.
+          Les modules suivants (réservations avancées, restaurant/POS, stock, finance, rapports)
+          seront ajoutés progressivement.
+        </p>
+>>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
       </div>
     </div>
   );
