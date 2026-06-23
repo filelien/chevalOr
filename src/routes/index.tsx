@@ -21,7 +21,7 @@ import logo from "@/assets/logo.png";
 import {
   Star, ArrowRight, ChevronDown, Award, Sparkles, Wine, MapPin,
   Smartphone, UtensilsCrossed, BedDouble, CalendarHeart, Gem,
-  Quote, Check, Play, Presentation,
+  Quote, Check, Presentation,
 } from "lucide-react";
 
 const expImgs: Record<string, string> = { hero, restaurant: restaurantImg, room: roomImg };
