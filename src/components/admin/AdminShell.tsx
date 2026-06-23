@@ -12,6 +12,7 @@ import type { PermissionKey } from "@/lib/permissions";
 import { fetchNotifications } from "@/lib/notifications-admin";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
+import { AdminGlobalSearch } from "@/components/admin/AdminGlobalSearch";
 
 type Item = { to: string; label: string; Icon: typeof LayoutDashboard; permission?: PermissionKey };
 
@@ -112,6 +113,9 @@ export function AdminShell() {
                   <p className="text-[10px] uppercase tracking-[0.25em] text-[#c9a227]">ERP Hôtelier · Anié</p>
                 </div>
               </div>
+            </div>
+            <div className="border-b border-white/10 px-4 py-3">
+              <AdminGlobalSearch />
             </div>
             <nav className="flex-1 px-3 py-4">
               {sections.map((section) => {

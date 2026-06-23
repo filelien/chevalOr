@@ -87,10 +87,10 @@ function Index() {
           </div>
           <div className="hero-fade-up hero-fade-up-delay-4 mt-10 flex flex-wrap items-center justify-center gap-4">
             <Button variant="hero" size="xl" asChild>
-              <Link to="/reserver"><CalendarHeart className="mr-2 size-5" />Réserver votre séjour</Link>
+              <Link to="/reserver"><CalendarHeart className="mr-2 size-5" />Réserver maintenant</Link>
             </Button>
             <Button variant="outline" size="xl" className="border-white/50 bg-white/5 text-white backdrop-blur hover:bg-white/15" asChild>
-              <Link to="/a-propos"><Play className="mr-2 size-4" />Notre histoire</Link>
+              <Link to="/chambres"><BedDouble className="mr-2 size-4" />Découvrir nos chambres</Link>
             </Button>
           </div>
         </div>

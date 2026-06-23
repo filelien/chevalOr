@@ -3,7 +3,7 @@
 export const HOTEL = {
   name: "Hôtel Le Cheval d'Or",
   tagline: "Votre référence hôtelière à Anié : confort, hospitalité et excellence pour vos séjours et événements.",
-  slogan: "Votre confort au cœur d'Anié, entre authenticité, sérénité et excellence.",
+  slogan: "Vivez une expérience unique au cœur d'Anié — confort, authenticité et excellence.",
   address: "Centre-ville, Anié, Région des Plateaux, Togo",
   phone: "+228 22 21 45 00",
   whatsapp: "22890123456",
@@ -440,10 +440,10 @@ export const LOYALTY = {
 /** Contenu page d'accueil */
 export const HOME = {
   hero: {
-    eyebrow: "Anié · Centre du Togo",
+    eyebrow: "Anié · Cœur du Togo",
     title: "Hôtel Le Cheval d'Or",
-    subtitle: HOTEL.slogan,
-    scrollHint: "Découvrir",
+    subtitle: "Une adresse d'exception au centre du Togo — chambres raffinées, gastronomie locale et salle de conférence pour vos événements.",
+    scrollHint: "Découvrir l'expérience",
   },
   quote: {
     text: "À Anié, nous ne vous offrons pas seulement une chambre — nous vous accueillons comme chez vous, avec professionnalisme et chaleur.",
@@ -491,7 +491,7 @@ export const HOME = {
     features: ["Espace détente", "Ambiance calme", "Cadre verdoyant", "Repos garanti"],
   },
   digital: {
-    title: "Réservez en toute simplicité",
+    title: "Vivez une expérience unique au cœur d'Anié",
     subtitle: "Chambres et salle de conférence — réservation en ligne ou par téléphone.",
     features: [
       { title: "Réservation en ligne", desc: "Chambres et disponibilités en temps réel" },
@@ -514,7 +514,7 @@ export const HOME = {
     highlights: ["Centre du pays", "Axes routiers nationaux", "Cadre paisible", "Culture & traditions"],
   },
   cta: {
-    title: "Réservez dès maintenant votre séjour ou votre salle de conférence",
+    title: "Prêt à vivre l'expérience Cheval d'Or ?",
     subtitle:
       "Vivez une expérience alliant confort, sérénité et professionnalisme au cœur d'Anié. Chambres et espaces événementiels — réponse rapide garantie.",
     primary: "Réserver une chambre",

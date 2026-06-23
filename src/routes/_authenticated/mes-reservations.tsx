@@ -9,7 +9,40 @@ import { cancelReservation, STATUS_BADGE, STATUS_LABEL, type ReservationStatus }
 import { generateInvoicePDF } from "@/lib/invoice";
 import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
-import { Download, Receipt, XCircle, User, Save } from "lucide-react";
+import { Download, Receipt, XCircle, User, Save, CheckCircle2, Circle } from "lucide-react";
+
+const TIMELINE_STEPS: { key: ReservationStatus | "done"; label: string }[] = [
+  { key: "pending", label: "Demande envoyée" },
+  { key: "confirmed", label: "Confirmée" },
+  { key: "checked_in", label: "Arrivée" },
+  { key: "checked_out", label: "Départ" },
+];
+
+function StayTimeline({ status }: { status: ReservationStatus }) {
+  if (status === "cancelled") {
+    return <p className="mt-4 text-sm text-destructive">Réservation annulée</p>;
+  }
+  const order = ["pending", "confirmed", "checked_in", "checked_out"];
+  const idx = order.indexOf(status);
+  return (
+    <ol className="mt-4 flex flex-wrap gap-2 sm:gap-0 sm:justify-between">
+      {TIMELINE_STEPS.map((step, i) => {
+        const done = i <= idx;
+        const active = i === idx;
+        return (
+          <li key={step.key} className="flex items-center gap-2 sm:flex-1 sm:flex-col sm:text-center">
+            {done ? (
+              <CheckCircle2 className={`size-5 shrink-0 ${active ? "text-gold-deep" : "text-emerald-600"}`} />
+            ) : (
+              <Circle className="size-5 shrink-0 text-muted-foreground/40" />
+            )}
+            <span className={`text-xs ${done ? "font-medium" : "text-muted-foreground"}`}>{step.label}</span>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
 
 export const Route = createFileRoute("/_authenticated/mes-reservations")({
   component: MyReservations,
@@ -120,7 +153,7 @@ function MyReservations() {
     <SiteShell>
       <section className="mx-auto max-w-5xl px-6 py-16">
         <h1 className="font-display text-4xl">Mon espace client</h1>
-        <p className="mt-2 text-muted-foreground">Réservations, factures et profil personnel.</p>
+        <p className="mt-2 text-muted-foreground">Suivez votre séjour, téléchargez vos documents et gérez votre profil.</p>
 
         <div className="mt-10 rounded-xl border border-border bg-card p-6">
           <div className="flex items-center justify-between">
@@ -208,6 +241,7 @@ function MyReservations() {
                     <p className="mt-2 font-display text-lg text-gold-deep">{formatXOF(Number(r.total_price))}</p>
                   </div>
                 </div>
+                <StayTimeline status={status} />
                 <div className="mt-4 flex flex-wrap gap-2 border-t border-border/60 pt-4">
                   <Button size="sm" variant="outline" onClick={() => downloadPDF(r, "invoice")}>
                     <Download className="mr-1 size-4" /> Facture PDF
