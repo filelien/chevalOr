@@ -5,14 +5,14 @@ export function hotelJsonLd() {
     "@context": "https://schema.org",
     "@type": "Hotel",
     name: HOTEL.name,
-    description: "Hôtel 5 étoiles à Lomé, Togo. Chambres de luxe, restaurant gastronomique, spa et conciergerie.",
+    description: "Hôtel à Anié, centre du Togo. Chambres climatisées, restaurant, salle de conférence et accueil 24h/24.",
     url: "https://chevaldor.tg",
     telephone: HOTEL.phone,
     email: HOTEL.email,
     address: {
       "@type": "PostalAddress",
       streetAddress: HOTEL.address,
-      addressLocality: "Lomé",
+      addressLocality: "Anié",
       addressCountry: "TG",
     },
     geo: {
@@ -22,9 +22,9 @@ export function hotelJsonLd() {
     },
     starRating: { "@type": "Rating", ratingValue: "5" },
     amenityFeature: [
-      { "@type": "LocationFeatureSpecification", name: "Piscine", value: true },
+      { "@type": "LocationFeatureSpecification", name: "Salle de conférence", value: true },
       { "@type": "LocationFeatureSpecification", name: "Restaurant", value: true },
-      { "@type": "LocationFeatureSpecification", name: "Spa", value: true },
+      { "@type": "LocationFeatureSpecification", name: "Parking sécurisé", value: true },
       { "@type": "LocationFeatureSpecification", name: "Wifi gratuit", value: true },
     ],
   };

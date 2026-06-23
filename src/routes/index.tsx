@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { fetchPublicRooms, formatXOF, ROOM_TYPE_LABEL } from "@/lib/rooms";
 import {
   HOTEL, STORY, TESTIMONIALS, LOYALTY, EXPERIENCES, PACKS, PROMOTIONS,
-  SERVICES, CHEF, HOME, FAQ, GALLERY_IMAGES,
+  SERVICES, CHEF, HOME, FAQ, GALLERY_IMAGES, WHY_CHOOSE, CONFERENCE, ANIE,
 } from "@/lib/content";
 import { QuickBookingBar } from "@/components/site/QuickBookingBar";
 import { Reveal } from "@/components/site/Reveal";
@@ -18,7 +18,7 @@ import logo from "@/assets/logo.png";
 import {
   Star, ArrowRight, ChevronDown, Award, Sparkles, Wine, MapPin,
   Smartphone, UtensilsCrossed, BedDouble, CalendarHeart, Gem,
-  Quote, Check, Play,
+  Quote, Check, Play, Presentation,
 } from "lucide-react";
 
 const expImgs: Record<string, string> = { hero, restaurant: restaurantImg, room: roomImg };
@@ -27,10 +27,10 @@ const galImgs: Record<string, string> = { hero, restaurant: restaurantImg, room:
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Hôtel Le Cheval d'Or — Palace 5 étoiles à Lomé, Togo" },
-      { name: "description", content: "Hôtel premium au Togo : chambres de luxe, restaurant gastronomique, spa, événements. L'excellence hôtelière internationale au cœur de Lomé." },
-      { property: "og:title", content: "Hôtel Le Cheval d'Or — Lomé" },
-      { property: "og:description", content: "Design Aman · Service Four Seasons · Gastronomie Mandarin Oriental" },
+      { title: "Hôtel Le Cheval d'Or — Votre référence à Anié, Togo" },
+      { name: "description", content: "Hôtel à Anié, centre du Togo : chambres climatisées, restaurant, salle de conférence, parking sécurisé. Idéal pour affaires, tourisme et événements." },
+      { property: "og:title", content: "Hôtel Le Cheval d'Or — Anié, Togo" },
+      { property: "og:description", content: HOTEL.tagline },
     ],
   }),
   component: Index,
@@ -57,6 +57,13 @@ function Index() {
           <p className="hero-fade-up hero-fade-up-delay-3 mx-auto mt-6 max-w-2xl text-lg text-white/90 md:text-xl">
             {HOME.hero.subtitle}
           </p>
+          <div className="hero-fade-up hero-fade-up-delay-3 mt-6 flex flex-wrap justify-center gap-2">
+            {HOME.audiences.map((a) => (
+              <span key={a} className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] uppercase tracking-wider text-white/85 backdrop-blur-sm">
+                {a}
+              </span>
+            ))}
+          </div>
           <div className="hero-fade-up hero-fade-up-delay-4 mt-10 flex flex-wrap items-center justify-center gap-4">
             <Button variant="hero" size="xl" asChild>
               <Link to="/reserver"><CalendarHeart className="mr-2 size-5" />Réserver votre séjour</Link>
@@ -108,7 +115,7 @@ function Index() {
       {/* ═══ 5. PHILOSOPHIE / STORYTELLING (Belmond / Aman) ═══ */}
       <section className="mx-auto grid max-w-7xl gap-12 px-6 py-24 lg:grid-cols-2 lg:items-center">
         <Reveal>
-          <SectionHeader label="Notre vision" title="Une adresse d'exception au Togo" subtitle={STORY.vision} />
+          <SectionHeader label="Présentation" title="Votre hôtel de référence à Anié" subtitle={STORY.vision} />
           <div className="mt-8 space-y-4 text-muted-foreground leading-relaxed">
             {STORY.paragraphs.slice(0, 2).map((p, i) => <p key={i}>{p}</p>)}
           </div>
@@ -126,7 +133,7 @@ function Index() {
             <img src={roomImg} alt="" className="rounded-xl shadow-elegant aspect-[4/5] w-full object-cover" />
             <div className="absolute -bottom-6 -left-6 max-w-xs rounded-xl border border-border bg-card p-6 shadow-elegant">
               <p className="font-display text-3xl text-gold-deep">Depuis {STORY.founded}</p>
-              <p className="mt-1 text-sm text-muted-foreground">Années d'excellence hôtelière à Lomé</p>
+              <p className="mt-1 text-sm text-muted-foreground">Années d'excellence hôtelière à Anié</p>
             </div>
           </div>
         </Reveal>
@@ -134,10 +141,30 @@ function Index() {
 
       <SectionDivider />
 
+      {/* ═══ POURQUOI CHOISIR ANIÉ ═══ */}
+      <section className="py-24">
+        <div className="mx-auto max-w-7xl px-6">
+          <SectionHeader align="center" label={WHY_CHOOSE.label} title={WHY_CHOOSE.title} subtitle={WHY_CHOOSE.subtitle} />
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {WHY_CHOOSE.reasons.map((r) => (
+              <Reveal key={r.title}>
+                <div className="card-lift h-full rounded-xl border border-border bg-card p-6">
+                  <Check className="size-6 text-gold-deep" />
+                  <h3 className="mt-4 font-display text-xl">{r.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{r.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <SectionDivider />
+
       {/* ═══ 6. PILIERS — TOP 10 INSPIRATION ═══ */}
       <section className="bg-secondary/30 py-24">
         <div className="mx-auto max-w-7xl px-6">
-          <SectionHeader align="center" label="L'excellence" title="Ce qui nous distingue" subtitle="Le meilleur des grands palaces internationaux, avec une identité togolaise unique." />
+          <SectionHeader align="center" label="L'excellence" title="Ce qui nous distingue" subtitle="Confort, hospitalité et professionnalisme au cœur d'Anié." />
           <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {HOME.pillars.map((p) => (
               <Reveal key={p.title}>
@@ -207,9 +234,9 @@ function Index() {
       {/* ═══ 9. SERVICES (Ritz-Carlton) ═══ */}
       <section className="border-y border-border bg-card py-24">
         <div className="mx-auto max-w-7xl px-6">
-          <SectionHeader align="center" label="Services & équipements" title="Tout est pensé pour vous" subtitle="Du wifi fibre au transfert aéroport — un confort total, 24h/24." />
+          <SectionHeader align="center" label="Services & équipements" title="Nos services" subtitle="Chambres climatisées, Wi-Fi, restaurant, salle de conférence, parking et accueil 24h/24." />
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {SERVICES.slice(0, 6).map((s) => (
+            {SERVICES.map((s) => (
               <Reveal key={s.id}>
                 <div className="flex gap-4 rounded-lg border border-border/60 p-5 transition hover:border-gold/40">
                   <Sparkles className="size-5 shrink-0 text-gold-deep mt-0.5" />
@@ -222,7 +249,42 @@ function Index() {
             ))}
           </div>
           <div className="mt-10 text-center">
-            <Button variant="goldOutline" asChild><Link to="/services">Voir les 12 services <ArrowRight className="ml-1 size-4" /></Link></Button>
+            <Button variant="goldOutline" asChild><Link to="/services">Tous nos services <ArrowRight className="ml-1 size-4" /></Link></Button>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ SALLE DE CONFÉRENCE ═══ */}
+      <section className="bg-secondary/30 py-24">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <Reveal>
+              <SectionHeader label={CONFERENCE.label} title={CONFERENCE.title} subtitle={CONFERENCE.subtitle} />
+              <p className="mt-4 text-sm font-medium text-gold-deep">{CONFERENCE.capacity}</p>
+              <ul className="mt-6 grid gap-2 sm:grid-cols-2">
+                {CONFERENCE.features.map((f) => (
+                  <li key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Presentation className="size-4 shrink-0 text-gold-deep" />{f}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Button variant="hero" asChild><Link to="/contact">Demander un devis</Link></Button>
+                <Button variant="goldOutline" asChild><Link to="/evenements">Nos événements</Link></Button>
+              </div>
+            </Reveal>
+            <Reveal>
+              <div className="rounded-xl border border-border bg-card p-8 shadow-elegant">
+                <h3 className="font-display text-2xl text-gold-deep">Idéal pour</h3>
+                <ul className="mt-6 space-y-3">
+                  {CONFERENCE.uses.map((u) => (
+                    <li key={u} className="flex gap-3 text-sm text-muted-foreground">
+                      <Check className="size-5 shrink-0 text-gold-deep" />{u}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -234,7 +296,7 @@ function Index() {
           <div className="absolute inset-0 bg-black/20" />
         </div>
         <div className="flex flex-col justify-center bg-onyx px-8 py-16 text-white lg:px-16">
-          <SectionHeader dark label="Gastronomie" title="La Table du Cheval d'Or" subtitle="Cuisine franco-togolaise par le Chef Emmanuel Agbeko — primé Gault&Millau Afrique." />
+          <SectionHeader dark label="Gastronomie" title="La Table du Cheval d'Or" subtitle="Spécialités togolaises et cuisine internationale — produits frais et saveurs authentiques." />
           <div className="mt-6 flex flex-wrap gap-2">
             {CHEF.awards.map((a) => <span key={a} className="rounded-full border border-gold/40 px-3 py-1 text-xs text-gold">{a}</span>)}
           </div>
@@ -270,7 +332,7 @@ function Index() {
       {/* ═══ 12. EXPÉRIENCES (Belmond) ═══ */}
       <section className="bg-secondary/40 py-24">
         <div className="mx-auto max-w-7xl px-6">
-          <SectionHeader label="Expériences" title="Vivez Lomé autrement" subtitle="Excursions, gastronomie, romance — des moments curated par notre conciergerie." />
+          <SectionHeader label="Expériences" title="Vivez Anié autrement" subtitle="Culture locale, gastronomie et séminaires — des moments uniques au cœur du Togo." />
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {EXPERIENCES.map((e) => (
               <Reveal key={e.title}>
@@ -349,10 +411,17 @@ function Index() {
         </div>
       </section>
 
-      {/* ═══ 16. LOCALISATION (Peninsula) ═══ */}
+      {/* ═══ 16. LOCALISATION & DÉCOUVRIR ANIÉ ═══ */}
       <section className="grid lg:grid-cols-2">
         <div className="flex flex-col justify-center px-8 py-16 lg:px-16">
-          <SectionHeader label="Destination" title={HOME.location.title} subtitle={HOME.location.desc} />
+          <SectionHeader label={ANIE.label} title={ANIE.title} subtitle={ANIE.intro} />
+          <ul className="mt-6 space-y-2">
+            {ANIE.highlights.slice(0, 4).map((h) => (
+              <li key={h} className="flex gap-2 text-sm text-muted-foreground">
+                <MapPin className="size-4 shrink-0 text-gold-deep mt-0.5" />{h}
+              </li>
+            ))}
+          </ul>
           <div className="mt-8 grid grid-cols-2 gap-3">
             {HOME.location.highlights.map((h) => (
               <div key={h} className="flex items-center gap-2 rounded-lg bg-secondary/60 px-4 py-3 text-sm">
@@ -360,7 +429,7 @@ function Index() {
               </div>
             ))}
           </div>
-          <Button variant="goldOutline" className="mt-8 w-fit" asChild><Link to="/guide">Guide complet Lomé</Link></Button>
+          <Button variant="goldOutline" className="mt-8 w-fit" asChild><Link to="/guide">Guide complet Anié</Link></Button>
         </div>
         <div className="min-h-[320px] lg:min-h-full">
           <iframe title="Carte" src={`https://maps.google.com/maps?q=${HOTEL.coords.lat},${HOTEL.coords.lng}&z=14&output=embed`}
@@ -466,11 +535,13 @@ function Index() {
         </div>
         <div className="relative z-10 mx-auto max-w-3xl px-6 text-center">
           <UtensilsCrossed className="mx-auto size-10 text-gold" />
-          <h2 className="mt-6 font-display text-4xl md:text-5xl">Prêt pour une parenthèse d'exception ?</h2>
-          <p className="mt-4 text-white/75">Réservez maintenant ou contactez notre conciergerie — réponse sous 2 heures.</p>
+          <h2 className="mt-6 font-display text-4xl md:text-5xl">{HOME.cta.title}</h2>
+          <p className="mt-4 text-white/75">{HOME.cta.subtitle}</p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <Button variant="hero" size="xl" asChild><Link to="/reserver">Réserver une chambre</Link></Button>
-            <Button variant="outline" size="xl" className="border-white/50 text-white hover:bg-white/10" asChild><Link to="/contact">Nous contacter</Link></Button>
+            <Button variant="hero" size="xl" asChild><Link to="/reserver">{HOME.cta.primary}</Link></Button>
+            <Button variant="outline" size="xl" className="border-white/50 text-white hover:bg-white/10" asChild>
+              <Link to={HOME.cta.secondaryLink}>{HOME.cta.secondary}</Link>
+            </Button>
           </div>
         </div>
       </section>

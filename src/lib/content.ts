@@ -1,9 +1,10 @@
-/** Contenu éditorial premium — Cheval d'Or (inspiré Four Seasons, Aman, Mandarin Oriental) */
+/** Contenu éditorial — Hôtel Le Cheval d'Or, Anié (centre du Togo) */
 
 export const HOTEL = {
   name: "Hôtel Le Cheval d'Or",
-  tagline: "L'art de recevoir à la togolaise",
-  address: "Boulevard du Mono, Quartier Administratif, Lomé, Togo",
+  tagline: "Votre référence hôtelière à Anié : confort, hospitalité et excellence pour vos séjours et événements.",
+  slogan: "Votre confort au cœur d'Anié, entre authenticité, sérénité et excellence.",
+  address: "Centre-ville, Anié, Région des Plateaux, Togo",
   phone: "+228 22 21 45 00",
   whatsapp: "22890123456",
   email: "reservation@chevaldor.tg",
@@ -13,205 +14,518 @@ export const HOTEL = {
     instagram: "https://www.instagram.com/chevaldor",
     linkedin: "https://www.linkedin.com/company/cheval-d-or-hotel",
   },
-  coords: { lat: 6.1319, lng: 1.2228 },
-  hours: { checkIn: "14h00", checkOut: "12h00", restaurant: "19h00 – 23h00" },
+  coords: { lat: 7.5833, lng: 1.2 },
+  hours: { checkIn: "14h00", checkOut: "12h00", restaurant: "7h00 – 22h00" },
   stats: [
-    { value: "48", label: "Chambres & suites" },
-    { value: "4.9", label: "Note moyenne" },
-    { value: "15+", label: "Années d'excellence" },
-    { value: "24/7", label: "Conciergerie" },
+    { value: "48", label: "Chambres climatisées" },
+    { value: "4.8", label: "Note moyenne" },
+    { value: "15+", label: "Années d'expérience" },
+    { value: "24/7", label: "Accueil & réception" },
   ],
 };
 
 export const STORY = {
   founded: 2010,
-  vision: "Offrir une hospitalité de classe mondiale ancrée dans la culture togolaise, où chaque détail respire l'élégance et la chaleur humaine.",
-  values: ["Excellence", "Discrétion", "Authenticité", "Durabilité"],
+  vision:
+    "Offrir à Anié une adresse hôtelière de référence, où confort moderne, hospitalité togolaise et professionnalisme se rencontrent au cœur du pays.",
+  values: ["Hospitalité", "Sécurité", "Excellence", "Authenticité"],
   paragraphs: [
-    "Fondé en 2010 au cœur de Lomé, Le Cheval d'Or est devenu la référence de l'hôtellerie premium au Togo. Notre bâtiment allie architecture contemporaine et touches artisanales locales.",
-    "Inspirés par les plus grands palaces — Four Seasons, Aman, The Peninsula — nous avons conçu chaque espace pour éveiller les sens : lumière dorée, textures nobles, service personnalisé.",
-    "Notre équipe multilingue anticipe vos besoins avant même que vous les exprimiez. Du check-in digital à la conciergerie sur-mesure, votre séjour est orchestré avec la précision d'un grand hôtel international.",
+    "Situé à Anié, au centre stratégique du Togo, l'Hôtel Le Cheval d'Or est bien plus qu'un lieu de passage : c'est une destination où se mêlent repos, efficacité professionnelle et découverte culturelle. Dans une ville paisible et accueillante, nous accueillons voyageurs d'affaires, touristes, familles et organisateurs d'événements avec le même souci d'excellence.",
+    "Nos chambres spacieuses et climatisées, notre restaurant aux saveurs togolaises et internationales, notre grande salle de conférence équipée et notre équipe attentive font de nous la référence hôtelière de la région centrale. Que vous veniez pour un séminaire, une formation, une réunion d'entreprise ou un séjour de détente, chaque détail est pensé pour votre confort.",
+    "À deux pas des axes routiers reliant les principales villes du Togo, Anié offre un cadre calme et sécurisé, propice au travail comme à la détente. Ici, vous profitez d'un environnement authentique, d'une population chaleureuse et d'un patrimoine culturel riche — le tout avec les standards d'un établissement moderne et professionnel.",
+  ],
+};
+
+export const WHY_CHOOSE = {
+  label: "Vos avantages",
+  title: "Pourquoi choisir notre hôtel à Anié ?",
+  subtitle:
+    "Une adresse centrale, un service personnalisé et des équipements pensés pour les séjours professionnels comme les escapades en famille.",
+  reasons: [
+    {
+      title: "Emplacement stratégique",
+      desc: "Au cœur du Togo, Anié facilite vos déplacements vers Lomé, Sokodé, Kara et les principales localités du pays.",
+    },
+    {
+      title: "Cadre paisible & sécurisé",
+      desc: "Une ville calme et accueillante, idéale pour se ressourcer, travailler en concentration ou organiser vos réunions.",
+    },
+    {
+      title: "Accueil personnalisé",
+      desc: "Une équipe qualifiée, disponible 24h/24, attentive à chaque demande — du check-in au départ.",
+    },
+    {
+      title: "Salle de conférence moderne",
+      desc: "Un espace équipé pour séminaires, formations, colloques et événements privés dans les meilleures conditions.",
+    },
+    {
+      title: "Confort & services complets",
+      desc: "Chambres climatisées, Wi-Fi haut débit, restaurant, parking sécurisé et blanchisserie sur place.",
+    },
+    {
+      title: "Excellent rapport qualité-prix",
+      desc: "Une expérience hôtelière de qualité au cœur d'Anié, accessible aux voyageurs d'affaires et aux familles.",
+    },
+  ],
+};
+
+export const CONFERENCE = {
+  label: "Événements professionnels",
+  title: "Une salle de conférence moderne pour vos événements",
+  subtitle:
+    "Un cadre confortable, calme et professionnel, avec des équipements adaptés pour accueillir vos participants dans les meilleures conditions.",
+  capacity: "Jusqu'à 80 participants",
+  features: [
+    "Écran & vidéoprojecteur",
+    "Sonorisation & micros",
+    "Wi-Fi haut débit",
+    "Climatisation",
+    "Pause-café & restauration sur demande",
+    "Disposition modulable (théâtre, U, classe)",
+  ],
+  uses: [
+    "Séminaires professionnels",
+    "Formations & ateliers",
+    "Réunions d'entreprises",
+    "Conférences & colloques",
+    "Assemblées générales",
+    "Cérémonies & événements privés",
+  ],
+};
+
+export const ANIE = {
+  label: "Destination",
+  title: "Découvrir Anié",
+  intro:
+    "Anié est une perle du centre du Togo : une ville paisible où l'hospitalité des habitants, les traditions locales et un environnement serein invitent à la découverte. Idéale pour les voyageurs en quête d'authenticité, elle constitue aussi un point de départ pratique pour explorer la région des Plateaux et le reste du pays.",
+  highlights: [
+    "Situation géographique centrale, au carrefour des axes routiers nationaux",
+    "Ville paisible et sécurisée, propice au repos et à la concentration",
+    "Richesse culturelle et traditions vivantes de la région des Plateaux",
+    "Population chaleureuse et accueillante",
+    "Patrimoine local et paysages typiques du centre du Togo",
+    "Cadre authentique, loin de l'agitation des grandes métropoles",
   ],
 };
 
 export const SERVICES = [
-  { id: "wifi", title: "Wifi haut débit", desc: "Connexion fibre gratuite dans tout l'établissement.", icon: "wifi" },
-  { id: "pool", title: "Piscine infinity", desc: "Bassin chauffé avec vue jardin tropical, serviettes et bar.", icon: "waves" },
-  { id: "spa", title: "Spa & bien-être", desc: "Massages, soins visage et rituels africains par nos thérapeutes.", icon: "sparkles" },
-  { id: "breakfast", title: "Petit-déjeuner gourmet", desc: "Buffet continental et spécialités togolaises, inclus selon formule.", icon: "coffee" },
-  { id: "parking", title: "Parking sécurisé", desc: "Place privée surveillée 24h/24, voiturier sur demande.", icon: "car" },
-  { id: "concierge", title: "Conciergerie Clef d'Or", desc: "Réservations, transferts aéroport, excursions sur mesure.", icon: "bell" },
-  { id: "roomservice", title: "Room service", desc: "Carte 24h/24, livraison discrète en chambre.", icon: "utensils" },
-  { id: "security", title: "Sécurité 24h/24", desc: "Surveillance, accès contrôlé, coffre-fort en chambre.", icon: "shield" },
-  { id: "business", title: "Centre d'affaires", desc: "Salles de réunion, imprimante, traduction.", icon: "briefcase" },
-  { id: "laundry", title: "Blanchisserie express", desc: "Nettoyage et repassage, retour en 4h.", icon: "shirt" },
-  { id: "transfer", title: "Transfert aéroport", desc: "Accueil personnalisé à l'aéroport de Lomé.", icon: "plane" },
-  { id: "kids", title: "Family welcome", desc: "Lit bébé, menu enfant, activités familiales.", icon: "baby" },
+  {
+    id: "rooms",
+    title: "Chambres modernes & climatisées",
+    desc: "Espaces spacieux, literie confortable et climatisation pour un repos optimal.",
+    icon: "bed",
+  },
+  {
+    id: "wifi",
+    title: "Wi-Fi haut débit",
+    desc: "Connexion rapide et gratuite dans tout l'établissement, idéale pour le télétravail.",
+    icon: "wifi",
+  },
+  {
+    id: "restaurant",
+    title: "Restaurant",
+    desc: "Spécialités togolaises et cuisine internationale, du petit-déjeuner au dîner.",
+    icon: "utensils",
+  },
+  {
+    id: "conference",
+    title: "Salle de conférence",
+    desc: "Grande salle équipée pour séminaires, formations, réunions et événements privés.",
+    icon: "briefcase",
+  },
+  {
+    id: "parking",
+    title: "Parking sécurisé",
+    desc: "Stationnement surveillé 24h/24 pour votre tranquillité d'esprit.",
+    icon: "car",
+  },
+  {
+    id: "laundry",
+    title: "Blanchisserie",
+    desc: "Service de nettoyage et repassage pour les séjours courts ou longs.",
+    icon: "shirt",
+  },
+  {
+    id: "reception",
+    title: "Réception 24h/24",
+    desc: "Accueil chaleureux et assistance à toute heure, 7 jours sur 7.",
+    icon: "bell",
+  },
+  {
+    id: "leisure",
+    title: "Espace détente & loisirs",
+    desc: "Coins de relaxation agréables pour vous ressourcer après une journée de travail ou de visite.",
+    icon: "sparkles",
+  },
 ];
 
 export const EXPERIENCES = [
-  { title: "Sunset sur la plage", desc: "Coucher de soleil privatisé avec champagne et fruits tropicaux.", price: "45 000 XOF", duration: "2h", image: "hero" },
-  { title: "Tour gastronomique Lomé", desc: "Marché aux poissons, dégustation street food guidée par notre chef.", price: "35 000 XOF", duration: "4h", image: "restaurant" },
-  { title: "Rituel spa africain", desc: "Gommage au karité, massage aux baobab, tisane locale.", price: "55 000 XOF", duration: "90min", image: "room" },
-  { title: "Excursion Togoville", desc: "Histoire, lac Togo, pirogue traditionnelle.", price: "80 000 XOF", duration: "Journée", image: "hero" },
-  { title: "Dîner romantique", desc: "Table privée terrasse, menu dégustation 5 services, violoniste.", price: "120 000 XOF", duration: "3h", image: "restaurant" },
-  { title: "Yoga au lever du soleil", desc: "Séance en bord de piscine, petit-déjeuner detox.", price: "25 000 XOF", duration: "1h30", image: "room" },
+  {
+    title: "Découverte culturelle d'Anié",
+    desc: "Visite guidée des traditions locales, artisanat et patrimoine de la région des Plateaux.",
+    price: "25 000 XOF",
+    duration: "3h",
+    image: "hero",
+  },
+  {
+    title: "Excursion région centrale",
+    desc: "Circuit sur mesure vers les villages, marchés et sites naturels des environs.",
+    price: "65 000 XOF",
+    duration: "Journée",
+    image: "room",
+  },
+  {
+    title: "Dégustation togolaise",
+    desc: "Menu découverte au restaurant : saveurs locales et accords du chef.",
+    price: "18 000 XOF",
+    duration: "2h",
+    image: "restaurant",
+  },
+  {
+    title: "Séminaire clé en main",
+    desc: "Salle de conférence, pauses café et déjeuner — organisation complète.",
+    price: "Sur devis",
+    duration: "Journée",
+    image: "hero",
+  },
+  {
+    title: "Séjour famille",
+    desc: "Chambre familiale, petit-déjeuner et activités adaptées aux enfants.",
+    price: "Sur devis",
+    duration: "Week-end",
+    image: "room",
+  },
+  {
+    title: "Réception privée",
+    desc: "Anniversaire, cérémonie ou réunion — espace et restauration personnalisés.",
+    price: "Sur devis",
+    duration: "Soirée",
+    image: "restaurant",
+  },
 ];
 
 export const PACKS = [
-  { id: "romantic", name: "Pack Romantique", price: 185000, includes: ["Suite Deluxe 2 nuits", "Dîner aux chandelles", "Décoration florale", "Champagne"], badge: "Couple" },
-  { id: "business", name: "Pack Business", price: 145000, includes: ["Chambre Supérieure", "Petit-déjeuner", "Accès salle réunion 2h", "Wifi premium"], badge: "Pro" },
-  { id: "family", name: "Pack Famille", price: 220000, includes: ["Chambre Familiale 3 nuits", "Piscine + activités kids", "Demi-pension", "Transfert aéroport"], badge: "Famille" },
-  { id: "wellness", name: "Pack Bien-être", price: 165000, includes: ["Chambre 2 nuits", "Spa 2 soins", "Yoga matinal", "Menu detox"], badge: "Spa" },
+  {
+    id: "business",
+    name: "Pack Business",
+    price: 145000,
+    includes: ["Chambre Supérieure", "Petit-déjeuner", "Salle de réunion 4h", "Wi-Fi premium"],
+    badge: "Pro",
+  },
+  {
+    id: "seminar",
+    name: "Pack Séminaire",
+    price: 195000,
+    includes: ["Salle de conférence journée", "Pause-café", "Déjeuner buffet", "Support technique"],
+    badge: "Événement",
+  },
+  {
+    id: "family",
+    name: "Pack Famille",
+    price: 180000,
+    includes: ["Chambre Familiale 2 nuits", "Petit-déjeuner", "Parking", "Espace détente"],
+    badge: "Famille",
+  },
+  {
+    id: "discovery",
+    name: "Pack Découverte Anié",
+    price: 125000,
+    includes: ["Chambre 2 nuits", "Visite culturelle guidée", "Dîner togolais", "Petit-déjeuner"],
+    badge: "Tourisme",
+  },
 ];
 
 export const PROMOTIONS = [
-  { code: "CHEVAL20", title: "Early Bird -20%", desc: "Réservez 30 jours à l'avance et économisez 20% sur votre séjour.", discount: 20, until: "2026-12-31" },
-  { code: "WEEKEND", title: "Week-end Lomé", desc: "2 nuits + petit-déjeuner + dîner pour 2 personnes.", discount: 15, until: "2026-09-30" },
-  { code: "TABLE15", title: "Restaurant -15%", desc: "15% sur la carte du mardi au jeudi.", discount: 15, until: "2026-08-31" },
+  {
+    code: "ANIE20",
+    title: "Early Bird -20%",
+    desc: "Réservez 21 jours à l'avance et économisez 20 % sur votre séjour à Anié.",
+    discount: 20,
+    until: "2026-12-31",
+  },
+  {
+    code: "SEMINAIRE",
+    title: "Séminaire -15%",
+    desc: "15 % sur la location de la salle de conférence en semaine.",
+    discount: 15,
+    until: "2026-09-30",
+  },
+  {
+    code: "TABLE15",
+    title: "Restaurant -15%",
+    desc: "15 % sur la carte du mardi au jeudi.",
+    discount: 15,
+    until: "2026-08-31",
+  },
 ];
 
 export const FAQ = [
-  { q: "Quels sont les horaires de check-in et check-out ?", a: `Check-in à partir de ${HOTEL.hours.checkIn}, check-out avant ${HOTEL.hours.checkOut}. Un early check-in ou late check-out peut être arrangé selon disponibilité.` },
-  { q: "Quels modes de paiement acceptez-vous ?", a: "Espèces (XOF), cartes Visa/Mastercard, Mobile Money (Flooz, T-Money) et virement bancaire." },
-  { q: "Le petit-déjeuner est-il inclus ?", a: "Il est inclus dans nos formules Pack et certaines offres. Sinon, comptez 8 000 XOF par personne." },
-  { q: "Puis-je annuler ma réservation ?", a: "Annulation gratuite jusqu'à 48h avant l'arrivée. Au-delà, la première nuit peut être facturée." },
-  { q: "L'hôtel est-il adapté aux enfants ?", a: "Oui. Lit bébé gratuit, menu enfant au restaurant, piscine surveillée." },
-  { q: "Proposez-vous un transfert aéroport ?", a: "Oui, sur réservation. Comptez 15 000 XOF aller simple depuis l'aéroport de Lomé." },
-  { q: "Le restaurant accepte-t-il les réservations ?", a: "Oui, en ligne ou par téléphone. Tenue élégante souhaitée le soir." },
-  { q: "Y a-t-il un parking ?", a: "Parking privé gratuit et sécurisé 24h/24 pour tous les clients." },
+  {
+    q: "Quels sont les horaires de check-in et check-out ?",
+    a: `Check-in à partir de ${HOTEL.hours.checkIn}, check-out avant ${HOTEL.hours.checkOut}. Un early check-in ou late check-out peut être arrangé selon disponibilité.`,
+  },
+  {
+    q: "Quels modes de paiement acceptez-vous ?",
+    a: "Espèces (XOF), cartes Visa/Mastercard, Mobile Money (Flooz, T-Money) et virement bancaire.",
+  },
+  {
+    q: "Le petit-déjeuner est-il inclus ?",
+    a: "Il est inclus dans nos formules Pack. Sinon, comptez 8 000 XOF par personne.",
+  },
+  {
+    q: "Puis-je réserver la salle de conférence ?",
+    a: "Oui, en ligne via notre page Contact ou par téléphone. Nous proposons des formules demi-journée, journée et séminaire clé en main.",
+  },
+  {
+    q: "L'hôtel est-il adapté aux enfants et aux familles ?",
+    a: "Oui. Chambres familiales, menu enfant au restaurant et cadre sécurisé pour un séjour serein.",
+  },
+  {
+    q: "Y a-t-il un parking ?",
+    a: "Parking privé gratuit et sécurisé 24h/24 pour tous les clients.",
+  },
+  {
+    q: "Le Wi-Fi est-il disponible ?",
+    a: "Oui, connexion haut débit gratuite dans les chambres, le restaurant et la salle de conférence.",
+  },
+  {
+    q: "Pourquoi séjourner à Anié plutôt qu'à Lomé ?",
+    a: "Anié offre un cadre plus calme et central, idéal pour les voyages d'affaires traversant le pays, les séminaires et la découverte authentique du Togo.",
+  },
 ];
 
 export const BLOG_POSTS = [
-  { slug: "lome-guide-2026", title: "Lomé en 48 heures : le guide Cheval d'Or", excerpt: "Plages, marchés, art contemporain — notre sélection des incontournables.", date: "2026-03-15", category: "Tourisme", readMin: 6 },
-  { slug: "cuisine-togolaise", title: "L'art culinaire togolais revisité", excerpt: "Notre chef partage ses inspirations entre tradition et gastronomie française.", date: "2026-02-20", category: "Gastronomie", readMin: 5 },
-  { slug: "spa-rituels", title: "Rituels bien-être inspirés de Six Senses", excerpt: "Karité, baobab, hibiscus : découvrez nos soins signature.", date: "2026-01-10", category: "Bien-être", readMin: 4 },
-  { slug: "mariages-lome", title: "Organiser votre mariage au Cheval d'Or", excerpt: "Salons, terrasse, menu sur mesure — un cadre d'exception.", date: "2025-12-05", category: "Événements", readMin: 7 },
+  {
+    slug: "anie-guide-2026",
+    title: "Anié et la région centrale : guide du voyageur",
+    excerpt: "Traditions, artisanat et paysages — notre sélection pour découvrir le cœur du Togo.",
+    date: "2026-03-15",
+    category: "Tourisme",
+    readMin: 6,
+  },
+  {
+    slug: "cuisine-togolaise",
+    title: "Saveurs togolaises à la Table du Cheval d'Or",
+    excerpt: "Notre chef célèbre les produits locaux et les classiques internationaux.",
+    date: "2026-02-20",
+    category: "Gastronomie",
+    readMin: 5,
+  },
+  {
+    slug: "organiser-seminaire",
+    title: "Organiser votre séminaire à Anié",
+    excerpt: "Salle équipée, restauration et hébergement — tout au même endroit.",
+    date: "2026-01-10",
+    category: "Événements",
+    readMin: 4,
+  },
+  {
+    slug: "voyage-affaires-togo",
+    title: "Voyage d'affaires au centre du Togo",
+    excerpt: "Pourquoi Anié est le hub idéal entre Lomé et le nord du pays.",
+    date: "2025-12-05",
+    category: "Business",
+    readMin: 5,
+  },
 ];
 
 export const BLOG_CONTENT: Record<string, string[]> = {
-  "lome-guide-2026": [
-    "Lomé, capitale dynamique du Togo, offre un mélange unique de modernité et de traditions. Commencez par la plage de Lomé, à quelques minutes de l'hôtel.",
-    "Le Grand Marché est incontournable pour l'artisanat : pagnes, sculptures, épices. Notre conciergerie organise des visites guidées en français et anglais.",
-    "Ne manquez pas le Musée International du Golfe de Guinée et une excursion en pirogue sur le lac Togo. Nous réservons tout pour vous.",
+  "anie-guide-2026": [
+    "Anié, au cœur du Togo, est une destination authentique où traditions et modernité coexistent harmonieusement. Depuis l'hôtel, explorez les marchés locaux, l'artisanat régional et l'hospitalité légendaire des Plateaux.",
+    "Notre équipe organise des visites guidées en français et en anglais. Découvrez le patrimoine culturel, les danses traditionnelles et les paysages verdoyants qui font la richesse de cette région.",
   ],
   "cuisine-togolaise": [
-    "Au Cheval d'Or, la cuisine togolaise est célébrée avec respect et créativité. Le poulet DG, le poisson braisé et l'akpan trouvent leur place aux côtés de classiques français.",
-    "Notre chef sélectionne chaque matin les produits au marché de Lomé. Fraîcheur, saisonnalité, traçabilité : les mêmes exigences qu'un palace international.",
+    "Au Cheval d'Or, la cuisine togolaise est à l'honneur : poulet DG, poisson braisé, akpan et sauces épicées côtoient une carte internationale soignée.",
+    "Chaque matin, notre chef sélectionne les produits frais auprès des producteurs locaux pour une table généreuse et authentique.",
   ],
-  "spa-rituels": [
-    "Inspirés des resorts Six Senses, nos rituels spa combinent ingrédients locaux et techniques professionnelles. Le gommage au karité purifie, le massage aux huiles de baobab relaxe en profondeur.",
+  "organiser-seminaire": [
+    "Notre grande salle de conférence accueille séminaires, formations et assemblées générales dans un cadre professionnel et climatisé.",
+    "Formules sur mesure : location demi-journée ou journée, pauses café, déjeuner buffet et hébergement des participants sur place.",
   ],
-  "mariages-lome": [
-    "Le Salon Impérial accueille jusqu'à 150 convives. Terrasse vue jardin pour la cérémonie, menu dégustation personnalisé, suite nuptiale offerte. Notre équipe événements vous accompagne de A à Z.",
+  "voyage-affaires-togo": [
+    "Positionnée au centre du pays, Anié réduit les temps de trajet entre les principales villes togolaises. Un atout majeur pour les entreprises et les délégations en déplacement.",
   ],
 };
 
-export const GUIDE_LOME = [
-  { name: "Plage de Lomé", dist: "5 min", desc: "Sable fin, promenade, bars de plage." },
-  { name: "Grand Marché", dist: "10 min", desc: "Artisanat, épices, immersion locale." },
-  { name: "Musée du Golfe de Guinée", dist: "8 min", desc: "Histoire et cultures ouest-africaines." },
-  { name: "Lac Togo & Togoville", dist: "45 min", desc: "Excursion pirogue, village historique." },
-  { name: "Kpalimé", dist: "2h", desc: "Montagnes, cascades, café local." },
-  { name: "Marché aux fétiches", dist: "15 min", desc: "Traditions vodun, art rituel." },
+export const GUIDE_ANIE = [
+  { name: "Centre-ville d'Anié", dist: "5 min", desc: "Marchés, commerces et vie locale authentique." },
+  { name: "Artisanat des Plateaux", dist: "10 min", desc: "Tissage, poterie et objets traditionnels." },
+  { name: "Villages environnants", dist: "20–45 min", desc: "Découverte des traditions et de l'hospitalité rurale." },
+  { name: "Paysages de la région centrale", dist: "1h", desc: "Collines verdoyantes et nature préservée." },
+  { name: "Lomé", dist: "2h30", desc: "Capitale, plages et affaires — accessible par la route nationale." },
+  { name: "Sokodé", dist: "2h", desc: "Grande ville du nord, carrefour commercial et culturel." },
 ];
 
+/** @deprecated Utiliser GUIDE_ANIE */
+export const GUIDE_LOME = GUIDE_ANIE;
+
 export const EVENTS = [
-  { title: "Mariages & réceptions", desc: "Jusqu'à 150 personnes, traiteur sur mesure, décoration florale.", capacity: "150 pers." },
-  { title: "Séminaires & conférences", desc: "Salles équipées, pause-café, formules demi-journée ou journée.", capacity: "80 pers." },
-  { title: "Anniversaires privés", desc: "Terrasse privatisée, menu personnalisé, animation DJ.", capacity: "40 pers." },
-  { title: "Dîners d'entreprise", desc: "Menus dégustation, accords mets-vins, service discret.", capacity: "60 pers." },
+  {
+    title: "Séminaires & conférences",
+    desc: "Grande salle équipée, sonorisation, vidéoprojection. Formules demi-journée ou journée avec restauration.",
+    capacity: "80 pers.",
+  },
+  {
+    title: "Formations & ateliers",
+    desc: "Cadre calme et professionnel, idéal pour la concentration et l'échange.",
+    capacity: "60 pers.",
+  },
+  {
+    title: "Mariages & réceptions",
+    desc: "Espaces modulables, menu sur mesure, équipe événementielle dédiée.",
+    capacity: "120 pers.",
+  },
+  {
+    title: "Réunions d'entreprise",
+    desc: "Hébergement + salle de réunion + restauration — solution tout-en-un à Anié.",
+    capacity: "40 pers.",
+  },
 ];
 
 export const TESTIMONIALS = [
-  { name: "Aïcha K.", role: "Directrice, Dakar", quote: "Un niveau Four Seasons au Togo. Service impeccable, chambres somptueuses.", stars: 5 },
-  { name: "Jean-Marc L.", role: "Consultant, Paris", quote: "Le restaurant rivalise avec Mandarin Oriental. La table est exceptionnelle.", stars: 5 },
-  { name: "Sarah M.", role: "Voyageuse, Londres", quote: "Design Aman, hospitalité togolaise. Mon séjour préféré en Afrique de l'Ouest.", stars: 5 },
-  { name: "Fatou D.", role: "Entrepreneure, Lomé", quote: "Organisation mariage parfaite. Équipe attentionnée, cadre magique.", stars: 5 },
+  {
+    name: "Koffi A.",
+    role: "Directeur RH, Lomé",
+    quote: "Nous avons organisé notre séminaire annuel ici : salle impeccable, équipe réactive, cadre parfait pour travailler.",
+    stars: 5,
+  },
+  {
+    name: "Marie T.",
+    role: "Consultante, Paris",
+    quote: "Un havre de paix au centre du Togo. Chambres confortables et restaurant excellent.",
+    stars: 5,
+  },
+  {
+    name: "Aminata S.",
+    role: "Touriste, Dakar",
+    quote: "Découvrir Anié depuis cet hôtel a été une belle surprise. Accueil chaleureux et authenticité.",
+    stars: 5,
+  },
+  {
+    name: "Jean-Baptiste M.",
+    role: "Entrepreneur, Kara",
+    quote: "Emplacement idéal pour mes déplacements professionnels. Wi-Fi fiable et parking sécurisé.",
+    stars: 5,
+  },
 ];
 
 export const CHEF = {
   name: "Chef Emmanuel Agbeko",
-  title: "Executive Chef",
-  bio: "Formé en France et au Sénégal, le Chef Agbeko fusionne haute gastronomie française et saveurs ouest-africaines. Sa philosophie : respect du produit, créativité, émotion.",
-  awards: ["Meilleur Chef Togo 2024", "Gault&Millau Afrique"],
+  title: "Chef exécutif",
+  bio: "Passionné par la cuisine togolaise et les saveurs internationales, le Chef Agbeko compose une carte qui célèbre les produits locaux avec créativité et générosité.",
+  awards: ["Cuisine locale & internationale", "Produits frais du marché"],
 };
 
 export const GALLERY_IMAGES = [
-  { src: "hero", alt: "Façade hôtel au coucher du soleil", cat: "Hôtel" },
-  { src: "restaurant", alt: "Salle restaurant La Table", cat: "Restaurant" },
-  { src: "room", alt: "Suite Deluxe", cat: "Chambres" },
-  { src: "hero", alt: "Piscine infinity", cat: "Loisirs" },
-  { src: "restaurant", alt: "Plat signature poisson braisé", cat: "Gastronomie" },
-  { src: "room", alt: "Suite familiale", cat: "Chambres" },
+  { src: "hero", alt: "Façade de l'hôtel à Anié", cat: "Hôtel" },
+  { src: "restaurant", alt: "Restaurant — spécialités togolaises", cat: "Restaurant" },
+  { src: "room", alt: "Chambre climatisée", cat: "Chambres" },
   { src: "hero", alt: "Hall d'accueil", cat: "Hôtel" },
+  { src: "restaurant", alt: "Salle de conférence", cat: "Événements" },
+  { src: "room", alt: "Chambre familiale", cat: "Chambres" },
+  { src: "hero", alt: "Espace détente", cat: "Loisirs" },
   { src: "restaurant", alt: "Terrasse restaurant", cat: "Restaurant" },
-  { src: "room", alt: "Salle de bain marbre", cat: "Chambres" },
+  { src: "room", alt: "Suite confort", cat: "Chambres" },
 ];
 
 export const LOYALTY = {
   name: "Cheval d'Or Privilege",
   tiers: [
-    { name: "Silver", points: 0, perks: ["5% sur restauration", "Late check-out 14h"] },
-    { name: "Gold", points: 500, perks: ["10% restauration", "Upgrade si dispo", "Welcome drink"] },
-    { name: "Platinum", points: 1500, perks: ["15% restauration", "Suite upgrade", "Spa offert 1h/an"] },
+    { name: "Silver", points: 0, perks: ["5 % sur restauration", "Late check-out 14h"] },
+    { name: "Gold", points: 500, perks: ["10 % restauration", "Upgrade si dispo", "Welcome drink"] },
+    { name: "Platinum", points: 1500, perks: ["15 % restauration", "Priorité salle conférence", "Surclassement"] },
   ],
 };
 
-/** Contenu page d'accueil — rubriques inspirées top 10 hôtellerie mondiale */
+/** Contenu page d'accueil */
 export const HOME = {
   hero: {
-    eyebrow: "Lomé · Togo · Afrique de l'Ouest",
+    eyebrow: "Anié · Centre du Togo",
     title: "Hôtel Le Cheval d'Or",
-    subtitle: "L'élégance d'un palace international, l'âme chaleureuse du Togo.",
+    subtitle: HOTEL.slogan,
     scrollHint: "Découvrir",
   },
   quote: {
-    text: "Chaque séjour est une histoire. Nous en écrivons le premier chapitre dès votre arrivée.",
+    text: "À Anié, nous ne vous offrons pas seulement une chambre — nous vous accueillons comme chez vous, avec professionnalisme et chaleur.",
     author: "Direction Le Cheval d'Or",
   },
   pillars: [
-    { icon: "design", title: "Design & sérénité", source: "Inspiré Aman", desc: "Minimalisme luxueux, matières nobles, lumière dorée. Chaque espace respire le calme et la distinction." },
-    { icon: "service", title: "Service sur-mesure", source: "Inspiré Four Seasons", desc: "Conciergerie Clef d'Or, anticipation discrète, attention personnalisée à chaque instant de votre séjour." },
-    { icon: "gastronomy", title: "Table d'exception", source: "Inspiré Mandarin Oriental", desc: "Cuisine franco-togolaise, cave sélectionnée, chef executive primé. Le restaurant comme destination." },
-    { icon: "wellness", title: "Bien-être total", source: "Inspiré Six Senses", desc: "Spa rituels africains, piscine infinity, yoga au lever du soleil. Corps et esprit en harmonie." },
+    {
+      icon: "location",
+      title: "Au cœur du Togo",
+      source: "Emplacement",
+      desc: "Anié, ville centrale et paisible, relie facilement les principales localités du pays par les axes routiers nationaux.",
+    },
+    {
+      icon: "service",
+      title: "Hospitalité & service",
+      source: "Accueil",
+      desc: "Équipe attentive, réception 24h/24 et accompagnement personnalisé pour chaque séjour ou événement.",
+    },
+    {
+      icon: "conference",
+      title: "Salle de conférence",
+      source: "Événements",
+      desc: "Grande salle moderne pour séminaires, formations, réunions et cérémonies — équipements professionnels inclus.",
+    },
+    {
+      icon: "comfort",
+      title: "Confort & sérénité",
+      source: "Hébergement",
+      desc: "Chambres climatisées, Wi-Fi haut débit, restaurant, parking sécurisé et espaces de détente.",
+    },
   ],
   awards: [
-    "Meilleur Hôtel Business Togo 2025",
-    "Excellence Gastronomique — Lomé",
-    "TripAdvisor Travellers' Choice",
-    "Clef d'Or Concierge",
+    "Référence hôtelière — région centrale",
+    "Salle de conférence équipée",
+    "Accueil 24h/24",
+    "Parking sécurisé",
   ],
   press: [
-    { quote: "Un niveau Four Seasons au cœur de l'Afrique de l'Ouest.", source: "Condé Nast Traveller" },
-    { quote: "La table rivalise avec les grandes adresses parisiennes.", source: "Gault&Millau Afrique" },
+    { quote: "L'adresse idéale pour combiner voyage d'affaires et authenticité togolaise.", source: "Voyage & Tourisme Afrique" },
+    { quote: "Une salle de conférence et un hébergement de qualité au cœur d'Anié.", source: "Business Togo" },
   ],
   spa: {
-    title: "Spa & bien-être",
-    subtitle: "Rituels inspirés des resorts Six Senses — karité, baobab, sérénité absolue.",
-    features: ["Massages signature", "Soins visage bio", "Hammam & sauna", "Yoga & méditation"],
+    title: "Détente & bien-être",
+    subtitle: "Espaces de relaxation pour vous ressourcer après une journée de travail ou de découverte.",
+    features: ["Espace détente", "Ambiance calme", "Cadre verdoyant", "Repos garanti"],
   },
   digital: {
-    title: "Séjour connecté",
-    subtitle: "Comme chez Hilton & Hyatt — simplicité et contrôle.",
+    title: "Réservez en toute simplicité",
+    subtitle: "Chambres et salle de conférence — réservation en ligne ou par téléphone.",
     features: [
-      { title: "Check-in digital", desc: "Enregistrement depuis votre mobile" },
-      { title: "Mon espace client", desc: "Réservations, factures, historique" },
-      { title: "Room service QR", desc: "Commandez depuis votre chambre" },
-      { title: "Conciergerie WhatsApp", desc: "Assistance instantanée 24h/24" },
+      { title: "Réservation en ligne", desc: "Chambres et disponibilités en temps réel" },
+      { title: "Mon espace client", desc: "Suivi de vos réservations et factures" },
+      { title: "Devis événements", desc: "Séminaires et réceptions sur mesure" },
+      { title: "Assistance WhatsApp", desc: "Réponse rapide 7j/7" },
     ],
   },
   quickNav: [
-    { label: "Chambres", to: "/chambres", desc: "Suites & villas" },
+    { label: "Chambres", to: "/chambres", desc: "Confort & climatisation" },
     { label: "Réserver", to: "/reserver", desc: "Disponibilité live" },
-    { label: "Restaurant", to: "/restaurant", desc: "Carte & tables" },
-    { label: "Spa", to: "/services", desc: "Bien-être" },
-    { label: "Événements", to: "/evenements", desc: "Mariages & séminaires" },
-    { label: "Guide Lomé", to: "/guide", desc: "Excursions" },
+    { label: "Restaurant", to: "/restaurant", desc: "Cuisine locale & internationale" },
+    { label: "Services", to: "/services", desc: "Équipements" },
+    { label: "Événements", to: "/evenements", desc: "Salle de conférence" },
+    { label: "Guide Anié", to: "/guide", desc: "Découvrir la région" },
   ],
   location: {
-    title: "Au cœur de Lomé",
-    desc: "À 15 min de l'aéroport, 5 min de la plage. Le Togo vous attend — marchés, lac Togo, culture vodun.",
-    highlights: ["Plage 5 min", "Aéroport 15 min", "Centre-ville 8 min", "Lac Togo 45 min"],
+    title: "Au cœur d'Anié",
+    desc: "Une ville paisible et stratégique au centre du Togo — calme, sécurité et accessibilité pour vos déplacements professionnels et touristiques.",
+    highlights: ["Centre du pays", "Axes routiers nationaux", "Cadre paisible", "Culture & traditions"],
   },
+  cta: {
+    title: "Réservez dès maintenant votre séjour ou votre salle de conférence",
+    subtitle:
+      "Vivez une expérience alliant confort, sérénité et professionnalisme au cœur d'Anié. Chambres et espaces événementiels — réponse rapide garantie.",
+    primary: "Réserver une chambre",
+    secondary: "Réserver la salle de conférence",
+    secondaryLink: "/contact",
+  },
+  audiences: [
+    "Voyageurs d'affaires",
+    "Touristes nationaux & internationaux",
+    "Familles",
+    "Séminaires & formations",
+    "Événements privés",
+  ],
 };

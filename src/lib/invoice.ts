@@ -36,7 +36,7 @@ export function generateInvoicePDF(data: InvoiceData) {
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
   doc.setTextColor(212, 175, 55);
-  doc.text("Élégance & hospitalité — Lomé, Togo", M, 21);
+  doc.text("Élégance & hospitalité — Anié, Togo", M, 21);
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(8);
   doc.text("contact@chevaldor.tg  ·  +228 00 00 00 00", M, 27);
@@ -136,7 +136,7 @@ export function generateInvoicePDF(data: InvoiceData) {
   // Footer
   doc.setTextColor(120, 120, 120);
   doc.setFontSize(8);
-  doc.text("Hôtel Le Cheval d'Or — Lomé, Togo. Merci de votre confiance.", W / 2, 285, { align: "center" });
+  doc.text("Hôtel Le Cheval d'Or — Anié, Togo. Merci de votre confiance.", W / 2, 285, { align: "center" });
 
   doc.save(`${data.type === "invoice" ? "facture" : "recu"}-${data.reference}.pdf`);
 }

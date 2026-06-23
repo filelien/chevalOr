@@ -78,8 +78,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Hôtel Le Cheval d'Or — Élégance & raffinement au Togo" },
-      { name: "description", content: "Hôtel Le Cheval d'Or : luxe discret, hospitalité ouest-africaine, restaurant gastronomique. Réservez votre séjour à Lomé." },
+      { title: "Hôtel Le Cheval d'Or — Élégance & hospitalité à Anié, Togo" },
+      { name: "description", content: "Hôtel Le Cheval d'Or à Anié : chambres climatisées, restaurant, salle de conférence. Réservez votre séjour au cœur du Togo." },
       { name: "author", content: "Hôtel Le Cheval d'Or" },
       { property: "og:title", content: "Hôtel Le Cheval d'Or" },
       { property: "og:description", content: "Une adresse d'exception au cœur du Togo." },

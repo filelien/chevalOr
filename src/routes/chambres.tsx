@@ -11,7 +11,7 @@ export const Route = createFileRoute("/chambres")({
       { title: "Chambres & Suites — Hôtel Le Cheval d'Or" },
       { name: "description", content: "Découvrez nos chambres et suites élégantes : standard, supérieures, deluxe, suites et familiales." },
       { property: "og:title", content: "Chambres & Suites — Le Cheval d'Or" },
-      { property: "og:description", content: "Chambres et suites d'exception, vue jardin ou océan, à Lomé." },
+      { property: "og:description", content: "Chambres modernes, climatisées et confortables à Anié, centre du Togo." },
     ],
   }),
   errorComponent: ({ error }) => <SiteShell><div className="p-12 text-center text-destructive">{error.message}</div></SiteShell>,

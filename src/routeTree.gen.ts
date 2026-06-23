@@ -36,14 +36,24 @@ import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminUtilisateursRouteImport } from './routes/_authenticated/admin/utilisateurs'
 import { Route as AuthenticatedAdminStockRouteImport } from './routes/_authenticated/admin/stock'
+import { Route as AuthenticatedAdminSiteWebRouteImport } from './routes/_authenticated/admin/site-web'
+import { Route as AuthenticatedAdminSeoRouteImport } from './routes/_authenticated/admin/seo'
 import { Route as AuthenticatedAdminRestaurantRouteImport } from './routes/_authenticated/admin/restaurant'
 import { Route as AuthenticatedAdminReservationsRouteImport } from './routes/_authenticated/admin/reservations'
 import { Route as AuthenticatedAdminRapportsRouteImport } from './routes/_authenticated/admin/rapports'
 import { Route as AuthenticatedAdminPlanningRouteImport } from './routes/_authenticated/admin/planning'
+import { Route as AuthenticatedAdminPersonnelRouteImport } from './routes/_authenticated/admin/personnel'
+import { Route as AuthenticatedAdminParametresRouteImport } from './routes/_authenticated/admin/parametres'
+import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin/notifications'
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin/messages'
+import { Route as AuthenticatedAdminMarketingRouteImport } from './routes/_authenticated/admin/marketing'
+import { Route as AuthenticatedAdminGalerieRouteImport } from './routes/_authenticated/admin/galerie'
 import { Route as AuthenticatedAdminFinanceRouteImport } from './routes/_authenticated/admin/finance'
+import { Route as AuthenticatedAdminEvenementsRouteImport } from './routes/_authenticated/admin/evenements'
+import { Route as AuthenticatedAdminConferenceRouteImport } from './routes/_authenticated/admin/conference'
 import { Route as AuthenticatedAdminClientsRouteImport } from './routes/_authenticated/admin/clients'
 import { Route as AuthenticatedAdminChambresRouteImport } from './routes/_authenticated/admin/chambres'
+import { Route as AuthenticatedAdminAvisRouteImport } from './routes/_authenticated/admin/avis'
 import { Route as AuthenticatedAdminClientsIdRouteImport } from './routes/_authenticated/admin/clients.$id'
 
 const ServicesRoute = ServicesRouteImport.update({
@@ -182,6 +192,17 @@ const AuthenticatedAdminStockRoute = AuthenticatedAdminStockRouteImport.update({
   path: '/stock',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedAdminSiteWebRoute =
+  AuthenticatedAdminSiteWebRouteImport.update({
+    id: '/site-web',
+    path: '/site-web',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminSeoRoute = AuthenticatedAdminSeoRouteImport.update({
+  id: '/seo',
+  path: '/seo',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
 const AuthenticatedAdminRestaurantRoute =
   AuthenticatedAdminRestaurantRouteImport.update({
     id: '/restaurant',
@@ -206,16 +227,58 @@ const AuthenticatedAdminPlanningRoute =
     path: '/planning',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminPersonnelRoute =
+  AuthenticatedAdminPersonnelRouteImport.update({
+    id: '/personnel',
+    path: '/personnel',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminParametresRoute =
+  AuthenticatedAdminParametresRouteImport.update({
+    id: '/parametres',
+    path: '/parametres',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminNotificationsRoute =
+  AuthenticatedAdminNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminMessagesRoute =
   AuthenticatedAdminMessagesRouteImport.update({
     id: '/messages',
     path: '/messages',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminMarketingRoute =
+  AuthenticatedAdminMarketingRouteImport.update({
+    id: '/marketing',
+    path: '/marketing',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminGalerieRoute =
+  AuthenticatedAdminGalerieRouteImport.update({
+    id: '/galerie',
+    path: '/galerie',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminFinanceRoute =
   AuthenticatedAdminFinanceRouteImport.update({
     id: '/finance',
     path: '/finance',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminEvenementsRoute =
+  AuthenticatedAdminEvenementsRouteImport.update({
+    id: '/evenements',
+    path: '/evenements',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminConferenceRoute =
+  AuthenticatedAdminConferenceRouteImport.update({
+    id: '/conference',
+    path: '/conference',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminClientsRoute =
@@ -230,6 +293,11 @@ const AuthenticatedAdminChambresRoute =
     path: '/chambres',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminAvisRoute = AuthenticatedAdminAvisRouteImport.update({
+  id: '/avis',
+  path: '/avis',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
 const AuthenticatedAdminClientsIdRoute =
   AuthenticatedAdminClientsIdRouteImport.update({
     id: '/$id',
@@ -261,14 +329,24 @@ export interface FileRoutesByFullPath {
   '/mes-reservations': typeof AuthenticatedMesReservationsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/chambres/$id': typeof ChambresIdRoute
+  '/admin/avis': typeof AuthenticatedAdminAvisRoute
   '/admin/chambres': typeof AuthenticatedAdminChambresRoute
   '/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
+  '/admin/conference': typeof AuthenticatedAdminConferenceRoute
+  '/admin/evenements': typeof AuthenticatedAdminEvenementsRoute
   '/admin/finance': typeof AuthenticatedAdminFinanceRoute
+  '/admin/galerie': typeof AuthenticatedAdminGalerieRoute
+  '/admin/marketing': typeof AuthenticatedAdminMarketingRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/parametres': typeof AuthenticatedAdminParametresRoute
+  '/admin/personnel': typeof AuthenticatedAdminPersonnelRoute
   '/admin/planning': typeof AuthenticatedAdminPlanningRoute
   '/admin/rapports': typeof AuthenticatedAdminRapportsRoute
   '/admin/reservations': typeof AuthenticatedAdminReservationsRoute
   '/admin/restaurant': typeof AuthenticatedAdminRestaurantRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
+  '/admin/site-web': typeof AuthenticatedAdminSiteWebRoute
   '/admin/stock': typeof AuthenticatedAdminStockRoute
   '/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
@@ -297,14 +375,24 @@ export interface FileRoutesByTo {
   '/mes-reservations': typeof AuthenticatedMesReservationsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/chambres/$id': typeof ChambresIdRoute
+  '/admin/avis': typeof AuthenticatedAdminAvisRoute
   '/admin/chambres': typeof AuthenticatedAdminChambresRoute
   '/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
+  '/admin/conference': typeof AuthenticatedAdminConferenceRoute
+  '/admin/evenements': typeof AuthenticatedAdminEvenementsRoute
   '/admin/finance': typeof AuthenticatedAdminFinanceRoute
+  '/admin/galerie': typeof AuthenticatedAdminGalerieRoute
+  '/admin/marketing': typeof AuthenticatedAdminMarketingRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/parametres': typeof AuthenticatedAdminParametresRoute
+  '/admin/personnel': typeof AuthenticatedAdminPersonnelRoute
   '/admin/planning': typeof AuthenticatedAdminPlanningRoute
   '/admin/rapports': typeof AuthenticatedAdminRapportsRoute
   '/admin/reservations': typeof AuthenticatedAdminReservationsRoute
   '/admin/restaurant': typeof AuthenticatedAdminRestaurantRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
+  '/admin/site-web': typeof AuthenticatedAdminSiteWebRoute
   '/admin/stock': typeof AuthenticatedAdminStockRoute
   '/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
@@ -336,14 +424,24 @@ export interface FileRoutesById {
   '/_authenticated/mes-reservations': typeof AuthenticatedMesReservationsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/chambres/$id': typeof ChambresIdRoute
+  '/_authenticated/admin/avis': typeof AuthenticatedAdminAvisRoute
   '/_authenticated/admin/chambres': typeof AuthenticatedAdminChambresRoute
   '/_authenticated/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
+  '/_authenticated/admin/conference': typeof AuthenticatedAdminConferenceRoute
+  '/_authenticated/admin/evenements': typeof AuthenticatedAdminEvenementsRoute
   '/_authenticated/admin/finance': typeof AuthenticatedAdminFinanceRoute
+  '/_authenticated/admin/galerie': typeof AuthenticatedAdminGalerieRoute
+  '/_authenticated/admin/marketing': typeof AuthenticatedAdminMarketingRoute
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
+  '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/_authenticated/admin/parametres': typeof AuthenticatedAdminParametresRoute
+  '/_authenticated/admin/personnel': typeof AuthenticatedAdminPersonnelRoute
   '/_authenticated/admin/planning': typeof AuthenticatedAdminPlanningRoute
   '/_authenticated/admin/rapports': typeof AuthenticatedAdminRapportsRoute
   '/_authenticated/admin/reservations': typeof AuthenticatedAdminReservationsRoute
   '/_authenticated/admin/restaurant': typeof AuthenticatedAdminRestaurantRoute
+  '/_authenticated/admin/seo': typeof AuthenticatedAdminSeoRoute
+  '/_authenticated/admin/site-web': typeof AuthenticatedAdminSiteWebRoute
   '/_authenticated/admin/stock': typeof AuthenticatedAdminStockRoute
   '/_authenticated/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
@@ -375,14 +473,24 @@ export interface FileRouteTypes {
     | '/mes-reservations'
     | '/blog/$slug'
     | '/chambres/$id'
+    | '/admin/avis'
     | '/admin/chambres'
     | '/admin/clients'
+    | '/admin/conference'
+    | '/admin/evenements'
     | '/admin/finance'
+    | '/admin/galerie'
+    | '/admin/marketing'
     | '/admin/messages'
+    | '/admin/notifications'
+    | '/admin/parametres'
+    | '/admin/personnel'
     | '/admin/planning'
     | '/admin/rapports'
     | '/admin/reservations'
     | '/admin/restaurant'
+    | '/admin/seo'
+    | '/admin/site-web'
     | '/admin/stock'
     | '/admin/utilisateurs'
     | '/admin/'
@@ -411,14 +519,24 @@ export interface FileRouteTypes {
     | '/mes-reservations'
     | '/blog/$slug'
     | '/chambres/$id'
+    | '/admin/avis'
     | '/admin/chambres'
     | '/admin/clients'
+    | '/admin/conference'
+    | '/admin/evenements'
     | '/admin/finance'
+    | '/admin/galerie'
+    | '/admin/marketing'
     | '/admin/messages'
+    | '/admin/notifications'
+    | '/admin/parametres'
+    | '/admin/personnel'
     | '/admin/planning'
     | '/admin/rapports'
     | '/admin/reservations'
     | '/admin/restaurant'
+    | '/admin/seo'
+    | '/admin/site-web'
     | '/admin/stock'
     | '/admin/utilisateurs'
     | '/admin'
@@ -449,14 +567,24 @@ export interface FileRouteTypes {
     | '/_authenticated/mes-reservations'
     | '/blog/$slug'
     | '/chambres/$id'
+    | '/_authenticated/admin/avis'
     | '/_authenticated/admin/chambres'
     | '/_authenticated/admin/clients'
+    | '/_authenticated/admin/conference'
+    | '/_authenticated/admin/evenements'
     | '/_authenticated/admin/finance'
+    | '/_authenticated/admin/galerie'
+    | '/_authenticated/admin/marketing'
     | '/_authenticated/admin/messages'
+    | '/_authenticated/admin/notifications'
+    | '/_authenticated/admin/parametres'
+    | '/_authenticated/admin/personnel'
     | '/_authenticated/admin/planning'
     | '/_authenticated/admin/rapports'
     | '/_authenticated/admin/reservations'
     | '/_authenticated/admin/restaurant'
+    | '/_authenticated/admin/seo'
+    | '/_authenticated/admin/site-web'
     | '/_authenticated/admin/stock'
     | '/_authenticated/admin/utilisateurs'
     | '/_authenticated/admin/'
@@ -677,6 +805,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminStockRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/site-web': {
+      id: '/_authenticated/admin/site-web'
+      path: '/site-web'
+      fullPath: '/admin/site-web'
+      preLoaderRoute: typeof AuthenticatedAdminSiteWebRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/seo': {
+      id: '/_authenticated/admin/seo'
+      path: '/seo'
+      fullPath: '/admin/seo'
+      preLoaderRoute: typeof AuthenticatedAdminSeoRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/restaurant': {
       id: '/_authenticated/admin/restaurant'
       path: '/restaurant'
@@ -705,6 +847,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPlanningRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/personnel': {
+      id: '/_authenticated/admin/personnel'
+      path: '/personnel'
+      fullPath: '/admin/personnel'
+      preLoaderRoute: typeof AuthenticatedAdminPersonnelRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/parametres': {
+      id: '/_authenticated/admin/parametres'
+      path: '/parametres'
+      fullPath: '/admin/parametres'
+      preLoaderRoute: typeof AuthenticatedAdminParametresRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/notifications': {
+      id: '/_authenticated/admin/notifications'
+      path: '/notifications'
+      fullPath: '/admin/notifications'
+      preLoaderRoute: typeof AuthenticatedAdminNotificationsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/messages': {
       id: '/_authenticated/admin/messages'
       path: '/messages'
@@ -712,11 +875,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminMessagesRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/marketing': {
+      id: '/_authenticated/admin/marketing'
+      path: '/marketing'
+      fullPath: '/admin/marketing'
+      preLoaderRoute: typeof AuthenticatedAdminMarketingRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/galerie': {
+      id: '/_authenticated/admin/galerie'
+      path: '/galerie'
+      fullPath: '/admin/galerie'
+      preLoaderRoute: typeof AuthenticatedAdminGalerieRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/finance': {
       id: '/_authenticated/admin/finance'
       path: '/finance'
       fullPath: '/admin/finance'
       preLoaderRoute: typeof AuthenticatedAdminFinanceRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/evenements': {
+      id: '/_authenticated/admin/evenements'
+      path: '/evenements'
+      fullPath: '/admin/evenements'
+      preLoaderRoute: typeof AuthenticatedAdminEvenementsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/conference': {
+      id: '/_authenticated/admin/conference'
+      path: '/conference'
+      fullPath: '/admin/conference'
+      preLoaderRoute: typeof AuthenticatedAdminConferenceRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/clients': {
@@ -731,6 +922,13 @@ declare module '@tanstack/react-router' {
       path: '/chambres'
       fullPath: '/admin/chambres'
       preLoaderRoute: typeof AuthenticatedAdminChambresRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/avis': {
+      id: '/_authenticated/admin/avis'
+      path: '/avis'
+      fullPath: '/admin/avis'
+      preLoaderRoute: typeof AuthenticatedAdminAvisRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/clients/$id': {
@@ -758,14 +956,24 @@ const AuthenticatedAdminClientsRouteWithChildren =
   )
 
 interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminAvisRoute: typeof AuthenticatedAdminAvisRoute
   AuthenticatedAdminChambresRoute: typeof AuthenticatedAdminChambresRoute
   AuthenticatedAdminClientsRoute: typeof AuthenticatedAdminClientsRouteWithChildren
+  AuthenticatedAdminConferenceRoute: typeof AuthenticatedAdminConferenceRoute
+  AuthenticatedAdminEvenementsRoute: typeof AuthenticatedAdminEvenementsRoute
   AuthenticatedAdminFinanceRoute: typeof AuthenticatedAdminFinanceRoute
+  AuthenticatedAdminGalerieRoute: typeof AuthenticatedAdminGalerieRoute
+  AuthenticatedAdminMarketingRoute: typeof AuthenticatedAdminMarketingRoute
   AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
+  AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
+  AuthenticatedAdminParametresRoute: typeof AuthenticatedAdminParametresRoute
+  AuthenticatedAdminPersonnelRoute: typeof AuthenticatedAdminPersonnelRoute
   AuthenticatedAdminPlanningRoute: typeof AuthenticatedAdminPlanningRoute
   AuthenticatedAdminRapportsRoute: typeof AuthenticatedAdminRapportsRoute
   AuthenticatedAdminReservationsRoute: typeof AuthenticatedAdminReservationsRoute
   AuthenticatedAdminRestaurantRoute: typeof AuthenticatedAdminRestaurantRoute
+  AuthenticatedAdminSeoRoute: typeof AuthenticatedAdminSeoRoute
+  AuthenticatedAdminSiteWebRoute: typeof AuthenticatedAdminSiteWebRoute
   AuthenticatedAdminStockRoute: typeof AuthenticatedAdminStockRoute
   AuthenticatedAdminUtilisateursRoute: typeof AuthenticatedAdminUtilisateursRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
@@ -773,14 +981,24 @@ interface AuthenticatedAdminRouteRouteChildren {
 
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
+    AuthenticatedAdminAvisRoute: AuthenticatedAdminAvisRoute,
     AuthenticatedAdminChambresRoute: AuthenticatedAdminChambresRoute,
     AuthenticatedAdminClientsRoute: AuthenticatedAdminClientsRouteWithChildren,
+    AuthenticatedAdminConferenceRoute: AuthenticatedAdminConferenceRoute,
+    AuthenticatedAdminEvenementsRoute: AuthenticatedAdminEvenementsRoute,
     AuthenticatedAdminFinanceRoute: AuthenticatedAdminFinanceRoute,
+    AuthenticatedAdminGalerieRoute: AuthenticatedAdminGalerieRoute,
+    AuthenticatedAdminMarketingRoute: AuthenticatedAdminMarketingRoute,
     AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
+    AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
+    AuthenticatedAdminParametresRoute: AuthenticatedAdminParametresRoute,
+    AuthenticatedAdminPersonnelRoute: AuthenticatedAdminPersonnelRoute,
     AuthenticatedAdminPlanningRoute: AuthenticatedAdminPlanningRoute,
     AuthenticatedAdminRapportsRoute: AuthenticatedAdminRapportsRoute,
     AuthenticatedAdminReservationsRoute: AuthenticatedAdminReservationsRoute,
     AuthenticatedAdminRestaurantRoute: AuthenticatedAdminRestaurantRoute,
+    AuthenticatedAdminSeoRoute: AuthenticatedAdminSeoRoute,
+    AuthenticatedAdminSiteWebRoute: AuthenticatedAdminSiteWebRoute,
     AuthenticatedAdminStockRoute: AuthenticatedAdminStockRoute,
     AuthenticatedAdminUtilisateursRoute: AuthenticatedAdminUtilisateursRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,

@@ -41,7 +41,7 @@ export function SiteHeader() {
           <img src={logo} alt="" className="h-12 w-12 object-contain" width={48} height={48} />
           <div className="hidden flex-col leading-tight sm:flex">
             <span className="font-display text-lg font-semibold tracking-wide">Le Cheval d'Or</span>
-            <span className="text-[10px] uppercase tracking-[0.25em] text-gold-deep">Hôtel · Togo</span>
+            <span className="text-[10px] uppercase tracking-[0.25em] text-gold-deep">Anié · Togo</span>
           </div>
         </Link>
 

@@ -1,22 +1,38 @@
 #!/usr/bin/env node
 /**
- * Déploie les migrations Supabase + attribue super_admin à admin@inovafrik.com
+ * Déploie les migrations Supabase + attribue super_admin à filelien08@gmail.com
  *
- * Prérequis (dans .env ou variables d'environnement) :
+ * Prérequis (dans .env.local ou variables d'environnement) :
  *   SUPABASE_ACCESS_TOKEN  — token depuis https://supabase.com/dashboard/account/tokens
- *   SUPABASE_PROJECT_ID    — yizpcyfcfhojinmfpbhc (déjà dans .env)
+ *   SUPABASE_PROJECT_ID    — hnmkszmpmsksgtqoatyr
  *
  * Usage : node scripts/setup-supabase.mjs
  */
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const PROJECT_ID = process.env.SUPABASE_PROJECT_ID || process.env.VITE_SUPABASE_PROJECT_ID || "yizpcyfcfhojinmfpbhc";
+
+function loadEnvLocal() {
+  const path = join(ROOT, ".env.local");
+  if (!existsSync(path)) return;
+  for (const line of readFileSync(path, "utf8").split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eq = trimmed.indexOf("=");
+    if (eq === -1) continue;
+    const key = trimmed.slice(0, eq).trim();
+    const val = trimmed.slice(eq + 1).trim();
+    if (!process.env[key]) process.env[key] = val;
+  }
+}
+
+loadEnvLocal();
+const PROJECT_ID = process.env.SUPABASE_PROJECT_ID || process.env.VITE_SUPABASE_PROJECT_ID || "hnmkszmpmsksgtqoatyr";
 const ACCESS_TOKEN = process.env.SUPABASE_ACCESS_TOKEN;
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@inovafrik.com";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "filelien08@gmail.com";
 
 if (!ACCESS_TOKEN) {
   console.error("❌ SUPABASE_ACCESS_TOKEN manquant.");
