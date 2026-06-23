@@ -182,7 +182,6 @@
 @utility shadow-gold { box-shadow: var(--shadow-gold); }
 @utility shadow-elegant { box-shadow: var(--shadow-elegant); }
 @utility border-gold { border-color: var(--gold); }
-<<<<<<< HEAD
 
 .reveal {
   opacity: 0;
@@ -260,5 +259,3 @@ html { scroll-behavior: smooth; }
   .mosaic-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
   .mosaic-grid > *:nth-child(1) { grid-column: span 2; grid-row: span 1; }
 }
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014

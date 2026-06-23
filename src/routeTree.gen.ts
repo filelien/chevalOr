@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-<<<<<<< HEAD
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RestaurantRouteImport } from './routes/restaurant'
 import { Route as ReserverRouteImport } from './routes/reserver'
@@ -43,33 +42,15 @@ import { Route as AuthenticatedAdminRapportsRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminPlanningRouteImport } from './routes/_authenticated/admin/planning'
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin/messages'
 import { Route as AuthenticatedAdminFinanceRouteImport } from './routes/_authenticated/admin/finance'
-=======
-import { Route as RestaurantRouteImport } from './routes/restaurant'
-import { Route as ReserverRouteImport } from './routes/reserver'
-import { Route as GalerieRouteImport } from './routes/galerie'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as ChambresRouteImport } from './routes/chambres'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ChambresIdRouteImport } from './routes/chambres.$id'
-import { Route as AuthenticatedMesReservationsRouteImport } from './routes/_authenticated/mes-reservations'
-import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
-import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
-import { Route as AuthenticatedAdminReservationsRouteImport } from './routes/_authenticated/admin/reservations'
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 import { Route as AuthenticatedAdminClientsRouteImport } from './routes/_authenticated/admin/clients'
 import { Route as AuthenticatedAdminChambresRouteImport } from './routes/_authenticated/admin/chambres'
 import { Route as AuthenticatedAdminClientsIdRouteImport } from './routes/_authenticated/admin/clients.$id'
 
-<<<<<<< HEAD
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 const RestaurantRoute = RestaurantRouteImport.update({
   id: '/restaurant',
   path: '/restaurant',
@@ -80,7 +61,6 @@ const ReserverRoute = ReserverRouteImport.update({
   path: '/reserver',
   getParentRoute: () => rootRouteImport,
 } as any)
-<<<<<<< HEAD
 const OffresRoute = OffresRouteImport.update({
   id: '/offres',
   path: '/offres',
@@ -96,14 +76,11 @@ const GuideRoute = GuideRouteImport.update({
   path: '/guide',
   getParentRoute: () => rootRouteImport,
 } as any)
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 const GalerieRoute = GalerieRouteImport.update({
   id: '/galerie',
   path: '/galerie',
   getParentRoute: () => rootRouteImport,
 } as any)
-<<<<<<< HEAD
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
@@ -119,14 +96,11 @@ const EvenementsRoute = EvenementsRouteImport.update({
   path: '/evenements',
   getParentRoute: () => rootRouteImport,
 } as any)
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-<<<<<<< HEAD
 const ConfidentialiteRoute = ConfidentialiteRouteImport.update({
   id: '/confidentialite',
   path: '/confidentialite',
@@ -137,14 +111,11 @@ const ComparerRoute = ComparerRouteImport.update({
   path: '/comparer',
   getParentRoute: () => rootRouteImport,
 } as any)
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 const ChambresRoute = ChambresRouteImport.update({
   id: '/chambres',
   path: '/chambres',
   getParentRoute: () => rootRouteImport,
 } as any)
-<<<<<<< HEAD
 const CgvRoute = CgvRouteImport.update({
   id: '/cgv',
   path: '/cgv',
@@ -155,21 +126,16 @@ const BlogRoute = BlogRouteImport.update({
   path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-<<<<<<< HEAD
 const AProposRoute = AProposRouteImport.update({
   id: '/a-propos',
   path: '/a-propos',
   getParentRoute: () => rootRouteImport,
 } as any)
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -184,14 +150,11 @@ const ChambresIdRoute = ChambresIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => ChambresRoute,
 } as any)
-<<<<<<< HEAD
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => BlogRoute,
 } as any)
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 const AuthenticatedMesReservationsRoute =
   AuthenticatedMesReservationsRouteImport.update({
     id: '/mes-reservations',
@@ -208,7 +171,6 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
-<<<<<<< HEAD
 const AuthenticatedAdminUtilisateursRoute =
   AuthenticatedAdminUtilisateursRouteImport.update({
     id: '/utilisateurs',
@@ -226,15 +188,12 @@ const AuthenticatedAdminRestaurantRoute =
     path: '/restaurant',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 const AuthenticatedAdminReservationsRoute =
   AuthenticatedAdminReservationsRouteImport.update({
     id: '/reservations',
     path: '/reservations',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
-<<<<<<< HEAD
 const AuthenticatedAdminRapportsRoute =
   AuthenticatedAdminRapportsRouteImport.update({
     id: '/rapports',
@@ -259,8 +218,6 @@ const AuthenticatedAdminFinanceRoute =
     path: '/finance',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 const AuthenticatedAdminClientsRoute =
   AuthenticatedAdminClientsRouteImport.update({
     id: '/clients',
@@ -282,7 +239,6 @@ const AuthenticatedAdminClientsIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-<<<<<<< HEAD
   '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
@@ -315,26 +271,11 @@ export interface FileRoutesByFullPath {
   '/admin/restaurant': typeof AuthenticatedAdminRestaurantRoute
   '/admin/stock': typeof AuthenticatedAdminStockRoute
   '/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
-=======
-  '/auth': typeof AuthRoute
-  '/chambres': typeof ChambresRouteWithChildren
-  '/contact': typeof ContactRoute
-  '/galerie': typeof GalerieRoute
-  '/reserver': typeof ReserverRoute
-  '/restaurant': typeof RestaurantRoute
-  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
-  '/mes-reservations': typeof AuthenticatedMesReservationsRoute
-  '/chambres/$id': typeof ChambresIdRoute
-  '/admin/chambres': typeof AuthenticatedAdminChambresRoute
-  '/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
-  '/admin/reservations': typeof AuthenticatedAdminReservationsRoute
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/clients/$id': typeof AuthenticatedAdminClientsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-<<<<<<< HEAD
   '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
@@ -366,19 +307,6 @@ export interface FileRoutesByTo {
   '/admin/restaurant': typeof AuthenticatedAdminRestaurantRoute
   '/admin/stock': typeof AuthenticatedAdminStockRoute
   '/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
-=======
-  '/auth': typeof AuthRoute
-  '/chambres': typeof ChambresRouteWithChildren
-  '/contact': typeof ContactRoute
-  '/galerie': typeof GalerieRoute
-  '/reserver': typeof ReserverRoute
-  '/restaurant': typeof RestaurantRoute
-  '/mes-reservations': typeof AuthenticatedMesReservationsRoute
-  '/chambres/$id': typeof ChambresIdRoute
-  '/admin/chambres': typeof AuthenticatedAdminChambresRoute
-  '/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
-  '/admin/reservations': typeof AuthenticatedAdminReservationsRoute
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/clients/$id': typeof AuthenticatedAdminClientsIdRoute
 }
@@ -386,7 +314,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-<<<<<<< HEAD
   '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
@@ -419,20 +346,6 @@ export interface FileRoutesById {
   '/_authenticated/admin/restaurant': typeof AuthenticatedAdminRestaurantRoute
   '/_authenticated/admin/stock': typeof AuthenticatedAdminStockRoute
   '/_authenticated/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
-=======
-  '/auth': typeof AuthRoute
-  '/chambres': typeof ChambresRouteWithChildren
-  '/contact': typeof ContactRoute
-  '/galerie': typeof GalerieRoute
-  '/reserver': typeof ReserverRoute
-  '/restaurant': typeof RestaurantRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
-  '/_authenticated/mes-reservations': typeof AuthenticatedMesReservationsRoute
-  '/chambres/$id': typeof ChambresIdRoute
-  '/_authenticated/admin/chambres': typeof AuthenticatedAdminChambresRoute
-  '/_authenticated/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
-  '/_authenticated/admin/reservations': typeof AuthenticatedAdminReservationsRoute
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/clients/$id': typeof AuthenticatedAdminClientsIdRoute
 }
@@ -440,7 +353,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-<<<<<<< HEAD
     | '/a-propos'
     | '/auth'
     | '/blog'
@@ -473,26 +385,11 @@ export interface FileRouteTypes {
     | '/admin/restaurant'
     | '/admin/stock'
     | '/admin/utilisateurs'
-=======
-    | '/auth'
-    | '/chambres'
-    | '/contact'
-    | '/galerie'
-    | '/reserver'
-    | '/restaurant'
-    | '/admin'
-    | '/mes-reservations'
-    | '/chambres/$id'
-    | '/admin/chambres'
-    | '/admin/clients'
-    | '/admin/reservations'
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     | '/admin/'
     | '/admin/clients/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-<<<<<<< HEAD
     | '/a-propos'
     | '/auth'
     | '/blog'
@@ -524,26 +421,12 @@ export interface FileRouteTypes {
     | '/admin/restaurant'
     | '/admin/stock'
     | '/admin/utilisateurs'
-=======
-    | '/auth'
-    | '/chambres'
-    | '/contact'
-    | '/galerie'
-    | '/reserver'
-    | '/restaurant'
-    | '/mes-reservations'
-    | '/chambres/$id'
-    | '/admin/chambres'
-    | '/admin/clients'
-    | '/admin/reservations'
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     | '/admin'
     | '/admin/clients/$id'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
-<<<<<<< HEAD
     | '/a-propos'
     | '/auth'
     | '/blog'
@@ -576,20 +459,6 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/restaurant'
     | '/_authenticated/admin/stock'
     | '/_authenticated/admin/utilisateurs'
-=======
-    | '/auth'
-    | '/chambres'
-    | '/contact'
-    | '/galerie'
-    | '/reserver'
-    | '/restaurant'
-    | '/_authenticated/admin'
-    | '/_authenticated/mes-reservations'
-    | '/chambres/$id'
-    | '/_authenticated/admin/chambres'
-    | '/_authenticated/admin/clients'
-    | '/_authenticated/admin/reservations'
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     | '/_authenticated/admin/'
     | '/_authenticated/admin/clients/$id'
   fileRoutesById: FileRoutesById
@@ -597,7 +466,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-<<<<<<< HEAD
   AProposRoute: typeof AProposRoute
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
@@ -616,19 +484,10 @@ export interface RootRouteChildren {
   ReserverRoute: typeof ReserverRoute
   RestaurantRoute: typeof RestaurantRoute
   ServicesRoute: typeof ServicesRoute
-=======
-  AuthRoute: typeof AuthRoute
-  ChambresRoute: typeof ChambresRouteWithChildren
-  ContactRoute: typeof ContactRoute
-  GalerieRoute: typeof GalerieRoute
-  ReserverRoute: typeof ReserverRoute
-  RestaurantRoute: typeof RestaurantRoute
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-<<<<<<< HEAD
     '/services': {
       id: '/services'
       path: '/services'
@@ -636,8 +495,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     '/restaurant': {
       id: '/restaurant'
       path: '/restaurant'
@@ -652,7 +509,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReserverRouteImport
       parentRoute: typeof rootRouteImport
     }
-<<<<<<< HEAD
     '/offres': {
       id: '/offres'
       path: '/offres'
@@ -674,8 +530,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GuideRouteImport
       parentRoute: typeof rootRouteImport
     }
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     '/galerie': {
       id: '/galerie'
       path: '/galerie'
@@ -683,7 +537,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GalerieRouteImport
       parentRoute: typeof rootRouteImport
     }
-<<<<<<< HEAD
     '/faq': {
       id: '/faq'
       path: '/faq'
@@ -705,8 +558,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EvenementsRouteImport
       parentRoute: typeof rootRouteImport
     }
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -714,7 +565,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-<<<<<<< HEAD
     '/confidentialite': {
       id: '/confidentialite'
       path: '/confidentialite'
@@ -729,8 +579,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComparerRouteImport
       parentRoute: typeof rootRouteImport
     }
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     '/chambres': {
       id: '/chambres'
       path: '/chambres'
@@ -738,7 +586,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChambresRouteImport
       parentRoute: typeof rootRouteImport
     }
-<<<<<<< HEAD
     '/cgv': {
       id: '/cgv'
       path: '/cgv'
@@ -753,8 +600,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -762,7 +607,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-<<<<<<< HEAD
     '/a-propos': {
       id: '/a-propos'
       path: '/a-propos'
@@ -770,8 +614,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AProposRouteImport
       parentRoute: typeof rootRouteImport
     }
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -793,7 +635,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChambresIdRouteImport
       parentRoute: typeof ChambresRoute
     }
-<<<<<<< HEAD
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/$slug'
@@ -801,8 +642,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
     }
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     '/_authenticated/mes-reservations': {
       id: '/_authenticated/mes-reservations'
       path: '/mes-reservations'
@@ -824,7 +663,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
-<<<<<<< HEAD
     '/_authenticated/admin/utilisateurs': {
       id: '/_authenticated/admin/utilisateurs'
       path: '/utilisateurs'
@@ -846,8 +684,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRestaurantRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     '/_authenticated/admin/reservations': {
       id: '/_authenticated/admin/reservations'
       path: '/reservations'
@@ -855,7 +691,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminReservationsRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
-<<<<<<< HEAD
     '/_authenticated/admin/rapports': {
       id: '/_authenticated/admin/rapports'
       path: '/rapports'
@@ -884,8 +719,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminFinanceRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     '/_authenticated/admin/clients': {
       id: '/_authenticated/admin/clients'
       path: '/clients'
@@ -927,7 +760,6 @@ const AuthenticatedAdminClientsRouteWithChildren =
 interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminChambresRoute: typeof AuthenticatedAdminChambresRoute
   AuthenticatedAdminClientsRoute: typeof AuthenticatedAdminClientsRouteWithChildren
-<<<<<<< HEAD
   AuthenticatedAdminFinanceRoute: typeof AuthenticatedAdminFinanceRoute
   AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
   AuthenticatedAdminPlanningRoute: typeof AuthenticatedAdminPlanningRoute
@@ -936,9 +768,6 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminRestaurantRoute: typeof AuthenticatedAdminRestaurantRoute
   AuthenticatedAdminStockRoute: typeof AuthenticatedAdminStockRoute
   AuthenticatedAdminUtilisateursRoute: typeof AuthenticatedAdminUtilisateursRoute
-=======
-  AuthenticatedAdminReservationsRoute: typeof AuthenticatedAdminReservationsRoute
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
@@ -946,7 +775,6 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
   {
     AuthenticatedAdminChambresRoute: AuthenticatedAdminChambresRoute,
     AuthenticatedAdminClientsRoute: AuthenticatedAdminClientsRouteWithChildren,
-<<<<<<< HEAD
     AuthenticatedAdminFinanceRoute: AuthenticatedAdminFinanceRoute,
     AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
     AuthenticatedAdminPlanningRoute: AuthenticatedAdminPlanningRoute,
@@ -955,9 +783,6 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminRestaurantRoute: AuthenticatedAdminRestaurantRoute,
     AuthenticatedAdminStockRoute: AuthenticatedAdminStockRoute,
     AuthenticatedAdminUtilisateursRoute: AuthenticatedAdminUtilisateursRoute,
-=======
-    AuthenticatedAdminReservationsRoute: AuthenticatedAdminReservationsRoute,
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   }
 
@@ -979,7 +804,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
-<<<<<<< HEAD
 interface BlogRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
 }
@@ -990,8 +814,6 @@ const BlogRouteChildren: BlogRouteChildren = {
 
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 interface ChambresRouteChildren {
   ChambresIdRoute: typeof ChambresIdRoute
 }
@@ -1007,7 +829,6 @@ const ChambresRouteWithChildren = ChambresRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-<<<<<<< HEAD
   AProposRoute: AProposRoute,
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
@@ -1026,19 +847,10 @@ const rootRouteChildren: RootRouteChildren = {
   ReserverRoute: ReserverRoute,
   RestaurantRoute: RestaurantRoute,
   ServicesRoute: ServicesRoute,
-=======
-  AuthRoute: AuthRoute,
-  ChambresRoute: ChambresRouteWithChildren,
-  ContactRoute: ContactRoute,
-  GalerieRoute: GalerieRoute,
-  ReserverRoute: ReserverRoute,
-  RestaurantRoute: RestaurantRoute,
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-<<<<<<< HEAD
 
 import type { getRouter } from './router.tsx'
 import type { startInstance } from './start.ts'
@@ -1049,5 +861,3 @@ declare module '@tanstack/react-start' {
     config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014

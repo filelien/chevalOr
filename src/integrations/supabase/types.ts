@@ -111,10 +111,7 @@ export type Database = {
           check_out: string
           confirmed_at: string | null
           created_at: string
-<<<<<<< HEAD
           discount_percent: number | null
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
           guest_id: string | null
           guests_count: number
           id: string
@@ -124,10 +121,7 @@ export type Database = {
           payment_amount: number | null
           payment_method: string | null
           profile_id: string | null
-<<<<<<< HEAD
           promo_code: string | null
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
           reference: string
           room_id: string
           special_requests: string | null
@@ -142,10 +136,7 @@ export type Database = {
           check_out: string
           confirmed_at?: string | null
           created_at?: string
-<<<<<<< HEAD
           discount_percent?: number | null
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
           guest_id?: string | null
           guests_count?: number
           id?: string
@@ -155,10 +146,7 @@ export type Database = {
           payment_amount?: number | null
           payment_method?: string | null
           profile_id?: string | null
-<<<<<<< HEAD
           promo_code?: string | null
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
           reference?: string
           room_id: string
           special_requests?: string | null
@@ -173,10 +161,7 @@ export type Database = {
           check_out?: string
           confirmed_at?: string | null
           created_at?: string
-<<<<<<< HEAD
           discount_percent?: number | null
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
           guest_id?: string | null
           guests_count?: number
           id?: string
@@ -186,10 +171,7 @@ export type Database = {
           payment_amount?: number | null
           payment_method?: string | null
           profile_id?: string | null
-<<<<<<< HEAD
           promo_code?: string | null
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
           reference?: string
           room_id?: string
           special_requests?: string | null
@@ -304,7 +286,6 @@ export type Database = {
         }
         Relationships: []
       }
-<<<<<<< HEAD
       menu_categories: {
         Row: {
           created_at: string
@@ -701,8 +682,6 @@ export type Database = {
         }
         Relationships: []
       }
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
       user_roles: {
         Row: {
           created_at: string
@@ -761,13 +740,10 @@ export type Database = {
         }
         Returns: boolean
       }
-<<<<<<< HEAD
       recalc_order_total: {
         Args: { _order_id: string }
         Returns: undefined
       }
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     }
     Enums: {
       app_role:
@@ -778,7 +754,6 @@ export type Database = {
         | "accountant"
         | "cleaning_staff"
         | "customer"
-<<<<<<< HEAD
       finance_type: "income" | "expense"
       order_status:
         | "new"
@@ -787,8 +762,6 @@ export type Database = {
         | "served"
         | "paid"
         | "cancelled"
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
       reservation_status:
         | "pending"
         | "confirmed"
@@ -801,7 +774,6 @@ export type Database = {
         | "cleaning"
         | "maintenance"
         | "reserved"
-<<<<<<< HEAD
       table_status:
         | "available"
         | "occupied"
@@ -812,8 +784,6 @@ export type Database = {
         | "confirmed"
         | "cancelled"
         | "completed"
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
       room_type: "standard" | "superior" | "deluxe" | "suite" | "family"
     }
     CompositeTypes: {
@@ -951,7 +921,6 @@ export const Constants = {
         "cleaning_staff",
         "customer",
       ],
-<<<<<<< HEAD
       finance_type: ["income", "expense"],
       order_status: [
         "new",
@@ -961,8 +930,6 @@ export const Constants = {
         "paid",
         "cancelled",
       ],
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
       reservation_status: [
         "pending",
         "confirmed",
@@ -977,7 +944,6 @@ export const Constants = {
         "maintenance",
         "reserved",
       ],
-<<<<<<< HEAD
       table_status: [
         "available",
         "occupied",
@@ -990,8 +956,6 @@ export const Constants = {
         "cancelled",
         "completed",
       ],
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
       room_type: ["standard", "superior", "deluxe", "suite", "family"],
     },
   },

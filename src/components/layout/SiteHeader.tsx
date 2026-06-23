@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-<<<<<<< HEAD
 import { Menu, X, UserCircle, ChevronDown } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { useAuth, signOut } from "@/lib/auth";
@@ -27,40 +26,18 @@ const moreNav = [
   { to: "/blog", labelKey: "blog" as const },
   { to: "/faq", labelKey: "faq" as const },
   { to: "/reserver", labelKey: "book" as const },
-=======
-import { Menu, X, UserCircle } from "lucide-react";
-import logo from "@/assets/logo.png";
-import { useAuth, signOut } from "@/lib/auth";
-import { Button } from "@/components/ui/button";
-
-const nav = [
-  { to: "/", label: "Accueil" },
-  { to: "/chambres", label: "Chambres" },
-  { to: "/reserver", label: "Réserver" },
-  { to: "/restaurant", label: "Restaurant" },
-  { to: "/galerie", label: "Galerie" },
-  { to: "/contact", label: "Contact" },
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 ] as const;
 
 export function SiteHeader() {
   const { user, isStaff } = useAuth();
-<<<<<<< HEAD
   const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [more, setMore] = useState(false);
-=======
-  const [open, setOpen] = useState(false);
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 lg:px-8">
-<<<<<<< HEAD
         <Link to="/" className="flex items-center gap-3 shrink-0" aria-label="Hôtel Le Cheval d'Or">
-=======
-        <Link to="/" className="flex items-center gap-3" aria-label="Hôtel Le Cheval d'Or">
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
           <img src={logo} alt="" className="h-12 w-12 object-contain" width={48} height={48} />
           <div className="hidden flex-col leading-tight sm:flex">
             <span className="font-display text-lg font-semibold tracking-wide">Le Cheval d'Or</span>
@@ -68,7 +45,6 @@ export function SiteHeader() {
           </div>
         </Link>
 
-<<<<<<< HEAD
         <nav className="hidden items-center gap-5 xl:flex">
           {mainNav.map((n) => (
             <Link key={n.to} to={n.to}
@@ -107,64 +83,16 @@ export function SiteHeader() {
             <>
               <Button variant="ghost" size="sm" asChild><Link to="/auth">{t.cta.login}</Link></Button>
               <Button variant="hero" size="sm" asChild><Link to="/reserver">{t.cta.book}</Link></Button>
-=======
-        <nav className="hidden items-center gap-8 lg:flex">
-          {nav.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              className="text-sm font-medium text-foreground/80 transition-colors hover:text-gold-deep"
-              activeProps={{ className: "text-gold-deep" }}
-              activeOptions={{ exact: n.to === "/" }}
-            >
-              {n.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="hidden items-center gap-3 lg:flex">
-          {user ? (
-            <>
-              {isStaff && (
-                <Button variant="goldOutline" size="sm" asChild>
-                  <Link to="/admin">Dashboard</Link>
-                </Button>
-              )}
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/mes-reservations" className="flex items-center gap-2">
-                  <UserCircle className="size-4" /> Mon espace
-                </Link>
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => signOut()}>Déconnexion</Button>
-            </>
-          ) : (
-            <>
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/auth">Connexion</Link>
-              </Button>
-              <Button variant="hero" size="sm" asChild>
-                <Link to="/chambres">Réserver</Link>
-              </Button>
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
             </>
           )}
         </div>
 
-<<<<<<< HEAD
         <button className="p-2 lg:hidden" onClick={() => setOpen((o) => !o)} aria-label="Menu">
-=======
-        <button
-          className="lg:hidden p-2"
-          onClick={() => setOpen((o) => !o)}
-          aria-label="Menu"
-        >
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
           {open ? <X /> : <Menu />}
         </button>
       </div>
 
       {open && (
-<<<<<<< HEAD
         <div className="border-t border-border/60 bg-background lg:hidden max-h-[80vh] overflow-y-auto">
           <div className="flex flex-col px-4 py-4">
             {[...mainNav, ...moreNav].map((n) => (
@@ -182,37 +110,6 @@ export function SiteHeader() {
                 <>
                   <Button variant="ghost" asChild><Link to="/auth">{t.cta.login}</Link></Button>
                   <Button variant="hero" asChild><Link to="/reserver">{t.cta.book}</Link></Button>
-=======
-        <div className="border-t border-border/60 bg-background lg:hidden">
-          <div className="flex flex-col px-4 py-4">
-            {nav.map((n) => (
-              <Link
-                key={n.to}
-                to={n.to}
-                onClick={() => setOpen(false)}
-                className="py-3 text-sm font-medium"
-              >
-                {n.label}
-              </Link>
-            ))}
-            <div className="mt-3 flex flex-col gap-2 border-t border-border/60 pt-3">
-              {user ? (
-                <>
-                  {isStaff && (
-                    <Button variant="goldOutline" asChild>
-                      <Link to="/admin">Dashboard</Link>
-                    </Button>
-                  )}
-                  <Button variant="ghost" asChild>
-                    <Link to="/mes-reservations">Mon espace</Link>
-                  </Button>
-                  <Button variant="ghost" onClick={() => signOut()}>Déconnexion</Button>
-                </>
-              ) : (
-                <>
-                  <Button variant="ghost" asChild><Link to="/auth">Connexion</Link></Button>
-                  <Button variant="hero" asChild><Link to="/chambres">Réserver</Link></Button>
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
                 </>
               )}
             </div>
@@ -221,8 +118,4 @@ export function SiteHeader() {
       )}
     </header>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014

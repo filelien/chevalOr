@@ -1,9 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-<<<<<<< HEAD
 import { useEffect, useState } from "react";
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 import { SiteShell } from "@/components/layout/SiteShell";
 import { supabase } from "@/integrations/supabase/client";
 import { formatXOF } from "@/lib/rooms";
@@ -12,11 +9,7 @@ import { cancelReservation, STATUS_BADGE, STATUS_LABEL, type ReservationStatus }
 import { generateInvoicePDF } from "@/lib/invoice";
 import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
-<<<<<<< HEAD
 import { Download, Receipt, XCircle, User, Save } from "lucide-react";
-=======
-import { Download, Receipt, XCircle } from "lucide-react";
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 
 export const Route = createFileRoute("/_authenticated/mes-reservations")({
   component: MyReservations,
@@ -25,13 +18,10 @@ export const Route = createFileRoute("/_authenticated/mes-reservations")({
 function MyReservations() {
   const qc = useQueryClient();
   const { user } = useAuth();
-<<<<<<< HEAD
   const [editing, setEditing] = useState(false);
   const [profileForm, setProfileForm] = useState({ full_name: "", phone: "", address: "", city: "", country: "" });
   const [savingProfile, setSavingProfile] = useState(false);
 
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
   const { data, isLoading } = useQuery({
     queryKey: ["my-reservations"],
     queryFn: async () => {
@@ -53,7 +43,6 @@ function MyReservations() {
     },
   });
 
-<<<<<<< HEAD
   useEffect(() => {
     if (profile) {
       setProfileForm({
@@ -66,15 +55,12 @@ function MyReservations() {
     }
   }, [profile]);
 
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
   async function handleCancel(id: string, ref: string) {
     if (!confirm(`Annuler la réservation ${ref} ?`)) return;
     try {
       await cancelReservation(id, "Annulée par le client");
       toast.success("Réservation annulée");
       qc.invalidateQueries({ queryKey: ["my-reservations"] });
-<<<<<<< HEAD
     } catch (e: unknown) {
       toast.error(e instanceof Error ? e.message : "Erreur");
     }
@@ -109,12 +95,6 @@ function MyReservations() {
     paid_at: string | null;
     rooms?: { name?: string; number?: string; price_per_night?: number } | null;
   }, type: "invoice" | "receipt") {
-=======
-    } catch (e: any) { toast.error(e.message); }
-  }
-
-  function downloadPDF(r: any, type: "invoice" | "receipt") {
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     generateInvoicePDF({
       reference: r.reference,
       type,
@@ -139,7 +119,6 @@ function MyReservations() {
   return (
     <SiteShell>
       <section className="mx-auto max-w-5xl px-6 py-16">
-<<<<<<< HEAD
         <h1 className="font-display text-4xl">Mon espace client</h1>
         <p className="mt-2 text-muted-foreground">Réservations, factures et profil personnel.</p>
 
@@ -199,12 +178,6 @@ function MyReservations() {
 
         <h2 className="mt-12 font-display text-2xl">Mes réservations</h2>
         <div className="mt-6 space-y-4">
-=======
-        <h1 className="font-display text-4xl">Mes réservations</h1>
-        <p className="mt-2 text-muted-foreground">Historique et statut de vos séjours.</p>
-
-        <div className="mt-10 space-y-4">
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
           {isLoading ? (
             <p className="text-muted-foreground">Chargement…</p>
           ) : (data?.length ?? 0) === 0 ? (
@@ -212,11 +185,7 @@ function MyReservations() {
               <p className="text-muted-foreground">Aucune réservation pour le moment.</p>
               <Button variant="hero" className="mt-4" asChild><Link to="/chambres">Réserver une chambre</Link></Button>
             </div>
-<<<<<<< HEAD
           ) : data!.map((r) => {
-=======
-          ) : data!.map((r: any) => {
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
             const status = r.status as ReservationStatus;
             const canCancel = status === "pending" || status === "confirmed";
             return (
@@ -228,12 +197,9 @@ function MyReservations() {
                     <p className="text-sm text-muted-foreground">
                       Du {r.check_in} au {r.check_out} · {r.nights} nuit(s) · {r.guests_count} pers.
                     </p>
-<<<<<<< HEAD
                     {r.promo_code && (
                       <p className="mt-1 text-xs text-emerald-600">Code {r.promo_code}{r.discount_percent ? ` (-${r.discount_percent}%)` : ""}</p>
                     )}
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
                   </div>
                   <div className="text-right">
                     <span className={`rounded-full px-3 py-1 text-xs ${STATUS_BADGE[status] ?? "bg-secondary"}`}>
@@ -264,8 +230,4 @@ function MyReservations() {
       </section>
     </SiteShell>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014

@@ -4,18 +4,11 @@ import { SiteShell } from "@/components/layout/SiteShell";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
-<<<<<<< HEAD
 import { findAvailableRoom, isRoomAvailable } from "@/lib/reservations";
 import { validatePromoCode, applyDiscount } from "@/lib/promo";
 import { formatXOF, ROOM_TYPE_LABEL, type Room } from "@/lib/rooms";
 import { toast } from "sonner";
 import { Sparkles, Tag } from "lucide-react";
-=======
-import { findAvailableRoom } from "@/lib/reservations";
-import { formatXOF, ROOM_TYPE_LABEL, type Room } from "@/lib/rooms";
-import { toast } from "sonner";
-import { Sparkles } from "lucide-react";
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 
 export const Route = createFileRoute("/reserver")({
   head: () => ({
@@ -24,15 +17,12 @@ export const Route = createFileRoute("/reserver")({
       { name: "description", content: "Réservez votre chambre en un clic. Nous attribuons automatiquement la chambre disponible la plus adaptée." },
     ],
   }),
-<<<<<<< HEAD
   validateSearch: (s: Record<string, unknown>) => ({
     in: (s.in as string) ?? "",
     out: (s.out as string) ?? "",
     guests: (s.guests as string) ?? "2",
     promo: (s.promo as string) ?? "",
   }),
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
   component: ReserverPage,
 });
 
@@ -48,25 +38,16 @@ const TYPES: Array<{ value: Room["type"] | ""; label: string }> = [
 function ReserverPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
-<<<<<<< HEAD
   const search = Route.useSearch();
   const [checkIn, setCheckIn] = useState(search.in);
   const [checkOut, setCheckOut] = useState(search.out);
   const [guests, setGuests] = useState(Number(search.guests) || 2);
-=======
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
-  const [guests, setGuests] = useState(2);
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
   const [type, setType] = useState<string>("");
   const [requests, setRequests] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [match, setMatch] = useState<any>(null);
-<<<<<<< HEAD
   const [promoInput, setPromoInput] = useState(search.promo);
   const [appliedPromo, setAppliedPromo] = useState<{ code: string; percent: number } | null>(null);
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 
   const nights = checkIn && checkOut
     ? Math.max(0, Math.round((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / 86400000))
@@ -89,7 +70,6 @@ function ReserverPage() {
     }
   }
 
-<<<<<<< HEAD
   async function applyPromo() {
     try {
       const promo = await validatePromoCode(promoInput);
@@ -99,22 +79,16 @@ function ReserverPage() {
     } catch (e: any) { toast.error(e.message); }
   }
 
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
   async function handleConfirm() {
     if (!user) { toast.error("Veuillez vous connecter"); return; }
     if (!match) return;
     setSubmitting(true);
-<<<<<<< HEAD
     const subtotal = nights * Number(match.price_per_night);
     const { total, discountPercent } = appliedPromo
       ? { total: applyDiscount(subtotal, appliedPromo.percent).total, discountPercent: appliedPromo.percent }
       : { total: subtotal, discountPercent: null };
     const ok = await isRoomAvailable(match.id, checkIn, checkOut);
     if (!ok) { toast.error("Chambre plus disponible"); setSubmitting(false); return; }
-=======
-    const total = nights * Number(match.price_per_night);
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     const { error } = await supabase.from("reservations").insert({
       room_id: match.id,
       profile_id: user.id,
@@ -125,11 +99,8 @@ function ReserverPage() {
       total_price: total,
       status: "pending",
       special_requests: requests || null,
-<<<<<<< HEAD
       promo_code: appliedPromo?.code ?? null,
       discount_percent: discountPercent,
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
     });
     setSubmitting(false);
     if (error) { toast.error(error.message); return; }
@@ -174,14 +145,11 @@ function ReserverPage() {
           <Button type="submit" variant="hero" size="lg" className="mt-6 w-full" disabled={submitting}>
             {submitting ? "Recherche…" : "Trouver une chambre disponible"}
           </Button>
-<<<<<<< HEAD
           <div className="mt-4 flex gap-2">
             <input value={promoInput} onChange={(e) => setPromoInput(e.target.value.toUpperCase())} placeholder="Code promo (CHEVAL20…)"
               className="flex-1 rounded-md border border-input px-3 py-2 text-sm uppercase" />
             <Button type="button" variant="outline" onClick={applyPromo}><Tag className="size-4" /></Button>
           </div>
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
         </form>
 
         {match && (
@@ -197,14 +165,10 @@ function ReserverPage() {
             <div className="mt-4 flex items-end justify-between border-t border-border/60 pt-4">
               <div>
                 <p className="text-xs uppercase tracking-wider text-muted-foreground">{nights} nuit(s)</p>
-<<<<<<< HEAD
                 <p className="font-display text-3xl text-gold-deep">
                   {formatXOF(appliedPromo ? applyDiscount(nights * Number(match.price_per_night), appliedPromo.percent).total : nights * Number(match.price_per_night))}
                 </p>
                 {appliedPromo && <p className="text-xs text-emerald-600">Code {appliedPromo.code} (-{appliedPromo.percent}%)</p>}
-=======
-                <p className="font-display text-3xl text-gold-deep">{formatXOF(nights * Number(match.price_per_night))}</p>
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
               </div>
               {user ? (
                 <Button variant="hero" size="lg" onClick={handleConfirm} disabled={submitting}>

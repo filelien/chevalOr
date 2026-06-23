@@ -15,12 +15,9 @@ dist-ssr
 .tanstack/**
 .nitro
 *.local
-<<<<<<< HEAD
 .env
 .env.*
 !.env.example
-=======
->>>>>>> 7a008f259efac475f06da1671ad6d3f8359af014
 
 # Wrangler / Cloudflare
 .wrangler/
