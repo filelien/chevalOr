@@ -39,6 +39,7 @@ import { Route as AuthenticatedAdminUtilisateursRouteImport } from './routes/_au
 import { Route as AuthenticatedAdminStockRouteImport } from './routes/_authenticated/admin/stock'
 import { Route as AuthenticatedAdminSiteWebRouteImport } from './routes/_authenticated/admin/site-web'
 import { Route as AuthenticatedAdminSeoRouteImport } from './routes/_authenticated/admin/seo'
+import { Route as AuthenticatedAdminRolesRouteImport } from './routes/_authenticated/admin/roles'
 import { Route as AuthenticatedAdminRestaurantRouteImport } from './routes/_authenticated/admin/restaurant'
 import { Route as AuthenticatedAdminReservationsRouteImport } from './routes/_authenticated/admin/reservations'
 import { Route as AuthenticatedAdminRapportsRouteImport } from './routes/_authenticated/admin/rapports'
@@ -213,6 +214,11 @@ const AuthenticatedAdminSeoRoute = AuthenticatedAdminSeoRouteImport.update({
   path: '/seo',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedAdminRolesRoute = AuthenticatedAdminRolesRouteImport.update({
+  id: '/roles',
+  path: '/roles',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
 const AuthenticatedAdminRestaurantRoute =
   AuthenticatedAdminRestaurantRouteImport.update({
     id: '/restaurant',
@@ -376,6 +382,7 @@ export interface FileRoutesByFullPath {
   '/admin/rapports': typeof AuthenticatedAdminRapportsRoute
   '/admin/reservations': typeof AuthenticatedAdminReservationsRoute
   '/admin/restaurant': typeof AuthenticatedAdminRestaurantRoute
+  '/admin/roles': typeof AuthenticatedAdminRolesRoute
   '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/site-web': typeof AuthenticatedAdminSiteWebRoute
   '/admin/stock': typeof AuthenticatedAdminStockRoute
@@ -426,6 +433,7 @@ export interface FileRoutesByTo {
   '/admin/rapports': typeof AuthenticatedAdminRapportsRoute
   '/admin/reservations': typeof AuthenticatedAdminReservationsRoute
   '/admin/restaurant': typeof AuthenticatedAdminRestaurantRoute
+  '/admin/roles': typeof AuthenticatedAdminRolesRoute
   '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/site-web': typeof AuthenticatedAdminSiteWebRoute
   '/admin/stock': typeof AuthenticatedAdminStockRoute
@@ -479,6 +487,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/rapports': typeof AuthenticatedAdminRapportsRoute
   '/_authenticated/admin/reservations': typeof AuthenticatedAdminReservationsRoute
   '/_authenticated/admin/restaurant': typeof AuthenticatedAdminRestaurantRoute
+  '/_authenticated/admin/roles': typeof AuthenticatedAdminRolesRoute
   '/_authenticated/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/_authenticated/admin/site-web': typeof AuthenticatedAdminSiteWebRoute
   '/_authenticated/admin/stock': typeof AuthenticatedAdminStockRoute
@@ -532,6 +541,7 @@ export interface FileRouteTypes {
     | '/admin/rapports'
     | '/admin/reservations'
     | '/admin/restaurant'
+    | '/admin/roles'
     | '/admin/seo'
     | '/admin/site-web'
     | '/admin/stock'
@@ -582,6 +592,7 @@ export interface FileRouteTypes {
     | '/admin/rapports'
     | '/admin/reservations'
     | '/admin/restaurant'
+    | '/admin/roles'
     | '/admin/seo'
     | '/admin/site-web'
     | '/admin/stock'
@@ -634,6 +645,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/rapports'
     | '/_authenticated/admin/reservations'
     | '/_authenticated/admin/restaurant'
+    | '/_authenticated/admin/roles'
     | '/_authenticated/admin/seo'
     | '/_authenticated/admin/site-web'
     | '/_authenticated/admin/stock'
@@ -878,6 +890,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSeoRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/roles': {
+      id: '/_authenticated/admin/roles'
+      path: '/roles'
+      fullPath: '/admin/roles'
+      preLoaderRoute: typeof AuthenticatedAdminRolesRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/restaurant': {
       id: '/_authenticated/admin/restaurant'
       path: '/restaurant'
@@ -1055,6 +1074,7 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminRapportsRoute: typeof AuthenticatedAdminRapportsRoute
   AuthenticatedAdminReservationsRoute: typeof AuthenticatedAdminReservationsRoute
   AuthenticatedAdminRestaurantRoute: typeof AuthenticatedAdminRestaurantRoute
+  AuthenticatedAdminRolesRoute: typeof AuthenticatedAdminRolesRoute
   AuthenticatedAdminSeoRoute: typeof AuthenticatedAdminSeoRoute
   AuthenticatedAdminSiteWebRoute: typeof AuthenticatedAdminSiteWebRoute
   AuthenticatedAdminStockRoute: typeof AuthenticatedAdminStockRoute
@@ -1084,6 +1104,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminRapportsRoute: AuthenticatedAdminRapportsRoute,
     AuthenticatedAdminReservationsRoute: AuthenticatedAdminReservationsRoute,
     AuthenticatedAdminRestaurantRoute: AuthenticatedAdminRestaurantRoute,
+    AuthenticatedAdminRolesRoute: AuthenticatedAdminRolesRoute,
     AuthenticatedAdminSeoRoute: AuthenticatedAdminSeoRoute,
     AuthenticatedAdminSiteWebRoute: AuthenticatedAdminSiteWebRoute,
     AuthenticatedAdminStockRoute: AuthenticatedAdminStockRoute,

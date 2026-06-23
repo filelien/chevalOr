@@ -7,78 +7,80 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useAuth, signOut, type AppRole } from "@/lib/auth";
+import { useAuth, signOut } from "@/lib/auth";
+import type { PermissionKey } from "@/lib/permissions";
 import { fetchNotifications } from "@/lib/notifications-admin";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 
-type Item = { to: string; label: string; Icon: typeof LayoutDashboard; roles?: AppRole[] };
+type Item = { to: string; label: string; Icon: typeof LayoutDashboard; permission?: PermissionKey };
 
 const sections: { title: string; items: Item[] }[] = [
   {
     title: "Centre de commande",
     items: [
-      { to: "/admin", label: "Tableau de bord", Icon: LayoutDashboard },
-      { to: "/admin/notifications", label: "Alertes", Icon: Bell, roles: ["super_admin", "manager", "reception"] },
-      { to: "/admin/activite", label: "Journal d'activité", Icon: ScrollText, roles: ["super_admin", "manager"] },
+      { to: "/admin", label: "Tableau de bord", Icon: LayoutDashboard, permission: "dashboard.view" },
+      { to: "/admin/notifications", label: "Alertes", Icon: Bell, permission: "notification.view" },
+      { to: "/admin/activite", label: "Journal d'activité", Icon: ScrollText, permission: "audit.view" },
     ],
   },
   {
     title: "Gestion hôtelière",
     items: [
-      { to: "/admin/chambres", label: "Chambres", Icon: BedDouble, roles: ["super_admin", "manager", "reception", "cleaning_staff"] },
-      { to: "/admin/planning", label: "Planning", Icon: CalendarRange, roles: ["super_admin", "manager", "reception"] },
-      { to: "/admin/reservations", label: "Réservations", Icon: CalendarCheck, roles: ["super_admin", "manager", "reception"] },
-      { to: "/admin/clients", label: "Clients (CRM)", Icon: Users, roles: ["super_admin", "manager", "reception"] },
-      { to: "/admin/conference", label: "Salle de conférence", Icon: Presentation, roles: ["super_admin", "manager", "reception"] },
-      { to: "/admin/evenements", label: "Événements", Icon: PartyPopper, roles: ["super_admin", "manager", "reception"] },
+      { to: "/admin/chambres", label: "Chambres", Icon: BedDouble, permission: "room.view" },
+      { to: "/admin/planning", label: "Planning", Icon: CalendarRange, permission: "reservation.view" },
+      { to: "/admin/reservations", label: "Réservations", Icon: CalendarCheck, permission: "reservation.view" },
+      { to: "/admin/clients", label: "Clients (CRM)", Icon: Users, permission: "client.view" },
+      { to: "/admin/conference", label: "Salle de conférence", Icon: Presentation, permission: "conference.view" },
+      { to: "/admin/evenements", label: "Événements", Icon: PartyPopper, permission: "event.view" },
     ],
   },
   {
     title: "Exploitation",
     items: [
-      { to: "/admin/restaurant", label: "Restaurant", Icon: UtensilsCrossed, roles: ["super_admin", "manager", "restaurant_staff"] },
-      { to: "/admin/stock", label: "Stocks", Icon: Boxes, roles: ["super_admin", "manager"] },
-      { to: "/admin/personnel", label: "Personnel", Icon: UserCog, roles: ["super_admin", "manager"] },
+      { to: "/admin/restaurant", label: "Restaurant", Icon: UtensilsCrossed, permission: "restaurant.view" },
+      { to: "/admin/stock", label: "Stocks", Icon: Boxes, permission: "stock.view" },
+      { to: "/admin/personnel", label: "Personnel", Icon: UserCog, permission: "staff.view" },
     ],
   },
   {
     title: "Finances",
     items: [
-      { to: "/admin/finance", label: "Comptabilité", Icon: Wallet, roles: ["super_admin", "manager", "accountant"] },
-      { to: "/admin/paiements", label: "Paiements", Icon: CreditCard, roles: ["super_admin", "manager", "accountant", "reception"] },
-      { to: "/admin/rapports", label: "Rapports", Icon: BarChart3, roles: ["super_admin", "manager"] },
+      { to: "/admin/finance", label: "Comptabilité", Icon: Wallet, permission: "finance.view" },
+      { to: "/admin/paiements", label: "Paiements", Icon: CreditCard, permission: "payment.view" },
+      { to: "/admin/rapports", label: "Rapports", Icon: BarChart3, permission: "report.view" },
     ],
   },
   {
     title: "Marketing",
     items: [
-      { to: "/admin/marketing", label: "Promotions", Icon: Megaphone, roles: ["super_admin", "manager"] },
-      { to: "/admin/avis", label: "Avis clients", Icon: Star, roles: ["super_admin", "manager", "reception"] },
-      { to: "/admin/campagnes", label: "Campagnes email", Icon: Mail, roles: ["super_admin", "manager"] },
-      { to: "/admin/whatsapp", label: "WhatsApp", Icon: MessageCircle, roles: ["super_admin", "manager"] },
+      { to: "/admin/marketing", label: "Promotions", Icon: Megaphone, permission: "marketing.view" },
+      { to: "/admin/avis", label: "Avis clients", Icon: Star, permission: "review.view" },
+      { to: "/admin/campagnes", label: "Campagnes email", Icon: Mail, permission: "marketing.manage" },
+      { to: "/admin/whatsapp", label: "WhatsApp", Icon: MessageCircle, permission: "marketing.manage" },
     ],
   },
   {
     title: "Site web",
     items: [
-      { to: "/admin/site-web", label: "Pages & contenu", Icon: Globe, roles: ["super_admin", "manager"] },
-      { to: "/admin/galerie", label: "Médiathèque", Icon: Image, roles: ["super_admin", "manager"] },
-      { to: "/admin/messages", label: "Messages", Icon: Inbox, roles: ["super_admin", "manager", "reception", "restaurant_staff"] },
-      { to: "/admin/seo", label: "SEO", Icon: Search, roles: ["super_admin", "manager"] },
+      { to: "/admin/site-web", label: "Pages & contenu", Icon: Globe, permission: "site.view" },
+      { to: "/admin/galerie", label: "Médiathèque", Icon: Image, permission: "gallery.view" },
+      { to: "/admin/messages", label: "Messages", Icon: Inbox, permission: "message.view" },
+      { to: "/admin/seo", label: "SEO", Icon: Search, permission: "seo.view" },
     ],
   },
   {
     title: "Administration",
     items: [
-      { to: "/admin/utilisateurs", label: "Utilisateurs & rôles", Icon: Shield, roles: ["super_admin"] },
-      { to: "/admin/parametres", label: "Paramètres", Icon: Settings, roles: ["super_admin", "manager"] },
+      { to: "/admin/utilisateurs", label: "Utilisateurs", Icon: Shield, permission: "user.view" },
+      { to: "/admin/roles", label: "Rôles & permissions", Icon: Shield, permission: "role.view" },
+      { to: "/admin/parametres", label: "Paramètres", Icon: Settings, permission: "settings.view" },
     ],
   },
 ];
 
 export function AdminShell() {
-  const { user, hasAnyRole, roles } = useAuth();
+  const { user, hasPermission, roles } = useAuth();
   const location = useLocation();
   const [open, setOpen] = useState(false);
 
@@ -113,7 +115,7 @@ export function AdminShell() {
             </div>
             <nav className="flex-1 px-3 py-4">
               {sections.map((section) => {
-                const visible = section.items.filter((i) => !i.roles || hasAnyRole(i.roles));
+                const visible = section.items.filter((i) => !i.permission || hasPermission(i.permission));
                 if (!visible.length) return null;
                 return (
                   <div key={section.title} className="mb-5">
