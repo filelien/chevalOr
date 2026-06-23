@@ -63,3 +63,8 @@ export async function setEventStatus(id: string, status: BookingStatus) {
   const { error } = await supabase.from("event_bookings").update({ status }).eq("id", id);
   if (error) throw error;
 }
+
+export async function deleteEventBooking(id: string) {
+  const { error } = await supabase.from("event_bookings").delete().eq("id", id);
+  if (error) throw error;
+}

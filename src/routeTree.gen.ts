@@ -34,6 +34,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedMesReservationsRouteImport } from './routes/_authenticated/mes-reservations'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminWhatsappRouteImport } from './routes/_authenticated/admin/whatsapp'
 import { Route as AuthenticatedAdminUtilisateursRouteImport } from './routes/_authenticated/admin/utilisateurs'
 import { Route as AuthenticatedAdminStockRouteImport } from './routes/_authenticated/admin/stock'
 import { Route as AuthenticatedAdminSiteWebRouteImport } from './routes/_authenticated/admin/site-web'
@@ -44,6 +45,7 @@ import { Route as AuthenticatedAdminRapportsRouteImport } from './routes/_authen
 import { Route as AuthenticatedAdminPlanningRouteImport } from './routes/_authenticated/admin/planning'
 import { Route as AuthenticatedAdminPersonnelRouteImport } from './routes/_authenticated/admin/personnel'
 import { Route as AuthenticatedAdminParametresRouteImport } from './routes/_authenticated/admin/parametres'
+import { Route as AuthenticatedAdminPaiementsRouteImport } from './routes/_authenticated/admin/paiements'
 import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin/notifications'
 import { Route as AuthenticatedAdminMessagesRouteImport } from './routes/_authenticated/admin/messages'
 import { Route as AuthenticatedAdminMarketingRouteImport } from './routes/_authenticated/admin/marketing'
@@ -53,7 +55,9 @@ import { Route as AuthenticatedAdminEvenementsRouteImport } from './routes/_auth
 import { Route as AuthenticatedAdminConferenceRouteImport } from './routes/_authenticated/admin/conference'
 import { Route as AuthenticatedAdminClientsRouteImport } from './routes/_authenticated/admin/clients'
 import { Route as AuthenticatedAdminChambresRouteImport } from './routes/_authenticated/admin/chambres'
+import { Route as AuthenticatedAdminCampagnesRouteImport } from './routes/_authenticated/admin/campagnes'
 import { Route as AuthenticatedAdminAvisRouteImport } from './routes/_authenticated/admin/avis'
+import { Route as AuthenticatedAdminActiviteRouteImport } from './routes/_authenticated/admin/activite'
 import { Route as AuthenticatedAdminClientsIdRouteImport } from './routes/_authenticated/admin/clients.$id'
 
 const ServicesRoute = ServicesRouteImport.update({
@@ -181,6 +185,12 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedAdminWhatsappRoute =
+  AuthenticatedAdminWhatsappRouteImport.update({
+    id: '/whatsapp',
+    path: '/whatsapp',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminUtilisateursRoute =
   AuthenticatedAdminUtilisateursRouteImport.update({
     id: '/utilisateurs',
@@ -239,6 +249,12 @@ const AuthenticatedAdminParametresRoute =
     path: '/parametres',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminPaiementsRoute =
+  AuthenticatedAdminPaiementsRouteImport.update({
+    id: '/paiements',
+    path: '/paiements',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminNotificationsRoute =
   AuthenticatedAdminNotificationsRouteImport.update({
     id: '/notifications',
@@ -293,11 +309,23 @@ const AuthenticatedAdminChambresRoute =
     path: '/chambres',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminCampagnesRoute =
+  AuthenticatedAdminCampagnesRouteImport.update({
+    id: '/campagnes',
+    path: '/campagnes',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminAvisRoute = AuthenticatedAdminAvisRouteImport.update({
   id: '/avis',
   path: '/avis',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedAdminActiviteRoute =
+  AuthenticatedAdminActiviteRouteImport.update({
+    id: '/activite',
+    path: '/activite',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminClientsIdRoute =
   AuthenticatedAdminClientsIdRouteImport.update({
     id: '/$id',
@@ -329,7 +357,9 @@ export interface FileRoutesByFullPath {
   '/mes-reservations': typeof AuthenticatedMesReservationsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/chambres/$id': typeof ChambresIdRoute
+  '/admin/activite': typeof AuthenticatedAdminActiviteRoute
   '/admin/avis': typeof AuthenticatedAdminAvisRoute
+  '/admin/campagnes': typeof AuthenticatedAdminCampagnesRoute
   '/admin/chambres': typeof AuthenticatedAdminChambresRoute
   '/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
   '/admin/conference': typeof AuthenticatedAdminConferenceRoute
@@ -339,6 +369,7 @@ export interface FileRoutesByFullPath {
   '/admin/marketing': typeof AuthenticatedAdminMarketingRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/paiements': typeof AuthenticatedAdminPaiementsRoute
   '/admin/parametres': typeof AuthenticatedAdminParametresRoute
   '/admin/personnel': typeof AuthenticatedAdminPersonnelRoute
   '/admin/planning': typeof AuthenticatedAdminPlanningRoute
@@ -349,6 +380,7 @@ export interface FileRoutesByFullPath {
   '/admin/site-web': typeof AuthenticatedAdminSiteWebRoute
   '/admin/stock': typeof AuthenticatedAdminStockRoute
   '/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
+  '/admin/whatsapp': typeof AuthenticatedAdminWhatsappRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/clients/$id': typeof AuthenticatedAdminClientsIdRoute
 }
@@ -375,7 +407,9 @@ export interface FileRoutesByTo {
   '/mes-reservations': typeof AuthenticatedMesReservationsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/chambres/$id': typeof ChambresIdRoute
+  '/admin/activite': typeof AuthenticatedAdminActiviteRoute
   '/admin/avis': typeof AuthenticatedAdminAvisRoute
+  '/admin/campagnes': typeof AuthenticatedAdminCampagnesRoute
   '/admin/chambres': typeof AuthenticatedAdminChambresRoute
   '/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
   '/admin/conference': typeof AuthenticatedAdminConferenceRoute
@@ -385,6 +419,7 @@ export interface FileRoutesByTo {
   '/admin/marketing': typeof AuthenticatedAdminMarketingRoute
   '/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/admin/paiements': typeof AuthenticatedAdminPaiementsRoute
   '/admin/parametres': typeof AuthenticatedAdminParametresRoute
   '/admin/personnel': typeof AuthenticatedAdminPersonnelRoute
   '/admin/planning': typeof AuthenticatedAdminPlanningRoute
@@ -395,6 +430,7 @@ export interface FileRoutesByTo {
   '/admin/site-web': typeof AuthenticatedAdminSiteWebRoute
   '/admin/stock': typeof AuthenticatedAdminStockRoute
   '/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
+  '/admin/whatsapp': typeof AuthenticatedAdminWhatsappRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/clients/$id': typeof AuthenticatedAdminClientsIdRoute
 }
@@ -424,7 +460,9 @@ export interface FileRoutesById {
   '/_authenticated/mes-reservations': typeof AuthenticatedMesReservationsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/chambres/$id': typeof ChambresIdRoute
+  '/_authenticated/admin/activite': typeof AuthenticatedAdminActiviteRoute
   '/_authenticated/admin/avis': typeof AuthenticatedAdminAvisRoute
+  '/_authenticated/admin/campagnes': typeof AuthenticatedAdminCampagnesRoute
   '/_authenticated/admin/chambres': typeof AuthenticatedAdminChambresRoute
   '/_authenticated/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
   '/_authenticated/admin/conference': typeof AuthenticatedAdminConferenceRoute
@@ -434,6 +472,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/marketing': typeof AuthenticatedAdminMarketingRoute
   '/_authenticated/admin/messages': typeof AuthenticatedAdminMessagesRoute
   '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
+  '/_authenticated/admin/paiements': typeof AuthenticatedAdminPaiementsRoute
   '/_authenticated/admin/parametres': typeof AuthenticatedAdminParametresRoute
   '/_authenticated/admin/personnel': typeof AuthenticatedAdminPersonnelRoute
   '/_authenticated/admin/planning': typeof AuthenticatedAdminPlanningRoute
@@ -444,6 +483,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/site-web': typeof AuthenticatedAdminSiteWebRoute
   '/_authenticated/admin/stock': typeof AuthenticatedAdminStockRoute
   '/_authenticated/admin/utilisateurs': typeof AuthenticatedAdminUtilisateursRoute
+  '/_authenticated/admin/whatsapp': typeof AuthenticatedAdminWhatsappRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/clients/$id': typeof AuthenticatedAdminClientsIdRoute
 }
@@ -473,7 +513,9 @@ export interface FileRouteTypes {
     | '/mes-reservations'
     | '/blog/$slug'
     | '/chambres/$id'
+    | '/admin/activite'
     | '/admin/avis'
+    | '/admin/campagnes'
     | '/admin/chambres'
     | '/admin/clients'
     | '/admin/conference'
@@ -483,6 +525,7 @@ export interface FileRouteTypes {
     | '/admin/marketing'
     | '/admin/messages'
     | '/admin/notifications'
+    | '/admin/paiements'
     | '/admin/parametres'
     | '/admin/personnel'
     | '/admin/planning'
@@ -493,6 +536,7 @@ export interface FileRouteTypes {
     | '/admin/site-web'
     | '/admin/stock'
     | '/admin/utilisateurs'
+    | '/admin/whatsapp'
     | '/admin/'
     | '/admin/clients/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -519,7 +563,9 @@ export interface FileRouteTypes {
     | '/mes-reservations'
     | '/blog/$slug'
     | '/chambres/$id'
+    | '/admin/activite'
     | '/admin/avis'
+    | '/admin/campagnes'
     | '/admin/chambres'
     | '/admin/clients'
     | '/admin/conference'
@@ -529,6 +575,7 @@ export interface FileRouteTypes {
     | '/admin/marketing'
     | '/admin/messages'
     | '/admin/notifications'
+    | '/admin/paiements'
     | '/admin/parametres'
     | '/admin/personnel'
     | '/admin/planning'
@@ -539,6 +586,7 @@ export interface FileRouteTypes {
     | '/admin/site-web'
     | '/admin/stock'
     | '/admin/utilisateurs'
+    | '/admin/whatsapp'
     | '/admin'
     | '/admin/clients/$id'
   id:
@@ -567,7 +615,9 @@ export interface FileRouteTypes {
     | '/_authenticated/mes-reservations'
     | '/blog/$slug'
     | '/chambres/$id'
+    | '/_authenticated/admin/activite'
     | '/_authenticated/admin/avis'
+    | '/_authenticated/admin/campagnes'
     | '/_authenticated/admin/chambres'
     | '/_authenticated/admin/clients'
     | '/_authenticated/admin/conference'
@@ -577,6 +627,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/marketing'
     | '/_authenticated/admin/messages'
     | '/_authenticated/admin/notifications'
+    | '/_authenticated/admin/paiements'
     | '/_authenticated/admin/parametres'
     | '/_authenticated/admin/personnel'
     | '/_authenticated/admin/planning'
@@ -587,6 +638,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/site-web'
     | '/_authenticated/admin/stock'
     | '/_authenticated/admin/utilisateurs'
+    | '/_authenticated/admin/whatsapp'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/clients/$id'
   fileRoutesById: FileRoutesById
@@ -791,6 +843,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/whatsapp': {
+      id: '/_authenticated/admin/whatsapp'
+      path: '/whatsapp'
+      fullPath: '/admin/whatsapp'
+      preLoaderRoute: typeof AuthenticatedAdminWhatsappRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/utilisateurs': {
       id: '/_authenticated/admin/utilisateurs'
       path: '/utilisateurs'
@@ -861,6 +920,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminParametresRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/paiements': {
+      id: '/_authenticated/admin/paiements'
+      path: '/paiements'
+      fullPath: '/admin/paiements'
+      preLoaderRoute: typeof AuthenticatedAdminPaiementsRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/notifications': {
       id: '/_authenticated/admin/notifications'
       path: '/notifications'
@@ -924,11 +990,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminChambresRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/campagnes': {
+      id: '/_authenticated/admin/campagnes'
+      path: '/campagnes'
+      fullPath: '/admin/campagnes'
+      preLoaderRoute: typeof AuthenticatedAdminCampagnesRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/avis': {
       id: '/_authenticated/admin/avis'
       path: '/avis'
       fullPath: '/admin/avis'
       preLoaderRoute: typeof AuthenticatedAdminAvisRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/activite': {
+      id: '/_authenticated/admin/activite'
+      path: '/activite'
+      fullPath: '/admin/activite'
+      preLoaderRoute: typeof AuthenticatedAdminActiviteRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/clients/$id': {
@@ -956,7 +1036,9 @@ const AuthenticatedAdminClientsRouteWithChildren =
   )
 
 interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminActiviteRoute: typeof AuthenticatedAdminActiviteRoute
   AuthenticatedAdminAvisRoute: typeof AuthenticatedAdminAvisRoute
+  AuthenticatedAdminCampagnesRoute: typeof AuthenticatedAdminCampagnesRoute
   AuthenticatedAdminChambresRoute: typeof AuthenticatedAdminChambresRoute
   AuthenticatedAdminClientsRoute: typeof AuthenticatedAdminClientsRouteWithChildren
   AuthenticatedAdminConferenceRoute: typeof AuthenticatedAdminConferenceRoute
@@ -966,6 +1048,7 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminMarketingRoute: typeof AuthenticatedAdminMarketingRoute
   AuthenticatedAdminMessagesRoute: typeof AuthenticatedAdminMessagesRoute
   AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
+  AuthenticatedAdminPaiementsRoute: typeof AuthenticatedAdminPaiementsRoute
   AuthenticatedAdminParametresRoute: typeof AuthenticatedAdminParametresRoute
   AuthenticatedAdminPersonnelRoute: typeof AuthenticatedAdminPersonnelRoute
   AuthenticatedAdminPlanningRoute: typeof AuthenticatedAdminPlanningRoute
@@ -976,12 +1059,15 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminSiteWebRoute: typeof AuthenticatedAdminSiteWebRoute
   AuthenticatedAdminStockRoute: typeof AuthenticatedAdminStockRoute
   AuthenticatedAdminUtilisateursRoute: typeof AuthenticatedAdminUtilisateursRoute
+  AuthenticatedAdminWhatsappRoute: typeof AuthenticatedAdminWhatsappRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
+    AuthenticatedAdminActiviteRoute: AuthenticatedAdminActiviteRoute,
     AuthenticatedAdminAvisRoute: AuthenticatedAdminAvisRoute,
+    AuthenticatedAdminCampagnesRoute: AuthenticatedAdminCampagnesRoute,
     AuthenticatedAdminChambresRoute: AuthenticatedAdminChambresRoute,
     AuthenticatedAdminClientsRoute: AuthenticatedAdminClientsRouteWithChildren,
     AuthenticatedAdminConferenceRoute: AuthenticatedAdminConferenceRoute,
@@ -991,6 +1077,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminMarketingRoute: AuthenticatedAdminMarketingRoute,
     AuthenticatedAdminMessagesRoute: AuthenticatedAdminMessagesRoute,
     AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
+    AuthenticatedAdminPaiementsRoute: AuthenticatedAdminPaiementsRoute,
     AuthenticatedAdminParametresRoute: AuthenticatedAdminParametresRoute,
     AuthenticatedAdminPersonnelRoute: AuthenticatedAdminPersonnelRoute,
     AuthenticatedAdminPlanningRoute: AuthenticatedAdminPlanningRoute,
@@ -1001,6 +1088,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminSiteWebRoute: AuthenticatedAdminSiteWebRoute,
     AuthenticatedAdminStockRoute: AuthenticatedAdminStockRoute,
     AuthenticatedAdminUtilisateursRoute: AuthenticatedAdminUtilisateursRoute,
+    AuthenticatedAdminWhatsappRoute: AuthenticatedAdminWhatsappRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
   }
 

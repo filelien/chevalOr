@@ -45,6 +45,7 @@ export async function markPaid(id: string, method: string, amount: number) {
     .update({
       payment_method: method,
       payment_amount: amount,
+      payment_status: "paid",
       paid_at: new Date().toISOString(),
     })
     .eq("id", id);

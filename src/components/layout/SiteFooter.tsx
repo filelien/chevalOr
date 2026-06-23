@@ -1,13 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo.png";
-import { HOTEL } from "@/lib/content";
 import { useI18n } from "@/lib/i18n";
+import { useHotelCms } from "@/hooks/use-hotel-cms";
 import { NewsletterForm } from "@/components/site/NewsletterForm";
 import { LanguageSwitcherFooter } from "@/components/site/LanguageSwitcher";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
 
 export function SiteFooter() {
   const { t } = useI18n();
+  const { hotel } = useHotelCms();
   return (
     <footer className="mt-24 bg-onyx text-[oklch(0.92_0.01_85)]">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-16 md:grid-cols-2 lg:grid-cols-5">
@@ -21,9 +22,9 @@ export function SiteFooter() {
           </p>
           <div className="mt-4 flex gap-3">
             {[
-              { Icon: Facebook, href: HOTEL.social.facebook, label: "Facebook" },
-              { Icon: Instagram, href: HOTEL.social.instagram, label: "Instagram" },
-              { Icon: Linkedin, href: HOTEL.social.linkedin, label: "LinkedIn" },
+              { Icon: Facebook, href: hotel.social.facebook, label: "Facebook" },
+              { Icon: Instagram, href: hotel.social.instagram, label: "Instagram" },
+              { Icon: Linkedin, href: hotel.social.linkedin, label: "LinkedIn" },
             ].map(({ Icon, href, label }) => (
               <a key={label} href={href} target="_blank" rel="noopener noreferrer"
                 className="rounded-full border border-white/20 p-2 text-white/60 hover:border-gold hover:text-gold" aria-label={label}>
@@ -46,9 +47,9 @@ export function SiteFooter() {
         <div>
           <h4 className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">Contact</h4>
           <ul className="space-y-2 text-sm text-white/70">
-            <li>{HOTEL.address}</li>
-            <li><a href={`tel:${HOTEL.phone}`} className="hover:text-gold">{HOTEL.phone}</a></li>
-            <li><a href={`mailto:${HOTEL.email}`} className="hover:text-gold">{HOTEL.email}</a></li>
+            <li>{hotel.address}</li>
+            <li><a href={`tel:${hotel.phone}`} className="hover:text-gold">{hotel.phone}</a></li>
+            <li><a href={`mailto:${hotel.email}`} className="hover:text-gold">{hotel.email}</a></li>
           </ul>
           <h4 className="mb-2 mt-6 text-xs uppercase tracking-[0.25em] text-gold">{t.footer.legal}</h4>
           <ul className="space-y-2 text-sm text-white/70">

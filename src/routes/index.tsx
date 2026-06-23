@@ -7,9 +7,12 @@ import {
   HOTEL, STORY, TESTIMONIALS, LOYALTY, EXPERIENCES, PACKS, PROMOTIONS,
   SERVICES, CHEF, HOME, FAQ, GALLERY_IMAGES, WHY_CHOOSE, CONFERENCE, ANIE,
 } from "@/lib/content";
+import { fetchSeoHome, fetchPublicGallery, fetchPublicReviews, galleryToLightbox } from "@/lib/cms";
+import { homeMetaFromCms } from "@/lib/seo";
 import { QuickBookingBar } from "@/components/site/QuickBookingBar";
 import { Reveal } from "@/components/site/Reveal";
 import { NewsletterForm } from "@/components/site/NewsletterForm";
+import { ReviewForm } from "@/components/site/ReviewForm";
 import { SectionHeader, SectionDivider, HomeQuickNav } from "@/components/home/SectionBlocks";
 import hero from "@/assets/hero.jpg";
 import restaurantImg from "@/assets/restaurant.jpg";
@@ -25,20 +28,38 @@ const expImgs: Record<string, string> = { hero, restaurant: restaurantImg, room:
 const galImgs: Record<string, string> = { hero, restaurant: restaurantImg, room: roomImg };
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Hôtel Le Cheval d'Or — Votre référence à Anié, Togo" },
-      { name: "description", content: "Hôtel à Anié, centre du Togo : chambres climatisées, restaurant, salle de conférence, parking sécurisé. Idéal pour affaires, tourisme et événements." },
-      { property: "og:title", content: "Hôtel Le Cheval d'Or — Anié, Togo" },
-      { property: "og:description", content: HOTEL.tagline },
-    ],
+  loader: async () => {
+    const seo = await fetchSeoHome();
+    return { seo };
+  },
+  head: ({ loaderData }) => ({
+    meta: homeMetaFromCms(loaderData?.seo ?? {
+      title: "Hôtel Le Cheval d'Or — Votre référence à Anié, Togo",
+      description: "Hôtel à Anié, centre du Togo : chambres climatisées, restaurant, salle de conférence.",
+      ogImage: "https://cheval-or.vercel.app/assets/hero.jpg",
+    }),
   }),
   component: Index,
 });
 
 function Index() {
   const { data: rooms } = useQuery({ queryKey: ["public-rooms"], queryFn: fetchPublicRooms });
+  const { data: galleryItems } = useQuery({ queryKey: ["public-gallery"], queryFn: fetchPublicGallery });
+  const { data: reviews } = useQuery({ queryKey: ["public-reviews"], queryFn: fetchPublicReviews });
   const featured = (rooms ?? []).slice(0, 3);
+
+  const galleryPreview = (galleryItems?.length
+    ? galleryToLightbox(galleryItems).slice(0, 5)
+    : GALLERY_IMAGES.slice(0, 5).map((g) => ({ src: galImgs[g.src], alt: g.alt, cat: g.cat }))
+  );
+
+  const displayReviews = (reviews?.length ? reviews : TESTIMONIALS.map((t, i) => ({
+    id: String(i),
+    name: t.name,
+    quote: t.quote,
+    stars: t.stars,
+    role: t.role,
+  })));
 
   return (
     <SiteShell>
@@ -445,9 +466,9 @@ function Index() {
             <Button variant="goldOutline" asChild><Link to="/galerie">Galerie complète</Link></Button>
           </div>
           <div className="mosaic-grid mt-10 overflow-hidden rounded-xl">
-            {GALLERY_IMAGES.slice(0, 5).map((g, i) => (
+            {galleryPreview.map((g, i) => (
               <Link key={i} to="/galerie" className="group relative overflow-hidden">
-                <img src={galImgs[g.src]} alt={g.alt} className="size-full object-cover transition duration-700 group-hover:scale-105" loading="lazy" />
+                <img src={g.src} alt={g.alt} className="size-full object-cover transition duration-700 group-hover:scale-105" loading="lazy" />
                 <span className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 to-transparent p-4 text-sm text-white opacity-0 transition group-hover:opacity-100">{g.cat}</span>
               </Link>
             ))}
@@ -474,19 +495,20 @@ function Index() {
         <div className="mx-auto max-w-7xl px-6">
           <SectionHeader dark align="center" label="Avis clients" title="Ils ont vécu Cheval d'Or" subtitle="4.9/5 — des voyageurs du monde entier." />
           <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {TESTIMONIALS.map((t) => (
-              <Reveal key={t.name}>
+            {displayReviews.map((t) => (
+              <Reveal key={t.id ?? t.name}>
                 <div className="h-full rounded-xl border border-white/10 bg-white/5 p-6">
                   <div className="flex gap-0.5 text-gold">
                     {Array.from({ length: t.stars }).map((_, i) => <Star key={i} className="size-3.5 fill-current" />)}
                   </div>
                   <p className="mt-4 text-sm leading-relaxed text-white/85">"{t.quote}"</p>
-                  <p className="mt-4 text-xs text-white/50">{t.role}</p>
+                  {t.role && <p className="mt-4 text-xs text-white/50">{t.role}</p>}
                   <p className="mt-1 text-sm font-medium text-gold">{t.name}</p>
                 </div>
               </Reveal>
             ))}
           </div>
+          <ReviewForm />
         </div>
       </section>
 

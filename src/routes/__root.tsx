@@ -11,7 +11,9 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import logo from "@/assets/logo.png";
+import hero from "@/assets/hero.jpg";
 import { hotelJsonLd } from "@/lib/seo";
+import { SITE_URL } from "@/lib/cms";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
@@ -84,7 +86,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Hôtel Le Cheval d'Or" },
       { property: "og:description", content: "Une adresse d'exception au cœur du Togo." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { property: "og:image", content: `${SITE_URL}${hero}` },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: `${SITE_URL}${hero}` },
     ],
     links: [
       { rel: "icon", type: "image/png", href: logo },

@@ -7,6 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { findAvailableRoom, isRoomAvailable } from "@/lib/reservations";
 import { validatePromoCode, applyDiscount } from "@/lib/promo";
 import { formatXOF, ROOM_TYPE_LABEL, type Room } from "@/lib/rooms";
+import { initiateCinetPay } from "@/lib/payment.server";
+import { notifyReservationConfirmation } from "@/lib/email.server";
 import { toast } from "sonner";
 import { Sparkles, Tag } from "lucide-react";
 
@@ -89,7 +91,7 @@ function ReserverPage() {
       : { total: subtotal, discountPercent: null };
     const ok = await isRoomAvailable(match.id, checkIn, checkOut);
     if (!ok) { toast.error("Chambre plus disponible"); setSubmitting(false); return; }
-    const { error } = await supabase.from("reservations").insert({
+    const { data: created, error } = await supabase.from("reservations").insert({
       room_id: match.id,
       profile_id: user.id,
       check_in: checkIn,
@@ -101,10 +103,36 @@ function ReserverPage() {
       special_requests: requests || null,
       promo_code: appliedPromo?.code ?? null,
       discount_percent: discountPercent,
-    });
+      payment_status: "unpaid",
+    }).select("id, reference").single();
     setSubmitting(false);
-    if (error) { toast.error(error.message); return; }
-    toast.success("Réservation enregistrée !");
+    if (error || !created) { toast.error(error?.message ?? "Erreur"); return; }
+
+    void notifyReservationConfirmation({
+      email: user.email ?? "",
+      reference: created.reference ?? created.id,
+      checkIn,
+      checkOut,
+      total,
+    });
+
+    const pay = await initiateCinetPay({
+      data: {
+        reservationId: created.id,
+        amount: total,
+        customerEmail: user.email ?? "",
+        customerName: user.user_metadata?.full_name ?? user.email ?? "Client",
+        description: `Réservation ${created.reference ?? created.id}`,
+      },
+    });
+
+    if (pay.ok && pay.paymentUrl) {
+      toast.success("Redirection vers le paiement sécurisé…");
+      window.location.href = pay.paymentUrl;
+      return;
+    }
+
+    toast.success("Réservation enregistrée ! Paiement à l'arrivée ou à la réception.");
     navigate({ to: "/mes-reservations" });
   }
 

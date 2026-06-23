@@ -50,11 +50,11 @@ function AdminSiteWeb() {
   }
 
   const pages = [
-    { name: "Accueil", path: "/", note: "Hero, sections principales — contenu dans content.ts" },
-    { name: "À propos", path: "/a-propos", note: "Présentation & Anié" },
-    { name: "Chambres", path: "/chambres", note: "Géré via module Chambres" },
-    { name: "Restaurant", path: "/restaurant", note: "Menu via module Restaurant" },
-    { name: "Salle de conférence", path: "/evenements", note: "Texte + réservations admin" },
+    { name: "Accueil", path: "/", note: "SEO + galerie + avis dynamiques" },
+    { name: "À propos", path: "/a-propos", note: "Contenu éditorial (CMS pages à venir)" },
+    { name: "Chambres", path: "/chambres", note: "Synchronisé module Chambres" },
+    { name: "Galerie", path: "/galerie", note: "Synchronisé Médiathèque" },
+    { name: "Événements", path: "/evenements", note: "Formulaires conférence & événements" },
     { name: "Contact", path: "/contact", note: "Coordonnées ci-dessous" },
   ];
 
@@ -63,7 +63,7 @@ function AdminSiteWeb() {
       <AdminPageHeader
         label="CMS"
         title="Gestion du site web"
-        subtitle="Modifiez les informations clés affichées sur le site public. Les pages détaillées restent dans le code jusqu'à migration CMS complète."
+        subtitle="Modifiez les informations clés affichées sur le site public en temps réel."
       />
 
       <div className="rounded-xl border border-border bg-card p-6">

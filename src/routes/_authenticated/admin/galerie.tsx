@@ -5,7 +5,8 @@ import { toast } from "sonner";
 import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Button } from "@/components/ui/button";
 import { fetchGalleryItems, saveGalleryItem, deleteGalleryItem } from "@/lib/gallery-admin";
-import { Plus, Trash2, Eye, EyeOff } from "lucide-react";
+import { uploadGalleryFile } from "@/lib/media-upload";
+import { Plus, Trash2, Eye, EyeOff, Upload } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/galerie")({
   component: AdminGallery,
@@ -15,6 +16,23 @@ function AdminGallery() {
   const qc = useQueryClient();
   const { data = [] } = useQuery({ queryKey: ["admin-gallery"], queryFn: () => fetchGalleryItems(true) });
   const [form, setForm] = useState({ title: "", category: "Hôtel", url: "", sort_order: 0, is_published: true, media_type: "image" });
+
+  const [uploading, setUploading] = useState(false);
+
+  async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const url = await uploadGalleryFile(file);
+      setForm((f) => ({ ...f, url, title: f.title || file.name }));
+      toast.success("Fichier uploadé");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Erreur upload — vérifiez le bucket gallery");
+    } finally {
+      setUploading(false);
+    }
+  }
 
   async function save() {
     try {
@@ -35,6 +53,11 @@ function AdminGallery() {
         <input placeholder="Titre" className="rounded-md border px-3 py-2" value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} />
         <input placeholder="Catégorie" className="rounded-md border px-3 py-2" value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))} />
         <input placeholder="URL image/vidéo" className="rounded-md border px-3 py-2 sm:col-span-2" value={form.url} onChange={(e) => setForm((f) => ({ ...f, url: e.target.value }))} />
+        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed px-3 py-2 text-sm">
+          <Upload className="size-4" />
+          {uploading ? "Upload…" : "Glisser / choisir fichier"}
+          <input type="file" accept="image/*" className="hidden" onChange={onFile} />
+        </label>
         <Button variant="hero" onClick={save}><Plus className="mr-1 size-4" />Ajouter</Button>
       </div>
 

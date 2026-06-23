@@ -11,12 +11,25 @@ import roomImg from "@/assets/room-deluxe.jpg";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { hotelJsonLd } from "@/lib/seo";
+import { hotelJsonLd, buildPageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/chambres/$id")({
-  head: () => ({
-    meta: [{ title: "Chambre — Hôtel Le Cheval d'Or" }],
-  }),
+  loader: async ({ params }) => {
+    const room = await fetchRoom(params.id);
+    return { room };
+  },
+  head: ({ loaderData }) => {
+    const room = loaderData?.room;
+    return {
+      meta: buildPageMeta({
+        title: room ? `${room.name} — Hôtel Le Cheval d'Or` : "Chambre — Hôtel Le Cheval d'Or",
+        description: room
+          ? `${ROOM_TYPE_LABEL[room.type]} à Anié — ${formatXOF(room.price_per_night)}/nuit. Réservez en ligne.`
+          : "Détail chambre et réservation.",
+        path: room ? `/chambres/${room.id}` : "/chambres",
+      }),
+    };
+  },
   errorComponent: ({ error }) => <SiteShell><div className="p-12 text-center text-destructive">{error.message}</div></SiteShell>,
   notFoundComponent: () => <SiteShell><div className="p-12 text-center">Chambre introuvable</div></SiteShell>,
   component: RoomDetail,

@@ -1,0 +1,8 @@
+# Variables à configurer sur Vercel pour https://cheval-or.vercel.app
+# Dashboard : https://vercel.com → Projet → Settings → Environment Variables
+# OU via CLI après `npx vercel login` : powershell -File scripts/setup-vercel-env.ps1
+
+VITE_SUPABASE_URL=https://hnmkszmpmsksgtqoatyr.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_cGobpbFN7isHy5N61Rq4Rw_rZHBXN5E
+SUPABASE_URL=https://hnmkszmpmsksgtqoatyr.supabase.co
+SUPABASE_PUBLISHABLE_KEY=sb_publishable_cGobpbFN7isHy5N61Rq4Rw_rZHBXN5E
