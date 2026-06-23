@@ -19,12 +19,14 @@ const buttonVariants = cva(
         hero: "bg-[var(--gradient-gold)] text-[oklch(0.18_0.02_60)] shadow-[var(--shadow-gold)] hover:opacity-95 font-semibold tracking-wide",
         gold: "bg-[var(--gold)] text-[oklch(0.18_0.02_60)] hover:bg-[var(--gold-deep)] shadow-sm font-medium",
         goldOutline: "border border-[var(--gold)] text-[var(--gold-deep)] bg-transparent hover:bg-[var(--gold)]/10",
+        onDark:
+          "border border-white/50 bg-white/10 text-white backdrop-blur-md shadow-lg hover:bg-white/20 hover:text-white font-medium",
       },
       size: {
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-8",
-        xl: "h-12 rounded-md px-10 text-base",
+        lg: "h-11 rounded-lg px-8 text-sm",
+        xl: "h-auto min-h-[3.25rem] rounded-lg px-8 py-3.5 text-base leading-snug",
         icon: "h-9 w-9",
       },
     },

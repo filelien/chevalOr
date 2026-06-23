@@ -39,13 +39,17 @@ export function StatCard({
   accent?: boolean;
 }) {
   return (
-    <div className={`rounded-xl border p-5 shadow-sm transition hover:shadow-md ${accent ? "border-gold/40 bg-gradient-to-br from-gold-soft/30 to-card" : "border-border bg-card"}`}>
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{label}</span>
-        {Icon && <Icon className="size-4 shrink-0 text-gold-deep" />}
+    <div className={`stat-card-premium rounded-2xl p-5 transition hover:-translate-y-0.5 hover:shadow-lg ${accent ? "accent" : ""}`}>
+      <div className="flex items-start justify-between gap-2">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</span>
+        {Icon && (
+          <span className="flex size-9 items-center justify-center rounded-xl bg-gold-soft/50">
+            <Icon className="size-4 shrink-0 text-gold-deep" />
+          </span>
+        )}
       </div>
-      <p className="mt-2 font-display text-2xl md:text-3xl tabular-nums">{value}</p>
-      {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
+      <p className="mt-3 font-display text-2xl font-medium tabular-nums text-foreground md:text-3xl">{value}</p>
+      {hint && <p className="mt-2 text-xs text-muted-foreground">{hint}</p>}
     </div>
   );
 }

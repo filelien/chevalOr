@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth";
-import { resolveDashboardKind, type DashboardKind, DASHBOARD_META } from "@/lib/dashboard-role";
+import { DashboardRoleSwitcher } from "@/components/admin/dashboards/DashboardRoleSwitcher";
+import { resolveDashboardKind, type DashboardKind } from "@/lib/dashboard-role";
 import { fetchExtendedDashboardStats } from "@/lib/role-dashboard-stats";
 import { DashboardSkeleton } from "@/components/admin/dashboards/shared";
 import {
@@ -57,22 +58,11 @@ function Dashboard() {
   return (
     <div>
       {canSwitch && (
-        <div className="border-b border-border bg-card/80 px-6 py-3 backdrop-blur-sm">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs uppercase tracking-wider text-muted-foreground">Vue métier :</span>
-            {ALL_KINDS.map((k) => (
-              <button
-                key={k}
-                onClick={() => setOverride(k === defaultKind ? null : k)}
-                className={`rounded-full px-3 py-1 text-xs font-medium transition ${
-                  kind === k ? "bg-gold-deep text-white" : "bg-secondary text-muted-foreground hover:bg-secondary/80"
-                }`}
-              >
-                {DASHBOARD_META[k].emoji} {DASHBOARD_META[k].title.split(" ")[0]}
-              </button>
-            ))}
-          </div>
-        </div>
+        <DashboardRoleSwitcher
+          kinds={ALL_KINDS}
+          active={kind}
+          onChange={(k) => setOverride(k === defaultKind ? null : k)}
+        />
       )}
       {renderDashboard()}
     </div>

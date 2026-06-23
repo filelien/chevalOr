@@ -66,31 +66,30 @@ function Index() {
       {/* ═══ 1. HERO CINÉMATIQUE (Four Seasons / Belmond) ═══ */}
       <section className="hero-cinematic relative h-[92vh] min-h-[640px] w-full overflow-hidden">
         <img src={hero} alt="" className="absolute inset-0 size-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/70" />
         <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center text-white">
-          <img src={logo} alt="" className="hero-fade-up mb-6 size-20 object-contain drop-shadow-lg" />
-          <span className="hero-fade-up hero-fade-up-delay-1 mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-1.5 text-[10px] uppercase tracking-[0.35em] backdrop-blur-sm">
+          <img src={logo} alt="" className="hero-fade-up mb-6 size-20 object-contain drop-shadow-2xl" />
+          <span className="hero-fade-up hero-fade-up-delay-1 mb-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/30 px-5 py-2 text-[11px] font-medium uppercase tracking-[0.35em] text-white backdrop-blur-md">
             <Star className="size-3 fill-gold text-gold" /> {HOME.hero.eyebrow}
           </span>
-          <h1 className="hero-fade-up hero-fade-up-delay-2 font-display text-5xl font-medium leading-[1.05] md:text-7xl lg:text-8xl">
-            <span className="gold-shimmer">{HOME.hero.title}</span>
+          <h1 className="hero-fade-up hero-fade-up-delay-2 hero-title font-display text-4xl font-medium leading-tight sm:text-5xl md:text-6xl lg:text-7xl">
+            {HOME.hero.title}
           </h1>
-          <p className="hero-fade-up hero-fade-up-delay-3 mx-auto mt-6 max-w-2xl text-lg text-white/90 md:text-xl">
+          <p className="hero-fade-up hero-fade-up-delay-3 hero-subtitle mx-auto mt-6 max-w-2xl text-base font-light leading-relaxed md:text-xl">
             {HOME.hero.subtitle}
           </p>
-          <div className="hero-fade-up hero-fade-up-delay-3 mt-6 flex flex-wrap justify-center gap-2">
+          <div className="hero-fade-up hero-fade-up-delay-3 mt-8 flex max-w-3xl flex-wrap justify-center gap-2">
             {HOME.audiences.map((a) => (
-              <span key={a} className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] uppercase tracking-wider text-white/85 backdrop-blur-sm">
+              <span key={a} className="rounded-full border border-white/25 bg-black/25 px-3 py-1.5 text-[10px] font-medium uppercase tracking-wide text-white/90 backdrop-blur-sm">
                 {a}
               </span>
             ))}
           </div>
-          <div className="hero-fade-up hero-fade-up-delay-4 mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Button variant="hero" size="xl" asChild>
-              <Link to="/reserver"><CalendarHeart className="mr-2 size-5" />Réserver maintenant</Link>
+          <div className="hero-fade-up hero-fade-up-delay-4 mt-10 flex w-full max-w-lg flex-col items-stretch justify-center gap-3 sm:max-w-none sm:flex-row sm:items-center">
+            <Button variant="hero" size="xl" className="w-full sm:w-auto" asChild>
+              <Link to="/reserver"><CalendarHeart className="mr-2 size-5 shrink-0" />Réserver maintenant</Link>
             </Button>
-            <Button variant="outline" size="xl" className="border-white/50 bg-white/5 text-white backdrop-blur hover:bg-white/15" asChild>
-              <Link to="/chambres"><BedDouble className="mr-2 size-4" />Découvrir nos chambres</Link>
+            <Button variant="onDark" size="xl" className="w-full sm:w-auto" asChild>
+              <Link to="/chambres"><BedDouble className="mr-2 size-4 shrink-0" />Découvrir nos chambres</Link>
             </Button>
           </div>
         </div>
@@ -551,17 +550,23 @@ function Index() {
       </section>
 
       {/* ═══ 22. CTA FINAL ═══ */}
-      <section className="relative overflow-hidden bg-gradient-dark py-24 text-white">
-        <div className="absolute inset-0 opacity-20">
+      <section className="cta-final-section relative overflow-hidden py-24 text-white">
+        <div className="absolute inset-0 opacity-30">
           <img src={hero} alt="" className="size-full object-cover" />
         </div>
         <div className="relative z-10 mx-auto max-w-3xl px-6 text-center">
-          <UtensilsCrossed className="mx-auto size-10 text-gold" />
-          <h2 className="mt-6 font-display text-4xl md:text-5xl">{HOME.cta.title}</h2>
-          <p className="mt-4 text-white/75">{HOME.cta.subtitle}</p>
-          <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <Button variant="hero" size="xl" asChild><Link to="/reserver">{HOME.cta.primary}</Link></Button>
-            <Button variant="outline" size="xl" className="border-white/50 text-white hover:bg-white/10" asChild>
+          <div className="mx-auto flex size-14 items-center justify-center rounded-full border border-gold/40 bg-gold/10 backdrop-blur-sm">
+            <UtensilsCrossed className="size-7 text-gold" />
+          </div>
+          <h2 className="mt-8 font-display text-3xl font-medium leading-tight text-white drop-shadow-lg md:text-5xl">
+            {HOME.cta.title}
+          </h2>
+          <p className="mt-5 text-base leading-relaxed text-white/90 md:text-lg">{HOME.cta.subtitle}</p>
+          <div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+            <Button variant="hero" size="xl" className="w-full sm:w-auto" asChild>
+              <Link to="/reserver">{HOME.cta.primary}</Link>
+            </Button>
+            <Button variant="onDark" size="xl" className="w-full sm:w-auto" asChild>
               <Link to={HOME.cta.secondaryLink}>{HOME.cta.secondary}</Link>
             </Button>
           </div>

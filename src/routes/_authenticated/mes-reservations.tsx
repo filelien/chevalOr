@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { supabase } from "@/integrations/supabase/client";
 import { formatXOF } from "@/lib/rooms";
@@ -9,10 +11,13 @@ import { cancelReservation, STATUS_BADGE, STATUS_LABEL, type ReservationStatus }
 import { generateInvoicePDF } from "@/lib/invoice";
 import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
-import { Download, Receipt, XCircle, User, Save, CheckCircle2, Circle } from "lucide-react";
+import {
+  Download, Receipt, XCircle, User, Save, CheckCircle2, Circle,
+  CalendarDays, BedDouble, Wallet, Sparkles,
+} from "lucide-react";
 
-const TIMELINE_STEPS: { key: ReservationStatus | "done"; label: string }[] = [
-  { key: "pending", label: "Demande envoyée" },
+const TIMELINE_STEPS: { key: string; label: string }[] = [
+  { key: "pending", label: "Demande" },
   { key: "confirmed", label: "Confirmée" },
   { key: "checked_in", label: "Arrivée" },
   { key: "checked_out", label: "Départ" },
@@ -20,27 +25,36 @@ const TIMELINE_STEPS: { key: ReservationStatus | "done"; label: string }[] = [
 
 function StayTimeline({ status }: { status: ReservationStatus }) {
   if (status === "cancelled") {
-    return <p className="mt-4 text-sm text-destructive">Réservation annulée</p>;
+    return (
+      <div className="mt-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
+        Cette réservation a été annulée.
+      </div>
+    );
   }
   const order = ["pending", "confirmed", "checked_in", "checked_out"];
   const idx = order.indexOf(status);
   return (
-    <ol className="mt-4 flex flex-wrap gap-2 sm:gap-0 sm:justify-between">
-      {TIMELINE_STEPS.map((step, i) => {
-        const done = i <= idx;
-        const active = i === idx;
-        return (
-          <li key={step.key} className="flex items-center gap-2 sm:flex-1 sm:flex-col sm:text-center">
-            {done ? (
-              <CheckCircle2 className={`size-5 shrink-0 ${active ? "text-gold-deep" : "text-emerald-600"}`} />
-            ) : (
-              <Circle className="size-5 shrink-0 text-muted-foreground/40" />
-            )}
-            <span className={`text-xs ${done ? "font-medium" : "text-muted-foreground"}`}>{step.label}</span>
-          </li>
-        );
-      })}
-    </ol>
+    <div className="relative mt-6">
+      <div className="client-timeline-line hidden sm:block" />
+      <ol className="relative z-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {TIMELINE_STEPS.map((step, i) => {
+          const done = i <= idx;
+          const active = i === idx;
+          return (
+            <li key={step.key} className="flex flex-col items-center text-center">
+              {done ? (
+                <CheckCircle2 className={`size-6 ${active ? "text-gold-deep" : "text-emerald-600"}`} />
+              ) : (
+                <Circle className="size-6 text-muted-foreground/30" />
+              )}
+              <span className={`mt-2 text-xs font-medium ${done ? "text-foreground" : "text-muted-foreground"}`}>
+                {step.label}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
   );
 }
 
@@ -75,6 +89,15 @@ function MyReservations() {
       return data;
     },
   });
+
+  const stats = useMemo(() => {
+    const list = data ?? [];
+    const active = list.filter((r) => r.status !== "cancelled" && r.status !== "checked_out");
+    const totalSpent = list
+      .filter((r) => r.status !== "cancelled")
+      .reduce((s, r) => s + Number(r.total_price ?? 0), 0);
+    return { count: list.length, active: active.length, totalSpent };
+  }, [data]);
 
   useEffect(() => {
     if (profile) {
@@ -149,115 +172,197 @@ function MyReservations() {
     });
   }
 
+  const displayName = profile?.full_name?.split(" ")[0] ?? user?.email?.split("@")[0] ?? "Client";
+  const initials = (profile?.full_name ?? user?.email ?? "C").slice(0, 2).toUpperCase();
+
   return (
     <SiteShell>
-      <section className="mx-auto max-w-5xl px-6 py-16">
-        <h1 className="font-display text-4xl">Mon espace client</h1>
-        <p className="mt-2 text-muted-foreground">Suivez votre séjour, téléchargez vos documents et gérez votre profil.</p>
+      {/* Bandeau d'accueil */}
+      <div className="client-hero-band px-6 py-12 text-white">
+        <div className="mx-auto max-w-5xl">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex size-16 items-center justify-center rounded-2xl bg-gold/20 text-xl font-semibold text-gold ring-2 ring-gold/30">
+              {initials}
+            </div>
+            <div>
+              <p className="text-sm font-medium uppercase tracking-widest text-gold/90">Espace client</p>
+              <h1 className="font-display text-3xl font-medium md:text-4xl">Bienvenue, {displayName}</h1>
+              <p className="mt-1 text-sm text-white/75">Gérez vos séjours, documents et préférences en toute simplicité.</p>
+            </div>
+          </div>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+              <CalendarDays className="size-5 text-gold" />
+              <p className="mt-2 text-2xl font-display font-medium">{stats.active}</p>
+              <p className="text-xs text-white/60">Séjour{stats.active > 1 ? "s" : ""} actif{stats.active > 1 ? "s" : ""}</p>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+              <BedDouble className="size-5 text-gold" />
+              <p className="mt-2 text-2xl font-display font-medium">{stats.count}</p>
+              <p className="text-xs text-white/60">Réservation{stats.count > 1 ? "s" : ""} au total</p>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+              <Wallet className="size-5 text-gold" />
+              <p className="mt-2 text-2xl font-display font-medium">{formatXOF(stats.totalSpent)}</p>
+              <p className="text-xs text-white/60">Total dépensé</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <div className="mt-10 rounded-xl border border-border bg-card p-6">
-          <div className="flex items-center justify-between">
-            <h2 className="flex items-center gap-2 font-display text-xl"><User className="size-5 text-gold-deep" /> Mon profil</h2>
+      <section className="mx-auto max-w-5xl px-6 py-12">
+        {/* Profil */}
+        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <h2 className="flex items-center gap-2 font-display text-xl">
+              <User className="size-5 text-gold-deep" /> Mon profil
+            </h2>
             {!editing && (
-              <Button variant="outline" size="sm" onClick={() => setEditing(true)}>Modifier</Button>
+              <Button variant="goldOutline" size="sm" onClick={() => setEditing(true)}>Modifier</Button>
             )}
           </div>
           {editing ? (
-            <form onSubmit={saveProfile} className="mt-4 grid gap-4 sm:grid-cols-2">
-              <label className="text-xs uppercase tracking-wider text-muted-foreground sm:col-span-2">
+            <form onSubmit={saveProfile} className="mt-6 grid gap-4 sm:grid-cols-2">
+              <label className="text-sm font-medium text-foreground sm:col-span-2">
                 Nom complet
                 <input value={profileForm.full_name} onChange={(e) => setProfileForm((f) => ({ ...f, full_name: e.target.value }))}
-                  className="mt-1 block w-full rounded-md border border-input px-3 py-2 text-sm" />
+                  className="mt-1.5 block w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm" />
               </label>
-              <label className="text-xs uppercase tracking-wider text-muted-foreground">
+              <label className="text-sm font-medium text-foreground">
                 Téléphone
                 <input value={profileForm.phone} onChange={(e) => setProfileForm((f) => ({ ...f, phone: e.target.value }))}
-                  className="mt-1 block w-full rounded-md border border-input px-3 py-2 text-sm" />
+                  className="mt-1.5 block w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm" />
               </label>
-              <label className="text-xs uppercase tracking-wider text-muted-foreground">
+              <label className="text-sm font-medium text-foreground">
                 Email
                 <input value={profile?.email ?? user?.email ?? ""} disabled
-                  className="mt-1 block w-full rounded-md border border-input bg-secondary/50 px-3 py-2 text-sm" />
+                  className="mt-1.5 block w-full rounded-lg border border-input bg-secondary/40 px-4 py-2.5 text-sm text-muted-foreground" />
               </label>
-              <label className="text-xs uppercase tracking-wider text-muted-foreground sm:col-span-2">
+              <label className="text-sm font-medium text-foreground sm:col-span-2">
                 Adresse
                 <input value={profileForm.address} onChange={(e) => setProfileForm((f) => ({ ...f, address: e.target.value }))}
-                  className="mt-1 block w-full rounded-md border border-input px-3 py-2 text-sm" />
+                  className="mt-1.5 block w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm" />
               </label>
-              <label className="text-xs uppercase tracking-wider text-muted-foreground">
+              <label className="text-sm font-medium text-foreground">
                 Ville
                 <input value={profileForm.city} onChange={(e) => setProfileForm((f) => ({ ...f, city: e.target.value }))}
-                  className="mt-1 block w-full rounded-md border border-input px-3 py-2 text-sm" />
+                  className="mt-1.5 block w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm" />
               </label>
-              <label className="text-xs uppercase tracking-wider text-muted-foreground">
+              <label className="text-sm font-medium text-foreground">
                 Pays
                 <input value={profileForm.country} onChange={(e) => setProfileForm((f) => ({ ...f, country: e.target.value }))}
-                  className="mt-1 block w-full rounded-md border border-input px-3 py-2 text-sm" />
+                  className="mt-1.5 block w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm" />
               </label>
               <div className="flex gap-2 sm:col-span-2">
-                <Button type="submit" size="sm" disabled={savingProfile}><Save className="mr-1 size-4" />{savingProfile ? "Enregistrement…" : "Enregistrer"}</Button>
+                <Button type="submit" variant="hero" size="sm" disabled={savingProfile}>
+                  <Save className="mr-1 size-4" />{savingProfile ? "Enregistrement…" : "Enregistrer"}
+                </Button>
                 <Button type="button" variant="ghost" size="sm" onClick={() => setEditing(false)}>Annuler</Button>
               </div>
             </form>
           ) : (
-            <dl className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
-              <div><dt className="text-muted-foreground">Nom</dt><dd>{profile?.full_name || "—"}</dd></div>
-              <div><dt className="text-muted-foreground">Email</dt><dd>{profile?.email ?? user?.email}</dd></div>
-              <div><dt className="text-muted-foreground">Téléphone</dt><dd>{profile?.phone || "—"}</dd></div>
-              <div><dt className="text-muted-foreground">Adresse</dt><dd>{profile?.address ? `${profile.address}${profile.city ? `, ${profile.city}` : ""}` : "—"}</dd></div>
+            <dl className="mt-6 grid gap-4 text-sm sm:grid-cols-2">
+              <div className="rounded-lg bg-secondary/40 px-4 py-3">
+                <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Nom</dt>
+                <dd className="mt-1 font-medium">{profile?.full_name || "—"}</dd>
+              </div>
+              <div className="rounded-lg bg-secondary/40 px-4 py-3">
+                <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Email</dt>
+                <dd className="mt-1 font-medium">{profile?.email ?? user?.email}</dd>
+              </div>
+              <div className="rounded-lg bg-secondary/40 px-4 py-3">
+                <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Téléphone</dt>
+                <dd className="mt-1 font-medium">{profile?.phone || "—"}</dd>
+              </div>
+              <div className="rounded-lg bg-secondary/40 px-4 py-3">
+                <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Adresse</dt>
+                <dd className="mt-1 font-medium">{profile?.address ? `${profile.address}${profile.city ? `, ${profile.city}` : ""}` : "—"}</dd>
+              </div>
             </dl>
           )}
         </div>
 
-        <h2 className="mt-12 font-display text-2xl">Mes réservations</h2>
-        <div className="mt-6 space-y-4">
+        {/* Réservations */}
+        <div className="mt-12 flex items-center justify-between">
+          <h2 className="font-display text-2xl">Mes réservations</h2>
+          <Button variant="hero" size="sm" asChild>
+            <Link to="/reserver"><Sparkles className="mr-1 size-4" />Nouvelle réservation</Link>
+          </Button>
+        </div>
+
+        <div className="mt-6 space-y-6">
           {isLoading ? (
-            <p className="text-muted-foreground">Chargement…</p>
+            <div className="space-y-4">
+              {[1, 2].map((i) => <div key={i} className="h-48 animate-pulse rounded-2xl bg-secondary/50" />)}
+            </div>
           ) : (data?.length ?? 0) === 0 ? (
-            <div className="rounded-xl border border-dashed border-border p-12 text-center">
-              <p className="text-muted-foreground">Aucune réservation pour le moment.</p>
-              <Button variant="hero" className="mt-4" asChild><Link to="/chambres">Réserver une chambre</Link></Button>
+            <div className="rounded-2xl border border-dashed border-gold/30 bg-gold-soft/20 p-12 text-center">
+              <BedDouble className="mx-auto size-12 text-gold-deep/60" />
+              <p className="mt-4 font-display text-xl">Aucune réservation</p>
+              <p className="mt-2 text-sm text-muted-foreground">Découvrez nos chambres et réservez votre prochain séjour à Anié.</p>
+              <Button variant="hero" className="mt-6" asChild>
+                <Link to="/chambres">Explorer les chambres</Link>
+              </Button>
             </div>
           ) : data!.map((r) => {
             const status = r.status as ReservationStatus;
             const canCancel = status === "pending" || status === "confirmed";
+            const checkIn = format(new Date(r.check_in), "d MMMM yyyy", { locale: fr });
+            const checkOut = format(new Date(r.check_out), "d MMMM yyyy", { locale: fr });
             return (
-              <div key={r.id} className="rounded-xl border border-border bg-card p-6">
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs uppercase tracking-wider text-muted-foreground">Réf. {r.reference}</p>
-                    <p className="mt-1 font-display text-xl">{r.rooms?.name ?? "Chambre"}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Du {r.check_in} au {r.check_out} · {r.nights} nuit(s) · {r.guests_count} pers.
-                    </p>
+              <article key={r.id} className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition hover:shadow-md">
+                <div className="border-b border-border/60 bg-gradient-to-r from-gold-soft/30 to-transparent px-6 py-4">
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-wider text-gold-deep">Réf. {r.reference}</p>
+                      <h3 className="mt-1 font-display text-2xl">{r.rooms?.name ?? "Chambre"}</h3>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        Chambre {r.rooms?.number} · {r.nights} nuit{r.nights > 1 ? "s" : ""} · {r.guests_count} personne{r.guests_count > 1 ? "s" : ""}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <span className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${STATUS_BADGE[status] ?? "bg-secondary"}`}>
+                        {STATUS_LABEL[status] ?? status}
+                      </span>
+                      <p className="mt-2 font-display text-2xl text-gold-deep">{formatXOF(Number(r.total_price))}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="px-6 py-5">
+                  <div className="flex flex-wrap gap-6 text-sm">
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Arrivée</p>
+                      <p className="mt-1 font-medium">{checkIn}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Départ</p>
+                      <p className="mt-1 font-medium">{checkOut}</p>
+                    </div>
                     {r.promo_code && (
-                      <p className="mt-1 text-xs text-emerald-600">Code {r.promo_code}{r.discount_percent ? ` (-${r.discount_percent}%)` : ""}</p>
+                      <div>
+                        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Promotion</p>
+                        <p className="mt-1 font-medium text-emerald-700">{r.promo_code}{r.discount_percent ? ` (-${r.discount_percent}%)` : ""}</p>
+                      </div>
                     )}
                   </div>
-                  <div className="text-right">
-                    <span className={`rounded-full px-3 py-1 text-xs ${STATUS_BADGE[status] ?? "bg-secondary"}`}>
-                      {STATUS_LABEL[status] ?? status}
-                    </span>
-                    <p className="mt-2 font-display text-lg text-gold-deep">{formatXOF(Number(r.total_price))}</p>
+                  <StayTimeline status={status} />
+                  <div className="mt-6 flex flex-wrap gap-2 border-t border-border/60 pt-5">
+                    <Button size="sm" variant="goldOutline" onClick={() => downloadPDF(r, "invoice")}>
+                      <Download className="mr-1 size-4" /> Facture PDF
+                    </Button>
+                    {r.paid_at && (
+                      <Button size="sm" variant="outline" onClick={() => downloadPDF(r, "receipt")}>
+                        <Receipt className="mr-1 size-4" /> Reçu
+                      </Button>
+                    )}
+                    {canCancel && (
+                      <Button size="sm" variant="ghost" className="text-destructive hover:text-destructive" onClick={() => handleCancel(r.id, r.reference)}>
+                        <XCircle className="mr-1 size-4" /> Annuler
+                      </Button>
+                    )}
                   </div>
                 </div>
-                <StayTimeline status={status} />
-                <div className="mt-4 flex flex-wrap gap-2 border-t border-border/60 pt-4">
-                  <Button size="sm" variant="outline" onClick={() => downloadPDF(r, "invoice")}>
-                    <Download className="mr-1 size-4" /> Facture PDF
-                  </Button>
-                  {r.paid_at && (
-                    <Button size="sm" variant="outline" onClick={() => downloadPDF(r, "receipt")}>
-                      <Receipt className="mr-1 size-4" /> Reçu PDF
-                    </Button>
-                  )}
-                  {canCancel && (
-                    <Button size="sm" variant="ghost" className="text-destructive" onClick={() => handleCancel(r.id, r.reference)}>
-                      <XCircle className="mr-1 size-4" /> Annuler
-                    </Button>
-                  )}
-                </div>
-              </div>
+              </article>
             );
           })}
         </div>

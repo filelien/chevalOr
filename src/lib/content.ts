@@ -514,12 +514,12 @@ export const HOME = {
     highlights: ["Centre du pays", "Axes routiers nationaux", "Cadre paisible", "Culture & traditions"],
   },
   cta: {
-    title: "Prêt à vivre l'expérience Cheval d'Or ?",
+    title: "Vivez l'expérience Cheval d'Or",
     subtitle:
-      "Vivez une expérience alliant confort, sérénité et professionnalisme au cœur d'Anié. Chambres et espaces événementiels — réponse rapide garantie.",
+      "Chambres raffinées et salle de conférence au cœur d'Anié. Notre équipe vous répond sous 24 h.",
     primary: "Réserver une chambre",
-    secondary: "Réserver la salle de conférence",
-    secondaryLink: "/contact",
+    secondary: "Salle de conférence",
+    secondaryLink: "/conference",
   },
   audiences: [
     "Voyageurs d'affaires",
