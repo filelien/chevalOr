@@ -3,7 +3,8 @@ import { SiteShell } from "@/components/layout/SiteShell";
 import { PageHero } from "@/components/site/PageHero";
 import { ConferenceBookingForm } from "@/components/site/ConferenceBookingForm";
 import { EventBookingForm } from "@/components/site/EventBookingForm";
-import { EVENTS, CONFERENCE } from "@/lib/content";
+import { useSiteContent } from "@/hooks/use-site-content";
+import { useI18n } from "@/lib/i18n";
 import { buildPageMeta } from "@/lib/seo";
 import hero from "@/assets/hero.jpg";
 import { Check, Presentation } from "lucide-react";
@@ -12,7 +13,7 @@ export const Route = createFileRoute("/evenements")({
   head: () => ({
     meta: buildPageMeta({
       title: "Événements & salle de conférence — Cheval d'Or, Anié",
-      description: CONFERENCE.subtitle,
+      description: "Salle de conférence moderne à Anié — séminaires, formations et réceptions.",
       path: "/evenements",
     }),
   }),
@@ -20,11 +21,14 @@ export const Route = createFileRoute("/evenements")({
 });
 
 function EvenementsPage() {
+  const { EVENTS, CONFERENCE } = useSiteContent();
+  const { t, lang } = useI18n();
+
   return (
     <SiteShell>
       <PageHero
         image={hero}
-        label="Événements"
+        label={t.pages.events.label}
         title={CONFERENCE.title}
         subtitle={CONFERENCE.subtitle}
       />
@@ -52,7 +56,12 @@ function EvenementsPage() {
             <span className="text-xs text-gold-deep">{e.capacity}</span>
             <h3 className="mt-2 font-display text-2xl">{e.title}</h3>
             <p className="mt-3 text-muted-foreground">{e.desc}</p>
-            <EventBookingForm defaultTitle={e.title} defaultType={e.title.toLowerCase().includes("mariage") ? "wedding" : "reception"} />
+            <EventBookingForm
+              defaultTitle={e.title}
+              defaultType={
+                e.title.toLowerCase().includes(lang === "en" ? "wedding" : "mariage") ? "wedding" : "reception"
+              }
+            />
           </div>
         ))}
       </section>

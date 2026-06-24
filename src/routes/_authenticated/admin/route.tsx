@@ -38,13 +38,20 @@ function AdminGate() {
   }, []);
 
   useEffect(() => {
-    if (!permissions.length && state !== "ok") return;
+    if (state !== "ok") return;
     const segment = pathname.replace(/^\/admin\/?/, "").split("/")[0] || "";
-    if (canAccessRoute(permissions, segment)) {
-      setState((s) => (s === "suspended" || s === "denied" ? s : "ok"));
-    } else {
-      setState("forbidden");
-    }
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) return;
+      const { data: roleRows } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
+      const userRoles = (roleRows ?? []).map((r) => r.role as AppRole);
+      if (userRoles.includes("super_admin")) {
+        setState("ok");
+        return;
+      }
+      if (!permissions.length) return;
+      if (canAccessRoute(permissions, segment)) setState("ok");
+      else setState("forbidden");
+    });
   }, [pathname, permissions, state]);
 
   if (state === "loading") {

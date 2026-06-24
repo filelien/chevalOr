@@ -3,8 +3,10 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { downloadCsv } from "@/lib/export-csv";
 import { toast } from "sonner";
-import { Mail, Newspaper, UtensilsCrossed } from "lucide-react";
+import { Mail, Newspaper, UtensilsCrossed, Download, Check } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/messages")({
   component: AdminMessages,
@@ -57,24 +59,42 @@ function AdminMessages() {
     qc.invalidateQueries({ queryKey: ["admin-table-reservations"] });
   }
 
+  async function toggleRead(id: string, isRead: boolean) {
+    const { error } = await supabase.from("contact_messages").update({ is_read: isRead }).eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    qc.invalidateQueries({ queryKey: ["admin-contact-messages"] });
+  }
+
+  const unreadCount = (contacts ?? []).filter((m: any) => !m.is_read).length;
+
   const tabs: { id: Tab; label: string; Icon: typeof Mail; count: number }[] = [
-    { id: "contact", label: "Messages contact", Icon: Mail, count: contacts?.length ?? 0 },
+    { id: "contact", label: "Messages contact", Icon: Mail, count: unreadCount || (contacts?.length ?? 0) },
     { id: "newsletter", label: "Newsletter", Icon: Newspaper, count: subscribers?.length ?? 0 },
     { id: "tables", label: "Réservations table", Icon: UtensilsCrossed, count: tableRes?.length ?? 0 },
   ];
 
   return (
-    <div className="p-6 lg:p-10">
-      <div>
-        <span className="text-xs uppercase tracking-[0.3em] text-gold-deep">Inbox · CRM</span>
-        <h1 className="mt-2 font-display text-4xl">Messages & demandes</h1>
-        <p className="mt-2 text-muted-foreground">Formulaires contact, abonnés newsletter et réservations restaurant.</p>
-      </div>
+    <div className="p-6 lg:p-10 space-y-6">
+      <AdminPageHeader
+        label="Inbox · CRM"
+        title="Messages & demandes"
+        subtitle="Formulaires contact, abonnés newsletter et réservations restaurant."
+      >
+        {tab === "newsletter" && (subscribers?.length ?? 0) > 0 && (
+          <Button variant="outline" size="sm" onClick={() => downloadCsv(
+            `newsletter-${new Date().toISOString().slice(0, 10)}.csv`,
+            ["Email", "Inscription"],
+            (subscribers ?? []).map((s: any) => [s.email, s.created_at]),
+          )}>
+            <Download className="mr-1 size-4" />Exporter abonnés
+          </Button>
+        )}
+      </AdminPageHeader>
 
-      <div className="mt-8 flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 border-b border-border pb-1">
         {tabs.map(({ id, label, Icon, count }) => (
           <button key={id} onClick={() => setTab(id)}
-            className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-sm transition ${tab === id ? "border-onyx bg-onyx text-white" : "border-border bg-card hover:bg-secondary"}`}>
+            className={`flex items-center gap-2 rounded-t-lg px-4 py-2 text-sm font-medium transition ${tab === id ? "border-b-2 border-gold-deep text-gold-deep bg-gold-soft/20" : "text-muted-foreground hover:text-foreground"}`}>
             <Icon className="size-4" />
             {label}
             <span className="rounded-full bg-gold/20 px-2 py-0.5 text-xs text-gold-deep">{count}</span>
@@ -86,14 +106,20 @@ function AdminMessages() {
         <div className="mt-6 space-y-4">
           {loadingContact ? <p className="text-muted-foreground">Chargement…</p> : (contacts?.length ?? 0) === 0 ? (
             <p className="rounded-xl border border-dashed border-border p-12 text-center text-muted-foreground">Aucun message.</p>
-          ) : contacts!.map((m) => (
-            <div key={m.id} className="rounded-xl border border-border bg-card p-6">
+          ) : contacts!.map((m: any) => (
+            <div key={m.id} className={`rounded-xl border bg-card p-6 ${m.is_read ? "border-border" : "border-gold/40 bg-gold-soft/10"}`}>
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
                   <p className="font-medium">{m.full_name}</p>
                   <p className="text-sm text-muted-foreground">{m.email}{m.phone ? ` · ${m.phone}` : ""}</p>
                 </div>
-                <p className="text-xs text-muted-foreground">{new Date(m.created_at).toLocaleString("fr-FR")}</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-xs text-muted-foreground">{new Date(m.created_at).toLocaleString("fr-FR")}</p>
+                  <Button size="sm" variant="ghost" title={m.is_read ? "Marquer non lu" : "Marquer lu"}
+                    onClick={() => toggleRead(m.id, !m.is_read)}>
+                    <Check className={`size-4 ${m.is_read ? "text-muted-foreground" : "text-emerald-600"}`} />
+                  </Button>
+                </div>
               </div>
               <p className="mt-3 text-sm font-medium text-gold-deep">{m.subject}</p>
               <p className="mt-2 text-sm leading-relaxed text-foreground/80">{m.message}</p>
@@ -103,9 +129,9 @@ function AdminMessages() {
       )}
 
       {tab === "newsletter" && (
-        <div className="mt-6 overflow-hidden rounded-xl border border-border bg-card">
-          <table className="w-full text-sm">
-            <thead className="bg-secondary/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
+        <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+          <table className="audit-table w-full text-sm">
+            <thead className="bg-[#f8f6f1] text-left text-[11px] font-bold uppercase tracking-widest text-foreground/70">
               <tr><th className="px-4 py-3">Email</th><th className="px-4 py-3">Inscription</th></tr>
             </thead>
             <tbody>

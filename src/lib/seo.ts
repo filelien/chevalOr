@@ -96,9 +96,10 @@ export const PUBLIC_ROUTES = [
   "/auth",
 ];
 
-export function buildSitemapXml() {
+export function buildSitemapXml(extraPaths: string[] = []) {
   const lastmod = new Date().toISOString().slice(0, 10);
-  const urls = PUBLIC_ROUTES.map(
+  const paths = [...PUBLIC_ROUTES, ...extraPaths.filter((p) => !PUBLIC_ROUTES.includes(p))];
+  const urls = paths.map(
     (path) => `  <url><loc>${SITE_URL}${path === "/" ? "" : path}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq></url>`,
   ).join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>

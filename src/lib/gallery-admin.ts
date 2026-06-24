@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { deleteGalleryStorageFile } from "@/lib/media-upload";
 
 export type GalleryItem = {
   id: string;
@@ -11,12 +12,40 @@ export type GalleryItem = {
   created_at: string;
 };
 
+export const GALLERY_CATEGORIES = [
+  "Hôtel",
+  "Chambres",
+  "Restaurant",
+  "Événements",
+  "Conférence",
+  "Extérieur",
+  "Équipe",
+  "Autre",
+] as const;
+
 export async function fetchGalleryItems(admin = true) {
-  let q = supabase.from("gallery_items").select("*").order("sort_order");
+  let q = supabase.from("gallery_items").select("*").order("sort_order").order("created_at", { ascending: false });
   if (!admin) q = q.eq("is_published", true);
   const { data, error } = await q;
   if (error) throw error;
   return (data ?? []) as GalleryItem[];
+}
+
+export function filterGalleryItems(
+  items: GalleryItem[],
+  opts: { search?: string; category?: string; published?: "all" | "published" | "draft" },
+): GalleryItem[] {
+  let rows = items;
+  if (opts.category && opts.category !== "all") {
+    rows = rows.filter((r) => r.category === opts.category);
+  }
+  if (opts.published === "published") rows = rows.filter((r) => r.is_published);
+  if (opts.published === "draft") rows = rows.filter((r) => !r.is_published);
+  if (opts.search?.trim()) {
+    const s = opts.search.toLowerCase();
+    rows = rows.filter((r) => `${r.title} ${r.category} ${r.url}`.toLowerCase().includes(s));
+  }
+  return rows;
 }
 
 export async function saveGalleryItem(input: Omit<GalleryItem, "id" | "created_at"> & { id?: string }) {
@@ -37,7 +66,9 @@ export async function saveGalleryItem(input: Omit<GalleryItem, "id" | "created_a
   }
 }
 
-export async function deleteGalleryItem(id: string) {
+export async function deleteGalleryItem(id: string, url?: string) {
   const { error } = await supabase.from("gallery_items").delete().eq("id", id);
   if (error) throw error;
+  if (url) await deleteGalleryStorageFile(url);
 }
+

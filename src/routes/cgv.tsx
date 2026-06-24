@@ -1,7 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteShell } from "@/components/layout/SiteShell";
+import { buildPageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/cgv")({
+  head: () => ({
+    meta: buildPageMeta({
+      title: "Conditions générales de vente — Cheval d'Or",
+      description: "CGV de l'Hôtel Le Cheval d'Or : réservation, annulation et paiement.",
+      path: "/cgv",
+    }),
+  }),
   component: () => (
     <SiteShell>
       <div className="mx-auto max-w-3xl px-6 py-20">

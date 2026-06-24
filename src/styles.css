@@ -337,3 +337,109 @@ html { scroll-behavior: smooth; }
   .mosaic-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
   .mosaic-grid > *:nth-child(1) { grid-column: span 2; grid-row: span 1; }
 }
+
+/* Audit journal premium */
+.audit-badge {
+  display: inline-block;
+  min-width: 5.5rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 0.375rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-align: center;
+  line-height: 1.2;
+}
+.audit-badge--success { background: #dcfce7; color: #14532d; border: 1px solid #86efac; }
+.audit-badge--danger { background: #fee2e2; color: #7f1d1d; border: 1px solid #fca5a5; }
+.audit-badge--info { background: #dbeafe; color: #1e3a8a; border: 1px solid #93c5fd; }
+.audit-badge--warning { background: #fef3c7; color: #78350f; border: 1px solid #fcd34d; }
+.audit-badge--muted { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; }
+.audit-detail-json {
+  font-family: ui-monospace, monospace;
+  background: #f8f6f1;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  color: #374151;
+}
+.audit-table th,
+.audit-table td {
+  padding: 0.85rem 1rem;
+}
+.audit-table tbody tr:hover {
+  background: rgba(201, 162, 39, 0.06);
+}
+.audit-filter-bar input,
+.audit-filter-bar select {
+  background: #fff;
+  color: #1a1d24;
+  font-size: 0.875rem;
+}
+.permission-cell:focus-visible {
+  outline: 2px solid var(--gold-deep);
+  outline-offset: 2px;
+}
+.command-center-banner {
+  background: linear-gradient(135deg, #0f1115 0%, #1e2229 50%, #2a2418 100%);
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+.command-center-banner .animated-number {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+.health-panel-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.health-panel-status--ok {
+  background: #dcfce7;
+  color: #14532d;
+  border: 1px solid #86efac;
+}
+.health-panel-status--fail {
+  background: #fee2e2;
+  color: #7f1d1d;
+  border: 1px solid #fca5a5;
+}
+.health-check-card {
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.health-check-card--ok {
+  border-left: 4px solid #16a34a;
+}
+.health-check-card--fail {
+  border-left: 4px solid #dc2626;
+}
+.kanban-card {
+  animation: fadeInUp 0.3s ease;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.media-dropzone {
+  transition: border-color 0.2s, background 0.2s;
+}
+.media-card img {
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animated-bar,
+  .occupancy-ring-progress,
+  .kanban-card,
+  .animated-number,
+  .media-card img {
+    animation: none !important;
+    transition: none !important;
+  }
+}

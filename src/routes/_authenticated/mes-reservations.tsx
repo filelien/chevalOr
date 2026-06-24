@@ -15,6 +15,7 @@ import {
   Download, Receipt, XCircle, User, Save, CheckCircle2, Circle,
   CalendarDays, BedDouble, Wallet, Sparkles,
 } from "lucide-react";
+import { reserverSearch } from "@/lib/reserver-search";
 
 const TIMELINE_STEPS: { key: string; label: string }[] = [
   { key: "pending", label: "Demande" },
@@ -286,7 +287,7 @@ function MyReservations() {
         <div className="mt-12 flex items-center justify-between">
           <h2 className="font-display text-2xl">Mes réservations</h2>
           <Button variant="hero" size="sm" asChild>
-            <Link to="/reserver"><Sparkles className="mr-1 size-4" />Nouvelle réservation</Link>
+            <Link to="/reserver" search={reserverSearch()}><Sparkles className="mr-1 size-4" />Nouvelle réservation</Link>
           </Button>
         </div>
 

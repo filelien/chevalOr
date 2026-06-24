@@ -4,7 +4,8 @@ import { SiteShell } from "@/components/layout/SiteShell";
 import { PageHero } from "@/components/site/PageHero";
 import { LightboxGallery } from "@/components/site/LightboxGallery";
 import { fetchPublicGallery, galleryToLightbox } from "@/lib/cms";
-import { GALLERY_IMAGES } from "@/lib/content";
+import { useSiteContent } from "@/hooks/use-site-content";
+import { useI18n } from "@/lib/i18n";
 import { buildPageMeta } from "@/lib/seo";
 import hero from "@/assets/hero.jpg";
 import restaurantImg from "@/assets/restaurant.jpg";
@@ -24,6 +25,9 @@ export const Route = createFileRoute("/galerie")({
 });
 
 function GaleriePage() {
+  const { GALLERY_IMAGES } = useSiteContent();
+  const { t } = useI18n();
+  const u = t.ui.gallery;
   const { data: items, isLoading } = useQuery({ queryKey: ["public-gallery"], queryFn: fetchPublicGallery });
 
   const images = items?.length
@@ -32,10 +36,10 @@ function GaleriePage() {
 
   return (
     <SiteShell>
-      <PageHero image={hero} label="Galerie" title="Visite immersive" subtitle="Découvrez nos espaces en images — zoom & navigation fluide." />
+      <PageHero image={hero} label={t.pages.gallery.label} title={u.immersive} subtitle={u.subtitle} />
       <section className="mx-auto max-w-7xl px-6 py-16">
         {isLoading ? (
-          <p className="text-center text-muted-foreground">Chargement de la galerie…</p>
+          <p className="text-center text-muted-foreground">{u.loading}</p>
         ) : (
           <LightboxGallery images={images} />
         )}

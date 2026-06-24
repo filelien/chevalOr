@@ -12,27 +12,99 @@ import { DashboardFrame, StatCard, QuickAction } from "./shared";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, Legend,
 } from "recharts";
-import { LogIn, CreditCard, FileText } from "lucide-react";
+import { LogIn, CreditCard, FileText, PlaneLanding, PlaneTakeoff } from "lucide-react";
+import { AnimatedNumber, OccupancyRing } from "@/components/admin/charts/AnimatedMetrics";
+import { useAdminI18n } from "@/hooks/use-admin-i18n";
+import { useI18n } from "@/lib/i18n";
 
 export function ExecutiveDashboard({ stats }: { stats: ExtendedDashboardStats }) {
+  const { ta } = useAdminI18n();
+  const { lang } = useI18n();
+  const now = new Date().toLocaleDateString(lang === "en" ? "en-US" : "fr-FR", { weekday: "long", day: "numeric", month: "long" });
   return (
     <DashboardFrame
       kind="executive"
       actions={
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" asChild><Link to="/admin/reservations">+ Réservation</Link></Button>
-          <Button variant="hero" size="sm" asChild><Link to="/admin/rapports">Rapports</Link></Button>
+          <Button variant="outline" size="sm" asChild><Link to="/admin/reservations">{ta.dashboard.newReservation}</Link></Button>
+          <Button variant="outline" size="sm" asChild><Link to="/admin/planning">{ta.nav.planning}</Link></Button>
+          <Button variant="outline" size="sm" asChild><Link to="/admin/activite">{ta.dashboard.audit}</Link></Button>
+          <Button variant="hero" size="sm" asChild><Link to="/admin/rapports">{ta.dashboard.reports}</Link></Button>
         </div>
       }
     >
+      <div className="command-center-banner mb-6 rounded-xl px-6 py-5 text-white shadow-elegant">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-gold-soft/80">{ta.dashboard.commandCenter}</p>
+            <h2 className="mt-1 font-display text-2xl capitalize">{now}</h2>
+            <p className="mt-1 text-sm text-white/60">{ta.dashboard.realtime}</p>
+          </div>
+          <div className="flex flex-wrap items-end justify-center gap-8 text-center">
+            <div className="flex flex-col items-center">
+              <OccupancyRing percent={stats.rooms.occupancyRate} variant="dark" size={80} />
+              <p className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-white/75">{ta.dashboard.occupancy}</p>
+            </div>
+            <div>
+              <p className="text-3xl font-display text-gold-soft">
+                <AnimatedNumber value={stats.reservations.pending} />
+              </p>
+              <p className="mt-1 text-[11px] font-semibold uppercase tracking-wider text-white/75">{ta.dashboard.pending}</p>
+            </div>
+            <div>
+              <p className="text-3xl font-display text-gold-soft">
+                <AnimatedNumber value={stats.alerts.length} />
+              </p>
+              <p className="mt-1 text-[11px] font-semibold uppercase tracking-wider text-white/75">{ta.dashboard.alerts}</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-7">
-        <StatCard label="CA du jour" value={formatXOF(stats.revenue.today)} Icon={Wallet} accent />
-        <StatCard label="CA du mois" value={formatXOF(stats.revenue.month)} Icon={TrendingUp} />
-        <StatCard label="CA annuel" value={formatXOF(stats.revenue.year)} Icon={TrendingUp} />
-        <StatCard label="Occupation" value={`${stats.rooms.occupancyRate}%`} Icon={BedDouble} />
-        <StatCard label="Résa. en attente" value={stats.reservations.pending} Icon={CalendarCheck} />
-        <StatCard label="Clients présents" value={stats.reservations.guestsInHouse} Icon={UsersRound} />
-        <StatCard label="Conférence" value={stats.conferencePending} Icon={Presentation} />
+        <StatCard label={ta.dashboard.revenueToday} value={formatXOF(stats.revenue.today)} Icon={Wallet} accent />
+        <StatCard label={ta.dashboard.revenueMonth} value={formatXOF(stats.revenue.month)} Icon={TrendingUp} />
+        <StatCard label={ta.dashboard.revenueYear} value={formatXOF(stats.revenue.year)} Icon={TrendingUp} />
+        <StatCard label={ta.dashboard.occupancy} value={`${stats.rooms.occupancyRate}%`} Icon={BedDouble} accent />
+        <StatCard label={ta.dashboard.pending} value={stats.reservations.pending} Icon={CalendarCheck} />
+        <StatCard label={ta.dashboard.guestsInHouse} value={stats.reservations.guestsInHouse} Icon={UsersRound} />
+        <StatCard label={ta.nav.conference} value={stats.conferencePending} Icon={Presentation} />
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <div className="flex items-center gap-2">
+            <PlaneLanding className="size-5 text-emerald-600" />
+            <h3 className="font-display text-xl">{ta.dashboard.arrivalsToday}</h3>
+            <span className="ml-auto rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">{stats.operations.arrivalsToday}</span>
+          </div>
+          <ul className="mt-4 space-y-2">
+            {stats.arrivalsList.length === 0 ? (
+              <li className="text-sm text-muted-foreground">{ta.common.noData}</li>
+            ) : stats.arrivalsList.slice(0, 6).map((a) => (
+              <li key={a.id} className="flex justify-between rounded-lg bg-secondary/30 px-3 py-2 text-sm">
+                <span className="font-medium">{a.guest}</span>
+                <span className="text-muted-foreground">{a.room}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <div className="flex items-center gap-2">
+            <PlaneTakeoff className="size-5 text-amber-600" />
+            <h3 className="font-display text-xl">{ta.dashboard.departuresToday}</h3>
+            <span className="ml-auto rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-bold text-amber-800">{stats.operations.departuresToday}</span>
+          </div>
+          <ul className="mt-4 space-y-2">
+            {stats.departuresList.length === 0 ? (
+              <li className="text-sm text-muted-foreground">{ta.common.noData}</li>
+            ) : stats.departuresList.slice(0, 6).map((d) => (
+              <li key={d.id} className="flex justify-between rounded-lg bg-secondary/30 px-3 py-2 text-sm">
+                <span className="font-medium">{d.guest}</span>
+                <span className="text-muted-foreground">{d.room}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

@@ -31,6 +31,11 @@ export const ADMIN_ROUTE_PERMISSIONS: Record<string, PermissionKey | PermissionK
   utilisateurs: "user.view",
   roles: "role.view",
   parametres: "settings.view",
+  groupes: "user.view",
+  tickets: "message.view",
+  securite: "settings.view",
+  surveillance: "audit.view",
+  "suite-enterprise": "settings.view",
 };
 
 export function routeRequiresPermission(segment: string): PermissionKey | PermissionKey[] | null {

@@ -4,6 +4,7 @@ import { SiteShell } from "@/components/layout/SiteShell";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useI18n } from "@/lib/i18n";
 import logo from "@/assets/logo.png";
 
 export const Route = createFileRoute("/auth")({
@@ -12,6 +13,8 @@ export const Route = createFileRoute("/auth")({
 });
 
 function AuthPage() {
+  const { t } = useI18n();
+  const u = t.ui.auth;
   const router = useRouter();
   const navigate = useNavigate();
   const [mode, setMode] = useState<"login" | "signup">("login");
@@ -40,14 +43,14 @@ function AuthPage() {
       });
       setLoading(false);
       if (error) { toast.error(error.message); return; }
-      toast.success("Compte créé. Vous êtes connecté.");
+      toast.success(u.accountCreated);
       router.invalidate();
       navigate({ to: "/" });
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       setLoading(false);
       if (error) { toast.error(error.message); return; }
-      toast.success("Bienvenue !");
+      toast.success(u.welcome);
       router.invalidate();
       navigate({ to: "/" });
     }
@@ -57,24 +60,24 @@ function AuthPage() {
     <SiteShell>
       <section className="mx-auto flex max-w-md flex-col items-center px-6 py-20">
         <img src={logo} alt="" className="h-16 w-16" width={64} height={64} />
-        <h1 className="mt-6 font-display text-3xl">{mode === "login" ? "Connexion" : "Créer un compte"}</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Accédez à votre espace client ou personnel.</p>
+        <h1 className="mt-6 font-display text-3xl">{mode === "login" ? u.login : u.signup}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{u.title}</p>
 
         <form onSubmit={handleSubmit} className="mt-10 w-full space-y-4 rounded-xl border border-border bg-card p-8 shadow-elegant">
           {mode === "signup" && (
             <>
-              <Field label="Nom complet" type="text" value={fullName} onChange={setFullName} required />
-              <Field label="Téléphone" type="tel" value={phone} onChange={setPhone} />
+              <Field label={u.fullName} type="text" value={fullName} onChange={setFullName} required />
+              <Field label={u.phone} type="tel" value={phone} onChange={setPhone} />
             </>
           )}
-          <Field label="Email" type="email" value={email} onChange={setEmail} required />
-          <Field label="Mot de passe" type="password" value={password} onChange={setPassword} required minLength={6} />
+          <Field label={u.email} type="email" value={email} onChange={setEmail} required />
+          <Field label={u.password} type="password" value={password} onChange={setPassword} required minLength={6} />
 
           <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
-            {loading ? "Patientez…" : mode === "login" ? "Se connecter" : "Créer mon compte"}
+            {loading ? t.common.loading : mode === "login" ? u.signIn : u.register}
           </Button>
           <button type="button" onClick={() => setMode(mode === "login" ? "signup" : "login")} className="block w-full text-center text-sm text-muted-foreground hover:text-gold-deep">
-            {mode === "login" ? "Pas encore de compte ? Créer un compte" : "Déjà un compte ? Se connecter"}
+            {mode === "login" ? `${u.noAccount} ${u.register}` : `${u.haveAccount} ${u.signIn}`}
           </button>
         </form>
       </section>

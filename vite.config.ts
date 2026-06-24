@@ -15,6 +15,12 @@ export default defineConfig({
       port: 5173,
       strictPort: false,
     },
+    test: {
+      globals: false,
+      environment: "jsdom",
+      setupFiles: ["./src/test/setup.ts"],
+      include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    },
   },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).

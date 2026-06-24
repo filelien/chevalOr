@@ -7,8 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { findAvailableRoom, isRoomAvailable } from "@/lib/reservations";
 import { validatePromoCode, applyDiscount } from "@/lib/promo";
 import { formatXOF, ROOM_TYPE_LABEL, type Room } from "@/lib/rooms";
-import { initiateCinetPay } from "@/lib/payment.server";
-import { notifyReservationConfirmation } from "@/lib/email.server";
+import { completeReservationFlow } from "@/lib/reservation-flow";
 import { toast } from "sonner";
 import { Sparkles, Tag } from "lucide-react";
 
@@ -108,31 +107,26 @@ function ReserverPage() {
     setSubmitting(false);
     if (error || !created) { toast.error(error?.message ?? "Erreur"); return; }
 
-    void notifyReservationConfirmation({
-      email: user.email ?? "",
+    const result = await completeReservationFlow({
+      reservationId: created.id,
       reference: created.reference ?? created.id,
+      email: user.email ?? "",
+      customerName: user.user_metadata?.full_name ?? user.email ?? "Client",
+      profileId: user.id,
+      roomId: match.id,
       checkIn,
       checkOut,
       total,
+      roomName: match.name,
     });
 
-    const pay = await initiateCinetPay({
-      data: {
-        reservationId: created.id,
-        amount: total,
-        customerEmail: user.email ?? "",
-        customerName: user.user_metadata?.full_name ?? user.email ?? "Client",
-        description: `Réservation ${created.reference ?? created.id}`,
-      },
-    });
-
-    if (pay.ok && pay.paymentUrl) {
+    if (result.kind === "redirect") {
       toast.success("Redirection vers le paiement sécurisé…");
-      window.location.href = pay.paymentUrl;
+      window.location.href = result.paymentUrl;
       return;
     }
 
-    toast.success("Réservation enregistrée ! Paiement à l'arrivée ou à la réception.");
+    toast.success(result.message);
     navigate({ to: "/mes-reservations" });
   }
 

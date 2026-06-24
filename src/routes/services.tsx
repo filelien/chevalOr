@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { PageHero } from "@/components/site/PageHero";
 import { Reveal } from "@/components/site/Reveal";
-import { SERVICES } from "@/lib/content";
+import { useSiteContent } from "@/hooks/use-site-content";
+import { useI18n } from "@/lib/i18n";
 import hero from "@/assets/hero.jpg";
 import {
   Wifi, Sparkles, Coffee, Car, Bell, UtensilsCrossed, Briefcase, Shirt, BedDouble,
@@ -27,17 +28,19 @@ export const Route = createFileRoute("/services")({
       { name: "description", content: "Chambres climatisées, Wi-Fi, restaurant, salle de conférence, parking sécurisé et accueil 24h/24 à Anié." },
     ],
   }),
-  component: () => (
+  component: ServicesPage,
+});
+
+function ServicesPage() {
+  const { SERVICES: services } = useSiteContent();
+  const { t } = useI18n();
+  const p = t.pages.services;
+  return (
     <SiteShell>
-      <PageHero
-        image={hero}
-        label="Services"
-        title="Nos services"
-        subtitle="Confort, sécurité et équipements modernes pour vos séjours professionnels et touristiques à Anié."
-      />
+      <PageHero image={hero} label={p.label} title={p.title} subtitle={p.subtitle} />
       <section className="mx-auto max-w-7xl px-6 py-20">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s) => {
+          {services.map((s) => {
             const Icon = ICONS[s.icon] ?? Sparkles;
             return (
               <Reveal key={s.id}>
@@ -52,5 +55,5 @@ export const Route = createFileRoute("/services")({
         </div>
       </section>
     </SiteShell>
-  ),
-});
+  );
+}

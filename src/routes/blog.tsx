@@ -1,14 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { PageHero } from "@/components/site/PageHero";
-import { BLOG_POSTS } from "@/lib/content";
+import { useSiteContent } from "@/hooks/use-site-content";
+import { useI18n } from "@/lib/i18n";
 import hero from "@/assets/hero.jpg";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({ meta: [{ title: "Blog — Cheval d'Or" }] }),
-  component: () => (
+  component: BlogPage,
+});
+
+function BlogPage() {
+  const { BLOG_POSTS } = useSiteContent();
+  const { t } = useI18n();
+
+  return (
     <SiteShell>
-      <PageHero image={hero} label="Blog" title="Inspirations & actualités" />
+      <PageHero image={hero} label={t.pages.blog.label} title={t.ui.blog.inspirations} />
       <section className="mx-auto max-w-4xl px-6 py-20 space-y-8">
         {BLOG_POSTS.map((p) => (
           <Link key={p.slug} to="/blog/$slug" params={{ slug: p.slug }}
@@ -21,5 +29,5 @@ export const Route = createFileRoute("/blog")({
         ))}
       </section>
     </SiteShell>
-  ),
-});
+  );
+}

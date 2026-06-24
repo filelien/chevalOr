@@ -35,18 +35,18 @@ function AdminMarketing() {
         subtitle="Gérez les réductions, campagnes et codes utilisables lors des réservations."
       />
 
-      <div className="rounded-xl border border-border bg-card p-6">
+      <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
         <h2 className="font-display text-xl">Nouveau code promo</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <input placeholder="Code (ex: ANIE20)" className="rounded-md border px-3 py-2" value={form.code} onChange={(e) => setForm((f) => ({ ...f, code: e.target.value }))} />
-          <input placeholder="Titre" className="rounded-md border px-3 py-2" value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} />
-          <input type="number" placeholder="%" className="rounded-md border px-3 py-2" value={form.discount_percent} onChange={(e) => setForm((f) => ({ ...f, discount_percent: Number(e.target.value) }))} />
-          <input type="date" className="rounded-md border px-3 py-2" value={form.valid_until} onChange={(e) => setForm((f) => ({ ...f, valid_until: e.target.value }))} />
+          <input placeholder="Code (ex: ANIE20)" className="rounded-lg border border-input px-3 py-2.5 text-sm" value={form.code} onChange={(e) => setForm((f) => ({ ...f, code: e.target.value }))} />
+          <input placeholder="Titre" className="rounded-lg border border-input px-3 py-2.5 text-sm" value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} />
+          <input type="number" placeholder="%" className="rounded-lg border border-input px-3 py-2.5 text-sm" value={form.discount_percent} onChange={(e) => setForm((f) => ({ ...f, discount_percent: Number(e.target.value) }))} />
+          <input type="date" className="rounded-lg border border-input px-3 py-2.5 text-sm" value={form.valid_until} onChange={(e) => setForm((f) => ({ ...f, valid_until: e.target.value }))} />
         </div>
         <Button className="mt-4" variant="hero" onClick={save}><Plus className="mr-1 size-4" />Ajouter</Button>
       </div>
 
-      <div className="rounded-xl border border-border bg-card divide-y divide-border">
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm divide-y divide-border">
         {data.map((p) => (
           <div key={p.id} className="flex flex-wrap items-center justify-between gap-4 p-4">
             <div>

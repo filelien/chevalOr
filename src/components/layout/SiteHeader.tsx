@@ -6,6 +6,7 @@ import { useAuth, signOut } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/site/LanguageSwitcher";
+import { reserverSearch } from "@/lib/reserver-search";
 
 const mainNav = [
   { to: "/", labelKey: "home" as const, exact: true },
@@ -82,7 +83,7 @@ export function SiteHeader() {
           ) : (
             <>
               <Button variant="ghost" size="sm" asChild><Link to="/auth">{t.cta.login}</Link></Button>
-              <Button variant="hero" size="sm" asChild><Link to="/reserver">{t.cta.book}</Link></Button>
+              <Button variant="hero" size="sm" asChild><Link to="/reserver" search={reserverSearch()}>{t.cta.book}</Link></Button>
             </>
           )}
         </div>
@@ -109,7 +110,7 @@ export function SiteHeader() {
               ) : (
                 <>
                   <Button variant="ghost" asChild><Link to="/auth">{t.cta.login}</Link></Button>
-                  <Button variant="hero" asChild><Link to="/reserver">{t.cta.book}</Link></Button>
+                  <Button variant="hero" asChild><Link to="/reserver" search={reserverSearch()}>{t.cta.book}</Link></Button>
                 </>
               )}
             </div>

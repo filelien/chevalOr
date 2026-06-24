@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { PageHero } from "@/components/site/PageHero";
-import { STORY, HOTEL, WHY_CHOOSE, ANIE } from "@/lib/content";
+import { useSiteContent } from "@/hooks/use-site-content";
+import { useI18n } from "@/lib/i18n";
 import hero from "@/assets/hero.jpg";
 import { Reveal } from "@/components/site/Reveal";
 import { Check } from "lucide-react";
@@ -10,15 +11,22 @@ export const Route = createFileRoute("/a-propos")({
   head: () => ({
     meta: [
       { title: "À propos — Hôtel Le Cheval d'Or, Anié" },
-      { name: "description", content: STORY.vision },
+      { name: "description", content: "Hôtel de référence à Anié, Togo — hospitalité, confort et excellence." },
     ],
   }),
-  component: () => (
+  component: AboutPage,
+});
+
+function AboutPage() {
+  const { STORY, HOTEL, WHY_CHOOSE, ANIE } = useSiteContent();
+  const { t } = useI18n();
+
+  return (
     <SiteShell>
       <PageHero
         image={hero}
-        label="Présentation"
-        title="Hôtel Le Cheval d'Or"
+        label={t.ui.about.presentation}
+        title={HOTEL.name}
         subtitle={HOTEL.tagline}
       />
       <section className="mx-auto max-w-4xl px-6 py-20">
@@ -70,5 +78,5 @@ export const Route = createFileRoute("/a-propos")({
         <p className="mt-12 text-center text-sm text-muted-foreground">{HOTEL.address}</p>
       </section>
     </SiteShell>
-  ),
-});
+  );
+}

@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { SiteShell } from "@/components/layout/SiteShell";
 import { PageHero } from "@/components/site/PageHero";
-import { fetchPublicRooms, formatXOF, ROOM_TYPE_LABEL } from "@/lib/rooms";
+import { fetchPublicRooms, formatXOF } from "@/lib/rooms";
+import { useI18n, roomTypeLabel } from "@/lib/i18n";
 import hero from "@/assets/hero.jpg";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
@@ -14,6 +15,8 @@ export const Route = createFileRoute("/comparer")({
 });
 
 function ComparePage() {
+  const { t, lang } = useI18n();
+  const u = t.ui.compare;
   const { data: rooms } = useQuery({ queryKey: ["public-rooms"], queryFn: fetchPublicRooms });
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -25,9 +28,9 @@ function ComparePage() {
 
   return (
     <SiteShell>
-      <PageHero image={hero} label="Chambres" title="Comparateur" subtitle="Comparez jusqu'à 3 chambres côte à côte — style Marriott / Peninsula." />
+      <PageHero image={hero} label={t.pages.compare.label} title={t.pages.compare.title} subtitle={u.subtitle} />
       <section className="mx-auto max-w-7xl px-6 py-12">
-        <p className="text-sm text-muted-foreground">Sélectionnez les chambres à comparer ({selected.length}/3)</p>
+        <p className="text-sm text-muted-foreground">{u.selectRooms} ({selected.length}/3)</p>
         <div className="mt-4 flex flex-wrap gap-2">
           {(rooms ?? []).map((r) => (
             <button key={r.id} onClick={() => toggle(r.id)}
@@ -41,17 +44,17 @@ function ComparePage() {
             <table className="w-full min-w-[600px] border-collapse text-sm">
               <thead>
                 <tr className="border-b">
-                  <th className="p-3 text-left">Critère</th>
+                  <th className="p-3 text-left">{u.criterion}</th>
                   {compared.map((r) => <th key={r.id} className="p-3 text-left font-display text-lg">{r.name}</th>)}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { label: "Type", fn: (r: typeof compared[0]) => ROOM_TYPE_LABEL[r.type] },
-                  { label: "Capacité", fn: (r: typeof compared[0]) => `${r.capacity} pers.` },
-                  { label: "Surface", fn: (r: typeof compared[0]) => r.size_sqm ? `${r.size_sqm} m²` : "—" },
-                  { label: "Prix / nuit", fn: (r: typeof compared[0]) => formatXOF(r.price_per_night) },
-                  { label: "Équipements", fn: (r: typeof compared[0]) => r.amenities.slice(0, 4).join(", ") || "—" },
+                  { label: u.type, fn: (r: typeof compared[0]) => roomTypeLabel(r.type, lang) },
+                  { label: u.capacity, fn: (r: typeof compared[0]) => `${r.capacity} ${u.persons}` },
+                  { label: u.size, fn: (r: typeof compared[0]) => r.size_sqm ? `${r.size_sqm} m²` : "—" },
+                  { label: u.price, fn: (r: typeof compared[0]) => formatXOF(r.price_per_night) },
+                  { label: u.amenities, fn: (r: typeof compared[0]) => r.amenities.slice(0, 4).join(", ") || "—" },
                 ].map((row) => (
                   <tr key={row.label} className="border-b border-border/60">
                     <td className="p-3 font-medium">{row.label}</td>
@@ -62,7 +65,7 @@ function ComparePage() {
                   <td className="p-3" />
                   {compared.map((r) => (
                     <td key={r.id} className="p-3">
-                      <Button variant="hero" size="sm" asChild><Link to="/chambres/$id" params={{ id: r.id }}>Réserver</Link></Button>
+                      <Button variant="hero" size="sm" asChild><Link to="/chambres/$id" params={{ id: r.id }}>{u.book}</Link></Button>
                     </td>
                   ))}
                 </tr>

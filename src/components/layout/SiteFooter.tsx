@@ -17,9 +17,7 @@ export function SiteFooter() {
             <img src={logo} alt="" className="h-12 w-12" width={48} height={48} loading="lazy" />
             <span className="font-display text-xl">Le Cheval d'Or</span>
           </div>
-          <p className="mt-4 text-sm text-white/60 max-w-sm">
-            Une adresse d'exception au cœur du Togo. Design inspiré des plus grands palaces internationaux, hospitalité ouest-africaine authentique.
-          </p>
+          <p className="mt-4 text-sm text-white/60 max-w-sm">{t.footer.tagline}</p>
           <div className="mt-4 flex gap-3">
             {[
               { Icon: Facebook, href: hotel.social.facebook, label: "Facebook" },
@@ -36,16 +34,16 @@ export function SiteFooter() {
         <div>
           <h4 className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">{t.footer.discover}</h4>
           <ul className="space-y-2 text-sm text-white/70">
-            <li><Link to="/chambres" className="hover:text-gold">Chambres & suites</Link></li>
-            <li><Link to="/restaurant" className="hover:text-gold">Restaurant</Link></li>
-            <li><Link to="/services" className="hover:text-gold">Services</Link></li>
-            <li><Link to="/experiences" className="hover:text-gold">Expériences</Link></li>
-            <li><Link to="/offres" className="hover:text-gold">Offres spéciales</Link></li>
-            <li><Link to="/blog" className="hover:text-gold">Blog</Link></li>
+            <li><Link to="/chambres" className="hover:text-gold">{t.footer.roomsSuites}</Link></li>
+            <li><Link to="/restaurant" className="hover:text-gold">{t.nav.restaurant}</Link></li>
+            <li><Link to="/services" className="hover:text-gold">{t.nav.services}</Link></li>
+            <li><Link to="/experiences" className="hover:text-gold">{t.nav.experiences}</Link></li>
+            <li><Link to="/offres" className="hover:text-gold">{t.footer.specialOffers}</Link></li>
+            <li><Link to="/blog" className="hover:text-gold">{t.nav.blog}</Link></li>
           </ul>
         </div>
         <div>
-          <h4 className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">Contact</h4>
+          <h4 className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">{t.footer.contactTitle}</h4>
           <ul className="space-y-2 text-sm text-white/70">
             <li>{hotel.address}</li>
             <li><a href={`tel:${hotel.phone}`} className="hover:text-gold">{hotel.phone}</a></li>
@@ -53,9 +51,9 @@ export function SiteFooter() {
           </ul>
           <h4 className="mb-2 mt-6 text-xs uppercase tracking-[0.25em] text-gold">{t.footer.legal}</h4>
           <ul className="space-y-2 text-sm text-white/70">
-            <li><Link to="/mentions-legales" className="hover:text-gold">Mentions légales</Link></li>
-            <li><Link to="/cgv" className="hover:text-gold">CGV</Link></li>
-            <li><Link to="/confidentialite" className="hover:text-gold">Confidentialité</Link></li>
+            <li><Link to="/mentions-legales" className="hover:text-gold">{t.footer.legalNotice}</Link></li>
+            <li><Link to="/cgv" className="hover:text-gold">{t.footer.terms}</Link></li>
+            <li><Link to="/confidentialite" className="hover:text-gold">{t.footer.privacy}</Link></li>
           </ul>
         </div>
         <div>

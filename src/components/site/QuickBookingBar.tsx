@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { reserverSearch } from "@/lib/reserver-search";
 import { Calendar, Users } from "lucide-react";
 
 export function QuickBookingBar() {
@@ -29,7 +30,7 @@ export function QuickBookingBar() {
           </select>
         </label>
         <Button variant="hero" size="lg" className="w-full" asChild>
-          <Link to="/reserver" search={{ in: checkIn, out: checkOut, guests: String(guests) }}>Vérifier disponibilité</Link>
+          <Link to="/reserver" search={reserverSearch({ in: checkIn, out: checkOut, guests: String(guests) })}>Vérifier disponibilité</Link>
         </Button>
       </div>
     </div>

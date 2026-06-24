@@ -37,6 +37,9 @@ export function permissionsFromRoles(roles: AppRole[]): PermissionKey[] {
 }
 
 export async function fetchUserPermissions(userId: string, roles?: AppRole[]): Promise<PermissionKey[]> {
+  if (roles?.includes("super_admin")) {
+    return Object.keys(PERMISSION_LABELS) as PermissionKey[];
+  }
   const { data, error } = await supabase.rpc("get_user_permissions", { _user_id: userId });
   if (!error && data?.length) return data as PermissionKey[];
   if (roles?.length) return permissionsFromRoles(roles);

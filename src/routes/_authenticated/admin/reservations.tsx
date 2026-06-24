@@ -6,14 +6,21 @@ import { Button } from "@/components/ui/button";
 import { formatXOF } from "@/lib/rooms";
 import {
   STATUS_BADGE, STATUS_LABEL, type ReservationStatus,
-  cancelReservation, confirmReservation, markPaid, setReservationStatus, updateReservationDates,
+  cancelReservation, confirmReservation, createWalkInReservation, isRoomAvailable,
+  markPaid, setReservationStatus, updateReservationDates,
 } from "@/lib/reservations";
 import { generateInvoicePDF } from "@/lib/invoice";
+import { downloadCsv } from "@/lib/export-csv";
+import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
-import { CheckCircle2, XCircle, FileText, Receipt, Edit3, Search } from "lucide-react";
+import { CheckCircle2, XCircle, FileText, Receipt, Edit3, Search, Plus, Download } from "lucide-react";
+import {
+  ViewModeToggle, ReservationKanban, ReservationCards, type ViewMode,
+} from "@/components/admin/reservations/ReservationViews";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 
 export const Route = createFileRoute("/_authenticated/admin/reservations")({
   component: AdminReservations,
@@ -23,10 +30,13 @@ const STATUSES: Array<ReservationStatus | "all"> = ["all", "pending", "confirmed
 
 function AdminReservations() {
   const qc = useQueryClient();
+  const { hasPermission } = useAuth();
   const [filter, setFilter] = useState<ReservationStatus | "all">("all");
   const [search, setSearch] = useState("");
   const [editing, setEditing] = useState<any | null>(null);
   const [paying, setPaying] = useState<any | null>(null);
+  const [creating, setCreating] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>("table");
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin-reservations"],
@@ -72,12 +82,46 @@ function AdminReservations() {
     });
   }
 
+  function exportCsv() {
+    downloadCsv(
+      `reservations-${new Date().toISOString().slice(0, 10)}.csv`,
+      ["Référence", "Client", "Email", "Chambre", "Arrivée", "Départ", "Nuits", "Total", "Statut", "Payé"],
+      filtered.map((r: any) => [
+        r.reference,
+        r.profiles?.full_name ?? "",
+        r.profiles?.email ?? "",
+        r.rooms?.name ?? "",
+        r.check_in,
+        r.check_out,
+        r.nights,
+        r.total_price,
+        STATUS_LABEL[r.status as ReservationStatus],
+        r.paid_at ? "Oui" : "Non",
+      ]),
+    );
+  }
+
   return (
-    <div className="p-6 lg:p-10">
-      <div>
-        <span className="text-xs uppercase tracking-[0.3em] text-gold-deep">Module 3</span>
-        <h1 className="mt-2 font-display text-4xl">Réservations</h1>
-      </div>
+    <div className="p-6 lg:p-10 space-y-6">
+      <AdminPageHeader
+        label="PMS · Réservations"
+        title="Gestion des réservations"
+        subtitle="Vues tableau, cartes et kanban — check-in, encaissement et walk-in."
+      >
+        <div className="flex flex-wrap items-center gap-2">
+          <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+          {hasPermission("reservation.export") && (
+            <Button variant="outline" size="sm" onClick={exportCsv}>
+              <Download className="mr-1 size-4" />Exporter
+            </Button>
+          )}
+          {hasPermission("reservation.create") && (
+            <Button variant="hero" size="sm" onClick={() => setCreating(true)}>
+              <Plus className="mr-1 size-4" />Nouvelle réservation
+            </Button>
+          )}
+        </div>
+      </AdminPageHeader>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <div className="relative">
@@ -98,7 +142,22 @@ function AdminReservations() {
         </div>
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-xl border border-border bg-card">
+      {isLoading ? (
+        <p className="text-muted-foreground">Chargement…</p>
+      ) : filtered.length === 0 ? (
+        <p className="rounded-xl border border-dashed border-border p-12 text-center text-muted-foreground">Aucune réservation.</p>
+      ) : viewMode === "kanban" ? (
+        <ReservationKanban
+          rows={filtered}
+          onEdit={setEditing}
+          onPay={setPaying}
+          onConfirm={(id) => action(() => confirmReservation(id), "Confirmée")}
+          onCancel={(id) => { if (confirm("Annuler ?")) action(() => cancelReservation(id, "Annulée par le personnel"), "Annulée"); }}
+        />
+      ) : viewMode === "cards" ? (
+        <ReservationCards rows={filtered} onEdit={setEditing} onPay={setPaying} />
+      ) : (
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
         <table className="w-full text-sm">
           <thead className="bg-secondary/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
             <tr>
@@ -181,9 +240,11 @@ function AdminReservations() {
           </tbody>
         </table>
       </div>
+      )}
 
       <EditDatesDialog reservation={editing} onClose={() => setEditing(null)} onSaved={() => { setEditing(null); qc.invalidateQueries({ queryKey: ["admin-reservations"] }); }} />
       <PayDialog reservation={paying} onClose={() => setPaying(null)} onSaved={() => { setPaying(null); qc.invalidateQueries({ queryKey: ["admin-reservations"] }); }} />
+      <CreateReservationDialog open={creating} onClose={() => setCreating(false)} onSaved={() => { setCreating(false); qc.invalidateQueries({ queryKey: ["admin-reservations"] }); }} />
     </div>
   );
 }
@@ -265,6 +326,125 @@ function PayDialog({ reservation, onClose, onSaved }: { reservation: any | null;
         <DialogFooter>
           <Button variant="ghost" onClick={onClose}>Annuler</Button>
           <Button variant="hero" onClick={save} disabled={busy}>{busy ? "…" : "Valider"}</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function CreateReservationDialog({
+  open, onClose, onSaved,
+}: { open: boolean; onClose: () => void; onSaved: () => void }) {
+  const [profileQuery, setProfileQuery] = useState("");
+  const [profileId, setProfileId] = useState("");
+  const [roomId, setRoomId] = useState("");
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
+  const [guests, setGuests] = useState(2);
+  const [busy, setBusy] = useState(false);
+
+  const { data: profiles = [] } = useQuery({
+    queryKey: ["admin-profiles-search", profileQuery],
+    queryFn: async () => {
+      if (!profileQuery.trim()) return [];
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, full_name, email")
+        .or(`full_name.ilike.%${profileQuery}%,email.ilike.%${profileQuery}%`)
+        .limit(8);
+      if (error) throw error;
+      return data ?? [];
+    },
+    enabled: profileQuery.length >= 2,
+  });
+
+  const { data: rooms = [] } = useQuery({
+    queryKey: ["admin-rooms-active"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("rooms").select("id, name, number, price_per_night, capacity").eq("is_active", true).order("number");
+      if (error) throw error;
+      return data ?? [];
+    },
+    enabled: open,
+  });
+
+  const selectedRoom = rooms.find((r) => r.id === roomId);
+  const nights = checkIn && checkOut
+    ? Math.max(0, Math.round((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / 86400000))
+    : 0;
+  const total = nights * Number(selectedRoom?.price_per_night ?? 0);
+
+  async function save() {
+    if (!profileId || !roomId || nights <= 0) {
+      toast.error("Complétez client, chambre et dates");
+      return;
+    }
+    setBusy(true);
+    try {
+      const ok = await isRoomAvailable(roomId, checkIn, checkOut);
+      if (!ok) { toast.error("Chambre indisponible sur ces dates"); return; }
+      await createWalkInReservation({
+        room_id: roomId,
+        profile_id: profileId,
+        check_in: checkIn,
+        check_out: checkOut,
+        guests_count: guests,
+        total_price: total,
+        status: "confirmed",
+      });
+      toast.success("Réservation créée");
+      onSaved();
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-lg">
+        <DialogHeader><DialogTitle>Nouvelle réservation (walk-in)</DialogTitle></DialogHeader>
+        <div className="space-y-3">
+          <label className="block text-xs uppercase tracking-wider text-muted-foreground">Rechercher client
+            <input value={profileQuery} onChange={(e) => setProfileQuery(e.target.value)}
+              placeholder="Nom ou email…"
+              className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          </label>
+          {profiles.length > 0 && (
+            <div className="max-h-32 overflow-y-auto rounded-md border border-border">
+              {profiles.map((p: any) => (
+                <button key={p.id} type="button" onClick={() => { setProfileId(p.id); setProfileQuery(`${p.full_name ?? ""} (${p.email})`); }}
+                  className={`block w-full px-3 py-2 text-left text-sm hover:bg-secondary ${profileId === p.id ? "bg-secondary" : ""}`}>
+                  {p.full_name ?? "—"} · {p.email}
+                </button>
+              ))}
+            </div>
+          )}
+          <label className="block text-xs uppercase tracking-wider text-muted-foreground">Chambre
+            <select value={roomId} onChange={(e) => setRoomId(e.target.value)} className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+              <option value="">Sélectionner…</option>
+              {rooms.map((r: any) => (
+                <option key={r.id} value={r.id}>n° {r.number} — {r.name}</option>
+              ))}
+            </select>
+          </label>
+          <div className="grid grid-cols-2 gap-3">
+            <label className="text-xs uppercase tracking-wider text-muted-foreground">Arrivée
+              <input type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+            </label>
+            <label className="text-xs uppercase tracking-wider text-muted-foreground">Départ
+              <input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+            </label>
+          </div>
+          <label className="block text-xs uppercase tracking-wider text-muted-foreground">Personnes
+            <input type="number" min={1} value={guests} onChange={(e) => setGuests(Number(e.target.value))} className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          </label>
+          {total > 0 && <p className="text-sm text-gold-deep">Total estimé : {formatXOF(total)} ({nights} nuit(s))</p>}
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={onClose}>Annuler</Button>
+          <Button variant="hero" onClick={save} disabled={busy}>{busy ? "…" : "Créer"}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

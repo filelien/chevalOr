@@ -5,11 +5,13 @@ import { SiteShell } from "@/components/layout/SiteShell";
 import { PageHero } from "@/components/site/PageHero";
 import { Reveal } from "@/components/site/Reveal";
 import { fetchMenu } from "@/lib/restaurant";
-import { CHEF } from "@/lib/content";
+import { useSiteContent } from "@/hooks/use-site-content";
+import { useI18n } from "@/lib/i18n";
 import { formatXOF } from "@/lib/rooms";
 import restaurantImg from "@/assets/restaurant.jpg";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { notifyTableReservation } from "@/lib/email.server";
 import { toast } from "sonner";
 import { Award, Clock } from "lucide-react";
 
@@ -19,16 +21,19 @@ export const Route = createFileRoute("/restaurant")({
 });
 
 function RestaurantPage() {
+  const { CHEF } = useSiteContent();
+  const { t } = useI18n();
+  const u = t.ui.restaurant;
   const { data: menu, isLoading } = useQuery({ queryKey: ["public-menu"], queryFn: fetchMenu });
   const [tab, setTab] = useState<"menu" | "reserve">("menu");
 
   return (
     <SiteShell>
-      <PageHero image={restaurantImg} label="Restaurant" title="La Table du Cheval d'Or"
-        subtitle="Gastronomie française & saveurs togolaises — inspiration Mandarin Oriental.">
+      <PageHero image={restaurantImg} label={t.pages.restaurant.label} title={t.pages.restaurant.title}
+        subtitle={u.subtitle}>
         <div className="mt-6 flex gap-3">
-          <Button variant={tab === "menu" ? "hero" : "outline"} className="border-white/40 text-white" onClick={() => setTab("menu")}>La carte</Button>
-          <Button variant={tab === "reserve" ? "hero" : "outline"} className="border-white/40 text-white" onClick={() => setTab("reserve")}>Réserver une table</Button>
+          <Button variant={tab === "menu" ? "hero" : "outline"} className="border-white/40 text-white" onClick={() => setTab("menu")}>{u.menuTab}</Button>
+          <Button variant={tab === "reserve" ? "hero" : "outline"} className="border-white/40 text-white" onClick={() => setTab("reserve")}>{u.reserveTab}</Button>
         </div>
       </PageHero>
 
@@ -53,9 +58,9 @@ function RestaurantPage() {
           </section>
           <section className="mx-auto max-w-4xl px-6 pb-20">
             <div className="mb-8 flex items-center gap-2 text-sm text-muted-foreground">
-              <Clock className="size-4" /> Ouvert 19h – 23h · Tenue élégante souhaitée
+              <Clock className="size-4" /> {u.openHours}
             </div>
-            {isLoading ? <p className="text-muted-foreground">Chargement de la carte…</p> : (menu ?? []).map((cat: any) => (
+            {isLoading ? <p className="text-muted-foreground">{u.loadingMenu}</p> : (menu ?? []).map((cat: any) => (
               <Reveal key={cat.id}>
                 <h2 className="mt-10 font-display text-3xl border-b border-border pb-2">{cat.name}</h2>
                 <div className="mt-4 space-y-4">
@@ -88,7 +93,7 @@ function TableReservationForm() {
     e.preventDefault();
     setBusy(true);
     try {
-      const { error } = await supabase.from("table_reservations").insert({
+      const { data: created, error } = await supabase.from("table_reservations").insert({
         reservation_date: form.date,
         reservation_time: form.time,
         guests_count: form.guests,
@@ -96,8 +101,16 @@ function TableReservationForm() {
         email: form.email,
         phone: form.phone || null,
         notes: form.notes || null,
-      });
+      }).select("reference").single();
       if (error) throw error;
+      void notifyTableReservation({
+        reference: created?.reference ?? "TABLE",
+        fullName: form.name,
+        email: form.email,
+        date: form.date,
+        time: form.time,
+        guests: form.guests,
+      });
       toast.success("Demande de réservation envoyée ! Confirmation par email.");
       setForm({ date: "", time: "19:30", guests: 2, name: "", email: "", phone: "", notes: "" });
     } catch (err: any) { toast.error(err.message); }

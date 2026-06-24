@@ -45,6 +45,16 @@ export const initiateCinetPay = createServerFn({ method: "POST" })
       return { ok: false as const, error: json.message ?? "Erreur CinetPay" };
     }
 
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      await supabaseAdmin
+        .from("reservations")
+        .update({ payment_status: "pending" })
+        .eq("id", data.reservationId);
+    } catch {
+      /* non bloquant */
+    }
+
     return {
       ok: true as const,
       paymentUrl: json.data?.payment_url as string,

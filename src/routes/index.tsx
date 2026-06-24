@@ -4,10 +4,10 @@ import { SiteShell } from "@/components/layout/SiteShell";
 import { Button } from "@/components/ui/button";
 import { fetchPublicRooms, formatXOF, ROOM_TYPE_LABEL } from "@/lib/rooms";
 import {
-  HOTEL, STORY, TESTIMONIALS, LOYALTY, EXPERIENCES, PACKS, PROMOTIONS,
-  SERVICES, CHEF, HOME, FAQ, GALLERY_IMAGES, WHY_CHOOSE, CONFERENCE, ANIE,
-} from "@/lib/content";
-import { fetchSeoHome, fetchPublicGallery, fetchPublicReviews, galleryToLightbox } from "@/lib/cms";
+  fetchSeoHome, fetchPublicGallery, fetchPublicReviews, galleryToLightbox,
+} from "@/lib/cms";
+import { useSiteContent } from "@/hooks/use-site-content";
+import { useI18n } from "@/lib/i18n";
 import { homeMetaFromCms } from "@/lib/seo";
 import { QuickBookingBar } from "@/components/site/QuickBookingBar";
 import { Reveal } from "@/components/site/Reveal";
@@ -18,6 +18,7 @@ import hero from "@/assets/hero.jpg";
 import restaurantImg from "@/assets/restaurant.jpg";
 import roomImg from "@/assets/room-deluxe.jpg";
 import logo from "@/assets/logo.png";
+import { reserverSearch } from "@/lib/reserver-search";
 import {
   Star, ArrowRight, ChevronDown, Award, Sparkles, Wine, MapPin,
   Smartphone, UtensilsCrossed, BedDouble, CalendarHeart, Gem,
@@ -43,6 +44,11 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const {
+    HOME, HOTEL, STORY, TESTIMONIALS, LOYALTY, EXPERIENCES, PACKS, PROMOTIONS,
+    SERVICES, CHEF, FAQ, GALLERY_IMAGES, WHY_CHOOSE, CONFERENCE, ANIE,
+  } = useSiteContent();
+  const { t } = useI18n();
   const { data: rooms } = useQuery({ queryKey: ["public-rooms"], queryFn: fetchPublicRooms });
   const { data: galleryItems } = useQuery({ queryKey: ["public-gallery"], queryFn: fetchPublicGallery });
   const { data: reviews } = useQuery({ queryKey: ["public-reviews"], queryFn: fetchPublicReviews });
@@ -86,10 +92,10 @@ function Index() {
           </div>
           <div className="hero-fade-up hero-fade-up-delay-4 mt-10 flex w-full max-w-lg flex-col items-stretch justify-center gap-3 sm:max-w-none sm:flex-row sm:items-center">
             <Button variant="hero" size="xl" className="w-full sm:w-auto" asChild>
-              <Link to="/reserver"><CalendarHeart className="mr-2 size-5 shrink-0" />Réserver maintenant</Link>
+              <Link to="/reserver" search={reserverSearch()}><CalendarHeart className="mr-2 size-5 shrink-0" />{t.home.bookNow}</Link>
             </Button>
             <Button variant="onDark" size="xl" className="w-full sm:w-auto" asChild>
-              <Link to="/chambres"><BedDouble className="mr-2 size-4 shrink-0" />Découvrir nos chambres</Link>
+              <Link to="/chambres"><BedDouble className="mr-2 size-4 shrink-0" />{t.home.discoverRooms}</Link>
             </Button>
           </div>
         </div>
@@ -135,7 +141,7 @@ function Index() {
       {/* ═══ 5. PHILOSOPHIE / STORYTELLING (Belmond / Aman) ═══ */}
       <section className="mx-auto grid max-w-7xl gap-12 px-6 py-24 lg:grid-cols-2 lg:items-center">
         <Reveal>
-          <SectionHeader label="Présentation" title="Votre hôtel de référence à Anié" subtitle={STORY.vision} />
+          <SectionHeader label={t.home.presentation} title={t.home.hotelRef} subtitle={STORY.vision} />
           <div className="mt-8 space-y-4 text-muted-foreground leading-relaxed">
             {STORY.paragraphs.slice(0, 2).map((p, i) => <p key={i}>{p}</p>)}
           </div>
@@ -152,7 +158,7 @@ function Index() {
           <div className="relative">
             <img src={roomImg} alt="" className="rounded-xl shadow-elegant aspect-[4/5] w-full object-cover" />
             <div className="absolute -bottom-6 -left-6 max-w-xs rounded-xl border border-border bg-card p-6 shadow-elegant">
-              <p className="font-display text-3xl text-gold-deep">Depuis {STORY.founded}</p>
+              <p className="font-display text-3xl text-gold-deep">{t.home.since} {STORY.founded}</p>
               <p className="mt-1 text-sm text-muted-foreground">Années d'excellence hôtelière à Anié</p>
             </div>
           </div>
@@ -514,7 +520,7 @@ function Index() {
       {/* ═══ 20. FIDÉLITÉ (Marriott Bonvoy / Hyatt) ═══ */}
       <section className="py-24">
         <div className="mx-auto max-w-5xl px-6 text-center">
-          <SectionHeader align="center" label="Programme fidélité" title={LOYALTY.name} subtitle="Gagnez des avantages à chaque séjour — restauration, upgrades, spa." />
+          <SectionHeader align="center" label={t.home.loyalty} title={LOYALTY.name} subtitle={t.home.loyaltySubtitle} />
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {LOYALTY.tiers.map((tier, i) => (
               <div key={tier.name} className={`card-lift rounded-xl border p-8 ${i === 1 ? "border-gold bg-gold-soft/20 shadow-gold" : "border-border bg-card"}`}>
@@ -531,7 +537,7 @@ function Index() {
       {/* ═══ 21. FAQ TEASER ═══ */}
       <section className="bg-secondary/30 py-20">
         <div className="mx-auto max-w-3xl px-6">
-          <SectionHeader align="center" label="FAQ" title="Questions fréquentes" />
+          <SectionHeader align="center" label="FAQ" title={t.home.faqTeaser} />
           <div className="mt-10 space-y-4">
             {FAQ.slice(0, 3).map((f) => (
               <details key={f.q} className="group rounded-xl border border-border bg-card p-5">
@@ -564,7 +570,7 @@ function Index() {
           <p className="mt-5 text-base leading-relaxed text-white/90 md:text-lg">{HOME.cta.subtitle}</p>
           <div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
             <Button variant="hero" size="xl" className="w-full sm:w-auto" asChild>
-              <Link to="/reserver">{HOME.cta.primary}</Link>
+              <Link to="/reserver" search={reserverSearch()}>{HOME.cta.primary}</Link>
             </Button>
             <Button variant="onDark" size="xl" className="w-full sm:w-auto" asChild>
               <Link to={HOME.cta.secondaryLink}>{HOME.cta.secondary}</Link>

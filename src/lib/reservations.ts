@@ -39,6 +39,44 @@ export async function confirmReservation(id: string) {
   if (error) throw error;
 }
 
+export async function createWalkInReservation(input: {
+  room_id: string;
+  profile_id: string;
+  check_in: string;
+  check_out: string;
+  guests_count: number;
+  total_price: number;
+  status?: ReservationStatus;
+  special_requests?: string | null;
+  promo_code?: string | null;
+  discount_percent?: number | null;
+}) {
+  const nights = Math.max(
+    0,
+    Math.round((new Date(input.check_out).getTime() - new Date(input.check_in).getTime()) / 86400000),
+  );
+  const { data, error } = await supabase
+    .from("reservations")
+    .insert({
+      room_id: input.room_id,
+      profile_id: input.profile_id,
+      check_in: input.check_in,
+      check_out: input.check_out,
+      nights,
+      guests_count: input.guests_count,
+      total_price: input.total_price,
+      status: input.status ?? "confirmed",
+      special_requests: input.special_requests ?? null,
+      promo_code: input.promo_code ?? null,
+      discount_percent: input.discount_percent ?? null,
+      payment_status: "unpaid",
+    })
+    .select("id, reference")
+    .single();
+  if (error) throw error;
+  return data;
+}
+
 export async function markPaid(id: string, method: string, amount: number) {
   const { error } = await supabase
     .from("reservations")

@@ -3,7 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { formatXOF } from "@/lib/rooms";
-import { Search } from "lucide-react";
+import { downloadCsv } from "@/lib/export-csv";
+import { useAuth } from "@/lib/auth";
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { Button } from "@/components/ui/button";
+import { Search, Download } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/clients")({
   component: AdminClients,
@@ -11,6 +15,7 @@ export const Route = createFileRoute("/_authenticated/admin/clients")({
 
 function AdminClients() {
   const [q, setQ] = useState("");
+  const { hasPermission } = useAuth();
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin-clients"],
@@ -41,22 +46,33 @@ function AdminClients() {
   }, [data, q]);
 
   return (
-    <div className="p-6 lg:p-10">
-      <div>
-        <span className="text-xs uppercase tracking-[0.3em] text-gold-deep">Module 4 · CRM</span>
-        <h1 className="mt-2 font-display text-4xl">Clients</h1>
-      </div>
+    <div className="p-6 lg:p-10 space-y-6">
+      <AdminPageHeader
+        label="CRM · Clients"
+        title="Base clients"
+        subtitle="Profils 360°, score VIP, historique séjours et export."
+      >
+        {hasPermission("client.export") && (
+          <Button variant="outline" size="sm" onClick={() => downloadCsv(
+            `clients-${new Date().toISOString().slice(0, 10)}.csv`,
+            ["Nom", "Email", "Téléphone", "Séjours", "Total dépensé", "Dernier séjour"],
+            filtered.map((c: any) => [c.full_name ?? "", c.email ?? "", c.phone ?? "", c.stats.count, c.stats.spent, c.stats.last ?? ""]),
+          )}>
+            <Download className="mr-1 size-4" />Exporter CSV
+          </Button>
+        )}
+      </AdminPageHeader>
 
       <div className="mt-6 relative w-full max-w-md">
         <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <input value={q} onChange={(e) => setQ(e.target.value)}
           placeholder="Rechercher un client (nom, email, téléphone)…"
-          className="w-full rounded-md border border-input bg-background py-2 pl-9 pr-3 text-sm" />
+          className="w-full rounded-lg border border-input bg-background py-2.5 pl-9 pr-3 text-sm" />
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-xl border border-border bg-card">
-        <table className="w-full text-sm">
-          <thead className="bg-secondary/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
+      <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+        <table className="audit-table w-full text-sm">
+          <thead className="bg-[#f8f6f1] text-left text-[11px] font-bold uppercase tracking-widest text-foreground/70">
             <tr>
               <th className="px-4 py-3">Client</th>
               <th className="px-4 py-3">Contact</th>

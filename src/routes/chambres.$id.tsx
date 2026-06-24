@@ -11,6 +11,7 @@ import roomImg from "@/assets/room-deluxe.jpg";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { completeReservationFlow } from "@/lib/reservation-flow";
 import { hotelJsonLd, buildPageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/chambres/$id")({
@@ -94,7 +95,7 @@ function RoomDetail() {
     setSubmitting(true);
     const ok = await isRoomAvailable(room!.id, checkIn, checkOut);
     if (!ok) { toast.error("Cette chambre n'est plus disponible"); setSubmitting(false); setAvailable(false); return; }
-    const { error } = await supabase.from("reservations").insert({
+    const { data: created, error } = await supabase.from("reservations").insert({
       room_id: room!.id,
       profile_id: user.id,
       check_in: checkIn,
@@ -105,10 +106,31 @@ function RoomDetail() {
       status: "pending",
       promo_code: appliedPromo?.code ?? null,
       discount_percent: appliedPromo?.percent ?? null,
+      payment_status: "unpaid",
+    }).select("id, reference").single();
+    if (error || !created) { toast.error(error?.message ?? "Erreur"); setSubmitting(false); return; }
+
+    const result = await completeReservationFlow({
+      reservationId: created.id,
+      reference: created.reference ?? created.id,
+      email: user.email ?? "",
+      customerName: user.user_metadata?.full_name ?? user.email ?? "Client",
+      profileId: user.id,
+      roomId: room!.id,
+      checkIn,
+      checkOut,
+      total: pricing.total,
+      roomName: room!.name,
     });
     setSubmitting(false);
-    if (error) { toast.error(error.message); return; }
-    toast.success("Réservation enregistrée !");
+
+    if (result.kind === "redirect") {
+      toast.success("Redirection vers le paiement sécurisé…");
+      window.location.href = result.paymentUrl;
+      return;
+    }
+
+    toast.success(result.message);
     navigate({ to: "/mes-reservations" });
   }
 

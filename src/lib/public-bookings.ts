@@ -1,4 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
+import {
+  notifyConferenceRequest,
+  notifyEventRequest,
+} from "@/lib/email.server";
 
 export type ConferenceRequest = {
   organizer_name: string;
@@ -42,6 +46,14 @@ export async function submitConferenceRequest(input: ConferenceRequest) {
     price: null,
   });
   if (error) throw error;
+
+  void notifyConferenceRequest({
+    organizerName: input.organizer_name,
+    organizerEmail: input.organizer_email,
+    eventTitle: input.event_title,
+    bookingDate: input.booking_date,
+    participants: input.participants,
+  });
 }
 
 export async function submitEventRequest(input: EventRequest) {
@@ -60,6 +72,15 @@ export async function submitEventRequest(input: EventRequest) {
     price: null,
   });
   if (error) throw error;
+
+  void notifyEventRequest({
+    organizerName: input.organizer_name,
+    organizerEmail: input.organizer_email,
+    title: input.title,
+    eventDate: input.event_date,
+    eventType: input.event_type,
+    expectedGuests: input.expected_guests,
+  });
 }
 
 export async function submitPublicReview(input: {
