@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
-  Copy, Eye, EyeOff, Grid3X3, ImageIcon, LayoutList, Pencil,
+  Copy, Eye, EyeOff, ExternalLink, Grid3X3, ImageIcon, LayoutList, Pencil,
   Search, Trash2, Upload,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/dialog";
 import {
   fetchGalleryItems, saveGalleryItem, deleteGalleryItem,
-  filterGalleryItems, GALLERY_CATEGORIES, type GalleryItem,
+  filterGalleryItems, getMediaExtension, getMediaFileName, GALLERY_CATEGORIES,
+  sortGalleryItems, type GalleryItem, type MediaSortBy,
 } from "@/lib/gallery-admin";
 import { uploadGalleryFiles } from "@/lib/media-upload";
 
@@ -32,6 +33,8 @@ export function MediaLibrary({ compact = false }: { compact?: boolean }) {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [published, setPublished] = useState<"all" | "published" | "draft">("all");
+  const [mediaType, setMediaType] = useState<"all" | "image" | "video" | "file">("all");
+  const [sortBy, setSortBy] = useState<MediaSortBy>("recent");
   const [view, setView] = useState<ViewMode>("grid");
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
@@ -44,8 +47,8 @@ export function MediaLibrary({ compact = false }: { compact?: boolean }) {
   });
 
   const filtered = useMemo(
-    () => filterGalleryItems(items, { search, category, published }),
-    [items, search, category, published],
+    () => sortGalleryItems(filterGalleryItems(items, { search, category, published, mediaType }), sortBy),
+    [items, search, category, published, mediaType, sortBy],
   );
 
   const stats = useMemo(() => ({
@@ -169,10 +172,22 @@ export function MediaLibrary({ compact = false }: { compact?: boolean }) {
           <option value="all">Toutes catégories</option>
           {GALLERY_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
+        <select value={mediaType} onChange={(e) => setMediaType(e.target.value as typeof mediaType)} className="rounded-lg border border-input bg-background px-3 py-2.5 text-sm">
+          <option value="all">Tous formats</option>
+          <option value="image">Images</option>
+          <option value="video">Vidéos</option>
+          <option value="file">Autres fichiers</option>
+        </select>
         <select value={published} onChange={(e) => setPublished(e.target.value as typeof published)} className="rounded-lg border border-input bg-background px-3 py-2.5 text-sm">
           <option value="all">Tous statuts</option>
           <option value="published">Publiés</option>
           <option value="draft">Brouillons</option>
+        </select>
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value as MediaSortBy)} className="rounded-lg border border-input bg-background px-3 py-2.5 text-sm">
+          <option value="recent">Récent d&apos;abord</option>
+          <option value="title">Titre A → Z</option>
+          <option value="category">Catégorie</option>
+          <option value="order">Ordre manuel</option>
         </select>
         <div className="flex rounded-lg border border-border">
           <button type="button" onClick={() => setView("grid")} className={`p-2.5 ${view === "grid" ? "bg-gold-soft/40 text-gold-deep" : "text-muted-foreground"}`} aria-label="Vue grille">
@@ -301,10 +316,19 @@ function MediaCard({
       <div className="p-4">
         <p className="font-medium truncate" title={item.title}>{item.title}</p>
         <p className="text-xs text-muted-foreground">{item.category}</p>
-        <div className="mt-3 flex gap-1">
+        <p className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground">
+          {getMediaExtension(item)} • {new Date(item.created_at).toLocaleDateString("fr-FR")}
+        </p>
+        <p className="mt-1 text-[11px] text-muted-foreground">{getMediaFileName(item)}</p>
+        <div className="mt-3 flex flex-wrap gap-1">
           <Button size="sm" variant="ghost" onClick={onEdit} title="Modifier"><Pencil className="size-4" /></Button>
           <Button size="sm" variant="ghost" onClick={() => { navigator.clipboard.writeText(item.url); toast.success("URL copiée"); }} title="Copier URL">
             <Copy className="size-4" />
+          </Button>
+          <Button size="sm" variant="ghost" asChild title="Ouvrir le média">
+            <a href={item.url} target="_blank" rel="noreferrer">
+              <ExternalLink className="size-4" />
+            </a>
           </Button>
           <Button size="sm" variant="ghost" onClick={onToggle} title={item.is_published ? "Masquer" : "Publier"}>
             {item.is_published ? <EyeOff className="size-4" /> : <Eye className="size-4" />}

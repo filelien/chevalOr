@@ -12,6 +12,15 @@ export type GalleryItem = {
   created_at: string;
 };
 
+export type GalleryFilterOptions = {
+  search?: string;
+  category?: string;
+  published?: "all" | "published" | "draft";
+  mediaType?: "all" | "image" | "video" | "file";
+};
+
+export type MediaSortBy = "recent" | "title" | "category" | "order";
+
 export const GALLERY_CATEGORIES = [
   "Hôtel",
   "Chambres",
@@ -31,20 +40,59 @@ export async function fetchGalleryItems(admin = true) {
   return (data ?? []) as GalleryItem[];
 }
 
-export function filterGalleryItems(
-  items: GalleryItem[],
-  opts: { search?: string; category?: string; published?: "all" | "published" | "draft" },
-): GalleryItem[] {
+export function getMediaFileName(item: GalleryItem) {
+  const match = item.url.match(/[^/\\]+$/);
+  return match?.[0] ?? item.title;
+}
+
+export function getMediaExtension(item: GalleryItem) {
+  const fileName = getMediaFileName(item);
+  const dotIndex = fileName.lastIndexOf(".");
+  return dotIndex >= 0 ? fileName.slice(dotIndex + 1).toUpperCase() : item.media_type.toUpperCase();
+}
+
+export function filterGalleryItems(items: GalleryItem[], opts: GalleryFilterOptions): GalleryItem[] {
   let rows = items;
   if (opts.category && opts.category !== "all") {
     rows = rows.filter((r) => r.category === opts.category);
   }
   if (opts.published === "published") rows = rows.filter((r) => r.is_published);
   if (opts.published === "draft") rows = rows.filter((r) => !r.is_published);
+  if (opts.mediaType && opts.mediaType !== "all") {
+    rows = rows.filter((r) => {
+      if (opts.mediaType === "image") return r.media_type.includes("image");
+      if (opts.mediaType === "video") return r.media_type.includes("video");
+      return !r.media_type.includes("image") && !r.media_type.includes("video");
+    });
+  }
   if (opts.search?.trim()) {
     const s = opts.search.toLowerCase();
-    rows = rows.filter((r) => `${r.title} ${r.category} ${r.url}`.toLowerCase().includes(s));
+    rows = rows.filter((r) => {
+      const haystack = `${r.title} ${r.category} ${r.url} ${getMediaFileName(r)} ${r.media_type}`.toLowerCase();
+      return haystack.includes(s);
+    });
   }
+  return rows;
+}
+
+export function sortGalleryItems(items: GalleryItem[], sortBy: MediaSortBy = "recent") {
+  const rows = [...items];
+  rows.sort((a, b) => {
+    switch (sortBy) {
+      case "title":
+        return a.title.localeCompare(b.title);
+      case "category":
+        return a.category.localeCompare(b.category);
+      case "order":
+        return a.sort_order - b.sort_order;
+      case "recent":
+      default: {
+        const dateA = new Date(a.created_at).getTime();
+        const dateB = new Date(b.created_at).getTime();
+        return dateB - dateA || a.sort_order - b.sort_order;
+      }
+    }
+  });
   return rows;
 }
 
