@@ -9,6 +9,13 @@ export function storagePathFromPublicUrl(url: string, bucket = GALLERY_BUCKET): 
   return decodeURIComponent(url.slice(idx + marker.length));
 }
 
+export function getMediaTypeFromFile(file: File) {
+  if (file.type.startsWith("image/")) return "image";
+  if (file.type.startsWith("video/")) return "video";
+  if (file.type === "application/pdf") return "file";
+  return file.type || "file";
+}
+
 export async function uploadGalleryFile(file: File) {
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
   const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;

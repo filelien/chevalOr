@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { SiteShell } from "@/components/layout/SiteShell";
+import { CmsPageRenderer } from "@/components/site/CmsPageRenderer";
 import { PageHero } from "@/components/site/PageHero";
 import { useSiteContent } from "@/hooks/use-site-content";
 import { useI18n } from "@/lib/i18n";
 import hero from "@/assets/hero.jpg";
 import { Reveal } from "@/components/site/Reveal";
 import { Check } from "lucide-react";
+import { fetchCmsPages, findCmsPageByPath } from "@/lib/cms-pages";
 
 export const Route = createFileRoute("/a-propos")({
   head: () => ({
@@ -20,6 +23,16 @@ export const Route = createFileRoute("/a-propos")({
 function AboutPage() {
   const { STORY, HOTEL, WHY_CHOOSE, ANIE } = useSiteContent();
   const { t } = useI18n();
+  const { data: pages = [] } = useQuery({ queryKey: ["cms-pages-about"], queryFn: fetchCmsPages });
+  const cmsPage = pages.find((page) => page.path === "/a-propos" || page.slug === "a-propos") ?? findCmsPageByPath("/a-propos", pages);
+
+  if (cmsPage?.published) {
+    return (
+      <SiteShell>
+        <CmsPageRenderer page={cmsPage} />
+      </SiteShell>
+    );
+  }
 
   return (
     <SiteShell>

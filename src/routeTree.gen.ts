@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RestaurantRouteImport } from './routes/restaurant'
+import { Route as ReserverSansCompteRouteImport } from './routes/reserver-sans-compte'
 import { Route as ReserverRouteImport } from './routes/reserver'
 import { Route as OffresRouteImport } from './routes/offres'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
@@ -27,6 +28,7 @@ import { Route as CgvRouteImport } from './routes/cgv'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AProposRouteImport } from './routes/a-propos'
+import { Route as SplatRouteImport } from './routes/$'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ChambresIdRouteImport } from './routes/chambres.$id'
@@ -59,6 +61,7 @@ import { Route as AuthenticatedAdminGalerieRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminFinanceRouteImport } from './routes/_authenticated/admin/finance'
 import { Route as AuthenticatedAdminEvenementsRouteImport } from './routes/_authenticated/admin/evenements'
 import { Route as AuthenticatedAdminConferenceRouteImport } from './routes/_authenticated/admin/conference'
+import { Route as AuthenticatedAdminComptabiliteRouteImport } from './routes/_authenticated/admin/comptabilite'
 import { Route as AuthenticatedAdminClientsRouteImport } from './routes/_authenticated/admin/clients'
 import { Route as AuthenticatedAdminChambresRouteImport } from './routes/_authenticated/admin/chambres'
 import { Route as AuthenticatedAdminCampagnesRouteImport } from './routes/_authenticated/admin/campagnes'
@@ -74,6 +77,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const RestaurantRoute = RestaurantRouteImport.update({
   id: '/restaurant',
   path: '/restaurant',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReserverSansCompteRoute = ReserverSansCompteRouteImport.update({
+  id: '/reserver-sans-compte',
+  path: '/reserver-sans-compte',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReserverRoute = ReserverRouteImport.update({
@@ -154,6 +162,11 @@ const AuthRoute = AuthRouteImport.update({
 const AProposRoute = AProposRouteImport.update({
   id: '/a-propos',
   path: '/a-propos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -338,6 +351,12 @@ const AuthenticatedAdminConferenceRoute =
     path: '/conference',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminComptabiliteRoute =
+  AuthenticatedAdminComptabiliteRouteImport.update({
+    id: '/comptabilite',
+    path: '/comptabilite',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminClientsRoute =
   AuthenticatedAdminClientsRouteImport.update({
     id: '/clients',
@@ -376,6 +395,7 @@ const AuthenticatedAdminClientsIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
@@ -392,6 +412,7 @@ export interface FileRoutesByFullPath {
   '/mentions-legales': typeof MentionsLegalesRoute
   '/offres': typeof OffresRoute
   '/reserver': typeof ReserverRoute
+  '/reserver-sans-compte': typeof ReserverSansCompteRoute
   '/restaurant': typeof RestaurantRoute
   '/services': typeof ServicesRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
@@ -403,6 +424,7 @@ export interface FileRoutesByFullPath {
   '/admin/campagnes': typeof AuthenticatedAdminCampagnesRoute
   '/admin/chambres': typeof AuthenticatedAdminChambresRoute
   '/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
+  '/admin/comptabilite': typeof AuthenticatedAdminComptabiliteRoute
   '/admin/conference': typeof AuthenticatedAdminConferenceRoute
   '/admin/evenements': typeof AuthenticatedAdminEvenementsRoute
   '/admin/finance': typeof AuthenticatedAdminFinanceRoute
@@ -433,6 +455,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$': typeof SplatRoute
   '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
@@ -449,6 +472,7 @@ export interface FileRoutesByTo {
   '/mentions-legales': typeof MentionsLegalesRoute
   '/offres': typeof OffresRoute
   '/reserver': typeof ReserverRoute
+  '/reserver-sans-compte': typeof ReserverSansCompteRoute
   '/restaurant': typeof RestaurantRoute
   '/services': typeof ServicesRoute
   '/mes-reservations': typeof AuthenticatedMesReservationsRoute
@@ -459,6 +483,7 @@ export interface FileRoutesByTo {
   '/admin/campagnes': typeof AuthenticatedAdminCampagnesRoute
   '/admin/chambres': typeof AuthenticatedAdminChambresRoute
   '/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
+  '/admin/comptabilite': typeof AuthenticatedAdminComptabiliteRoute
   '/admin/conference': typeof AuthenticatedAdminConferenceRoute
   '/admin/evenements': typeof AuthenticatedAdminEvenementsRoute
   '/admin/finance': typeof AuthenticatedAdminFinanceRoute
@@ -491,6 +516,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/$': typeof SplatRoute
   '/a-propos': typeof AProposRoute
   '/auth': typeof AuthRoute
   '/blog': typeof BlogRouteWithChildren
@@ -507,6 +533,7 @@ export interface FileRoutesById {
   '/mentions-legales': typeof MentionsLegalesRoute
   '/offres': typeof OffresRoute
   '/reserver': typeof ReserverRoute
+  '/reserver-sans-compte': typeof ReserverSansCompteRoute
   '/restaurant': typeof RestaurantRoute
   '/services': typeof ServicesRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
@@ -518,6 +545,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/campagnes': typeof AuthenticatedAdminCampagnesRoute
   '/_authenticated/admin/chambres': typeof AuthenticatedAdminChambresRoute
   '/_authenticated/admin/clients': typeof AuthenticatedAdminClientsRouteWithChildren
+  '/_authenticated/admin/comptabilite': typeof AuthenticatedAdminComptabiliteRoute
   '/_authenticated/admin/conference': typeof AuthenticatedAdminConferenceRoute
   '/_authenticated/admin/evenements': typeof AuthenticatedAdminEvenementsRoute
   '/_authenticated/admin/finance': typeof AuthenticatedAdminFinanceRoute
@@ -550,6 +578,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$'
     | '/a-propos'
     | '/auth'
     | '/blog'
@@ -566,6 +595,7 @@ export interface FileRouteTypes {
     | '/mentions-legales'
     | '/offres'
     | '/reserver'
+    | '/reserver-sans-compte'
     | '/restaurant'
     | '/services'
     | '/admin'
@@ -577,6 +607,7 @@ export interface FileRouteTypes {
     | '/admin/campagnes'
     | '/admin/chambres'
     | '/admin/clients'
+    | '/admin/comptabilite'
     | '/admin/conference'
     | '/admin/evenements'
     | '/admin/finance'
@@ -607,6 +638,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$'
     | '/a-propos'
     | '/auth'
     | '/blog'
@@ -623,6 +655,7 @@ export interface FileRouteTypes {
     | '/mentions-legales'
     | '/offres'
     | '/reserver'
+    | '/reserver-sans-compte'
     | '/restaurant'
     | '/services'
     | '/mes-reservations'
@@ -633,6 +666,7 @@ export interface FileRouteTypes {
     | '/admin/campagnes'
     | '/admin/chambres'
     | '/admin/clients'
+    | '/admin/comptabilite'
     | '/admin/conference'
     | '/admin/evenements'
     | '/admin/finance'
@@ -664,6 +698,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/$'
     | '/a-propos'
     | '/auth'
     | '/blog'
@@ -680,6 +715,7 @@ export interface FileRouteTypes {
     | '/mentions-legales'
     | '/offres'
     | '/reserver'
+    | '/reserver-sans-compte'
     | '/restaurant'
     | '/services'
     | '/_authenticated/admin'
@@ -691,6 +727,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/campagnes'
     | '/_authenticated/admin/chambres'
     | '/_authenticated/admin/clients'
+    | '/_authenticated/admin/comptabilite'
     | '/_authenticated/admin/conference'
     | '/_authenticated/admin/evenements'
     | '/_authenticated/admin/finance'
@@ -723,6 +760,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  SplatRoute: typeof SplatRoute
   AProposRoute: typeof AProposRoute
   AuthRoute: typeof AuthRoute
   BlogRoute: typeof BlogRouteWithChildren
@@ -739,6 +777,7 @@ export interface RootRouteChildren {
   MentionsLegalesRoute: typeof MentionsLegalesRoute
   OffresRoute: typeof OffresRoute
   ReserverRoute: typeof ReserverRoute
+  ReserverSansCompteRoute: typeof ReserverSansCompteRoute
   RestaurantRoute: typeof RestaurantRoute
   ServicesRoute: typeof ServicesRoute
 }
@@ -757,6 +796,13 @@ declare module '@tanstack/react-router' {
       path: '/restaurant'
       fullPath: '/restaurant'
       preLoaderRoute: typeof RestaurantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reserver-sans-compte': {
+      id: '/reserver-sans-compte'
+      path: '/reserver-sans-compte'
+      fullPath: '/reserver-sans-compte'
+      preLoaderRoute: typeof ReserverSansCompteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reserver': {
@@ -869,6 +915,13 @@ declare module '@tanstack/react-router' {
       path: '/a-propos'
       fullPath: '/a-propos'
       preLoaderRoute: typeof AProposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -1095,6 +1148,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminConferenceRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/comptabilite': {
+      id: '/_authenticated/admin/comptabilite'
+      path: '/comptabilite'
+      fullPath: '/admin/comptabilite'
+      preLoaderRoute: typeof AuthenticatedAdminComptabiliteRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/clients': {
       id: '/_authenticated/admin/clients'
       path: '/clients'
@@ -1160,6 +1220,7 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminCampagnesRoute: typeof AuthenticatedAdminCampagnesRoute
   AuthenticatedAdminChambresRoute: typeof AuthenticatedAdminChambresRoute
   AuthenticatedAdminClientsRoute: typeof AuthenticatedAdminClientsRouteWithChildren
+  AuthenticatedAdminComptabiliteRoute: typeof AuthenticatedAdminComptabiliteRoute
   AuthenticatedAdminConferenceRoute: typeof AuthenticatedAdminConferenceRoute
   AuthenticatedAdminEvenementsRoute: typeof AuthenticatedAdminEvenementsRoute
   AuthenticatedAdminFinanceRoute: typeof AuthenticatedAdminFinanceRoute
@@ -1195,6 +1256,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminCampagnesRoute: AuthenticatedAdminCampagnesRoute,
     AuthenticatedAdminChambresRoute: AuthenticatedAdminChambresRoute,
     AuthenticatedAdminClientsRoute: AuthenticatedAdminClientsRouteWithChildren,
+    AuthenticatedAdminComptabiliteRoute: AuthenticatedAdminComptabiliteRoute,
     AuthenticatedAdminConferenceRoute: AuthenticatedAdminConferenceRoute,
     AuthenticatedAdminEvenementsRoute: AuthenticatedAdminEvenementsRoute,
     AuthenticatedAdminFinanceRoute: AuthenticatedAdminFinanceRoute,
@@ -1267,6 +1329,7 @@ const ChambresRouteWithChildren = ChambresRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  SplatRoute: SplatRoute,
   AProposRoute: AProposRoute,
   AuthRoute: AuthRoute,
   BlogRoute: BlogRouteWithChildren,
@@ -1283,6 +1346,7 @@ const rootRouteChildren: RootRouteChildren = {
   MentionsLegalesRoute: MentionsLegalesRoute,
   OffresRoute: OffresRoute,
   ReserverRoute: ReserverRoute,
+  ReserverSansCompteRoute: ReserverSansCompteRoute,
   RestaurantRoute: RestaurantRoute,
   ServicesRoute: ServicesRoute,
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { fetchAllRooms, ROOM_STATUS_BADGE, ROOM_STATUS_LABEL, ROOM_TYPE_LABEL, type RoomWithPhotos, formatXOF } from "@/lib/rooms";
+import { MediaPicker } from "@/components/admin/media/MediaPicker";
 import { Plus, Edit, Trash2, Upload, Image as ImageIcon, X } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
@@ -222,6 +223,23 @@ function RoomEditor({ draft, existing, onClose, onSave, saving }: { draft: Draft
     qc.invalidateQueries({ queryKey: ["public-rooms"] });
   }
 
+  async function addPhotoFromGallery(url: string) {
+    if (!existing) return;
+    const { error } = await supabase.from("room_photos").insert({
+      room_id: existing.id,
+      url,
+      sort_order: existing.photos.length,
+      is_cover: existing.photos.length === 0,
+    });
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    qc.invalidateQueries({ queryKey: ["admin-rooms"] });
+    qc.invalidateQueries({ queryKey: ["public-rooms"] });
+    toast.success("Image ajoutée depuis la médiathèque");
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-xl bg-card shadow-2xl">
@@ -258,30 +276,40 @@ function RoomEditor({ draft, existing, onClose, onSave, saving }: { draft: Draft
           </label>
 
           {existing && (
-            <div className="rounded-lg border border-border p-4">
-              <div className="flex items-center justify-between">
-                <h3 className="font-medium">Photos</h3>
-                <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-input px-3 py-2 text-sm hover:bg-secondary">
-                  <Upload className="size-4" />
-                  {uploading ? "Envoi…" : "Ajouter"}
-                  <input type="file" multiple accept="image/*" className="hidden" onChange={handlePhotoUpload} disabled={uploading} />
-                </label>
-              </div>
-              {existing.photos.length === 0 ? (
-                <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground"><ImageIcon className="size-4" /> Aucune photo</p>
-              ) : (
-                <div className="mt-4 grid grid-cols-3 gap-3 md:grid-cols-4">
-                  {existing.photos.map((p) => (
-                    <div key={p.id} className="group relative aspect-square overflow-hidden rounded-md bg-muted">
-                      <img src={p.url} alt="" className="size-full object-cover" />
-                      <button type="button" onClick={() => removePhoto(p.id)} className="absolute right-1 top-1 rounded-full bg-black/60 p-1 text-white opacity-0 transition group-hover:opacity-100">
-                        <Trash2 className="size-3" />
-                      </button>
-                    </div>
-                  ))}
+            <>
+              <div className="rounded-lg border border-border p-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-medium">Photos</h3>
+                  <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-input px-3 py-2 text-sm hover:bg-secondary">
+                    <Upload className="size-4" />
+                    {uploading ? "Envoi…" : "Ajouter"}
+                    <input type="file" multiple accept="image/*" className="hidden" onChange={handlePhotoUpload} disabled={uploading} />
+                  </label>
                 </div>
-              )}
-            </div>
+                {existing.photos.length === 0 ? (
+                  <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground"><ImageIcon className="size-4" /> Aucune photo</p>
+                ) : (
+                  <div className="mt-4 grid grid-cols-3 gap-3 md:grid-cols-4">
+                    {existing.photos.map((p) => (
+                      <div key={p.id} className="group relative aspect-square overflow-hidden rounded-md bg-muted">
+                        <img src={p.url} alt="" className="size-full object-cover" />
+                        <button type="button" onClick={() => removePhoto(p.id)} className="absolute right-1 top-1 rounded-full bg-black/60 p-1 text-white opacity-0 transition group-hover:opacity-100">
+                          <Trash2 className="size-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="rounded-lg border border-border p-4">
+                <MediaPicker
+                  value=""
+                  onChange={(url) => void addPhotoFromGallery(url)}
+                  label="Ajouter une image depuis la médiathèque"
+                  triggerLabel="Choisir depuis la médiathèque"
+                />
+              </div>
+            </>
           )}
 
           <div className="flex justify-end gap-3 border-t border-border pt-4">

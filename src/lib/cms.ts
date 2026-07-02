@@ -1,14 +1,33 @@
 import { HOTEL } from "@/lib/content";
-import { getSiteSetting } from "@/lib/site-settings";
+import { getSiteSetting, setSiteSetting } from "@/lib/site-settings";
 import { fetchGalleryItems, type GalleryItem } from "@/lib/gallery-admin";
 import { fetchReviews, type Review } from "@/lib/reviews-admin";
 
+export type SocialLinks = {
+  facebook?: string;
+  instagram?: string;
+  linkedin?: string;
+  tiktok?: string;
+  twitter?: string;
+  youtube?: string;
+};
+
 export type HotelInfoCms = {
+  name?: string;
+  description?: string;
   tagline?: string;
   slogan?: string;
   address?: string;
   phone?: string;
   email?: string;
+  whatsapp?: string;
+  social?: Partial<SocialLinks>;
+  hours?: {
+    checkIn?: string;
+    checkOut?: string;
+    restaurant?: string;
+  };
+  banking?: string;
 };
 
 export type SeoHomeCms = {
@@ -18,18 +37,55 @@ export type SeoHomeCms = {
   ogImage?: string;
 };
 
+export type GlobalContent = {
+  footerTagline: string;
+  reservationMessage: string;
+  reservationMessageRoom: string;
+  reservationMessageRestaurant: string;
+  reservationMessageEvent: string;
+};
+
+export const DEFAULT_GLOBAL_CONTENT: GlobalContent = {
+  footerTagline: "Un séjour de qualité, un accueil personnalisé et un cadre d'exception à Anié.",
+  reservationMessage: "Bonjour, je souhaite réserver une chambre pour une date précise.",
+  reservationMessageRoom: "Bonjour, je souhaite réserver la chambre Deluxe pour le prochain séjour.",
+  reservationMessageRestaurant: "Bonjour, je souhaite réserver une table au restaurant.",
+  reservationMessageEvent: "Bonjour, je souhaite organiser un événement au Cheval d'Or.",
+};
+
 export const SITE_URL = import.meta.env.VITE_SITE_URL ?? "https://cheval-or.vercel.app";
 
-export async function fetchHotelInfo() {
-  const cms = await getSiteSetting<HotelInfoCms>("hotel_info", {});
+export function mergeHotelInfo(cms: Partial<HotelInfoCms> = {}) {
   return {
     ...HOTEL,
+    ...cms,
+    name: cms.name ?? HOTEL.name,
+    description: cms.description ?? HOTEL.tagline,
     tagline: cms.tagline ?? HOTEL.tagline,
     slogan: cms.slogan ?? HOTEL.slogan,
     address: cms.address ?? HOTEL.address,
     phone: cms.phone ?? HOTEL.phone,
     email: cms.email ?? HOTEL.email,
+    whatsapp: cms.whatsapp ?? HOTEL.whatsapp,
+    social: { ...HOTEL.social, ...cms.social },
+    hours: { ...HOTEL.hours, ...cms.hours },
+    banking: cms.banking ?? "",
   };
+}
+
+export async function fetchHotelInfo() {
+  const cms = await getSiteSetting<HotelInfoCms>("hotel_info", {});
+  return mergeHotelInfo(cms);
+}
+
+export async function fetchGlobalContent() {
+  const cms = await getSiteSetting<GlobalContent>("global_content", DEFAULT_GLOBAL_CONTENT);
+  return { ...DEFAULT_GLOBAL_CONTENT, ...cms };
+}
+
+export async function saveGlobalContent(value: GlobalContent) {
+  await setSiteSetting("global_content", value);
+  return value;
 }
 
 export async function fetchSeoHome() {

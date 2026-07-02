@@ -11,7 +11,7 @@ import {
   assignCustomRole, removeCustomRole,
 } from "@/lib/users";
 import { fetchCustomRoles } from "@/lib/rbac";
-import { adminResetPassword, adminSetAccountStatus } from "@/lib/rbac.server";
+import { adminCreateUser, adminResetPassword, adminSetAccountStatus } from "@/lib/rbac.server";
 import { downloadCsv } from "@/lib/export";
 import { fetchLoginHistory } from "@/lib/audit";
 import { AdminPageHeader, StatCard } from "@/components/admin/AdminPageHeader";
@@ -39,6 +39,17 @@ function AdminUsers() {
   const [statusFilter, setStatusFilter] = useState<AccountStatus | "">("");
   const [editing, setEditing] = useState<UserWithRoles | null>(null);
   const [historyUser, setHistoryUser] = useState<UserWithRoles | null>(null);
+  const [creating, setCreating] = useState(false);
+  const [newUser, setNewUser] = useState({
+    email: "",
+    full_name: "",
+    phone: "",
+    department: "",
+    job_title: "",
+    roles: ["reception"] as AppRole[],
+    account_status: "active" as AccountStatus,
+    mfa_required: false,
+  });
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin-users"],
@@ -88,6 +99,13 @@ function AdminUsers() {
       else await assignRole(userId, role);
       toast.success(hasIt ? "Rôle retiré" : "Rôle attribué");
       qc.invalidateQueries({ queryKey: ["admin-users"] });
+      setEditing((prev) => {
+        if (!prev || prev.id !== userId) return prev;
+        const roles = hasIt
+          ? prev.roles.filter((r) => r !== role)
+          : [...prev.roles, role];
+        return { ...prev, roles };
+      });
     } catch (e: unknown) { toast.error(e instanceof Error ? e.message : "Erreur"); }
   }
 
@@ -132,6 +150,42 @@ function AdminUsers() {
     } catch (e: unknown) { toast.error(e instanceof Error ? e.message : "Erreur"); }
   }
 
+  async function createUser() {
+    if (!user) return;
+    try {
+      const res = await adminCreateUser({
+        data: {
+          callerUserId: user.id,
+          callerPermissions: permissions,
+          email: newUser.email,
+          full_name: newUser.full_name,
+          phone: newUser.phone,
+          department: newUser.department || undefined,
+          job_title: newUser.job_title || undefined,
+          roles: newUser.roles,
+          mfa_required: newUser.mfa_required,
+          account_status: newUser.account_status,
+        },
+      });
+      if (!res.ok) throw new Error(res.error ?? "Échec création utilisateur");
+      toast.success("Utilisateur créé. Un email d&#39;invitation a été envoyé.");
+      setCreating(false);
+      setNewUser({
+        email: "",
+        full_name: "",
+        phone: "",
+        department: "",
+        job_title: "",
+        roles: ["reception"],
+        account_status: "active",
+        mfa_required: false,
+      });
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Erreur");
+    }
+  }
+
   function exportUsers() {
     downloadCsv(
       "utilisateurs-cheval-dor.csv",
@@ -154,11 +208,82 @@ function AdminUsers() {
       >
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={exportUsers}><Download className="mr-1 size-4" />Export CSV</Button>
+          {hasPermission("user.edit") && (
+            <Button variant="outline" size="sm" onClick={() => setCreating(true)}>Nouvel utilisateur</Button>
+          )}
           {hasPermission("role.view") && (
             <Button variant="hero" size="sm" asChild><Link to="/admin/roles">Matrice des rôles</Link></Button>
           )}
         </div>
       </AdminPageHeader>
+
+      {creating && (
+        <Dialog open onOpenChange={(o) => !o && setCreating(false)}>
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+            <DialogHeader><DialogTitle>Nouveau compte</DialogTitle></DialogHeader>
+            <div className="grid gap-3">
+              <label className="text-sm">Email
+                <input className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} />
+              </label>
+              <label className="text-sm">Nom complet
+                <input className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.full_name} onChange={(e) => setNewUser({ ...newUser, full_name: e.target.value })} />
+              </label>
+              <label className="text-sm">Téléphone
+                <input className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.phone} onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })} />
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <label className="text-sm">Département
+                  <select className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.department} onChange={(e) => setNewUser({ ...newUser, department: e.target.value })}>
+                    <option value="">—</option>
+                    {DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}
+                  </select>
+                </label>
+                <label className="text-sm">Poste
+                  <input className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.job_title} onChange={(e) => setNewUser({ ...newUser, job_title: e.target.value })} />
+                </label>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <label className="text-sm">Statut
+                  <select className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.account_status} onChange={(e) => setNewUser({ ...newUser, account_status: e.target.value as AccountStatus })}>
+                    {(Object.keys(STATUS_LABEL) as AccountStatus[]).map((s) => (
+                      <option key={s} value={s}>{STATUS_LABEL[s]}</option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" checked={newUser.mfa_required} onChange={(e) => setNewUser({ ...newUser, mfa_required: e.target.checked })} />
+                  2FA obligatoire
+                </label>
+              </div>
+              <div className="border-t pt-3">
+                <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">Rôles attribués</p>
+                <div className="grid gap-2">
+                  {STAFF_ASSIGNABLE.map((role) => {
+                    const checked = newUser.roles.includes(role);
+                    return (
+                      <label key={role} className="flex items-center justify-between rounded-lg border border-border px-3 py-2">
+                        <span className="text-sm">{ROLE_LABEL[role]}</span>
+                        <input type="checkbox" checked={checked} onChange={(e) => {
+                          setNewUser((prev) => ({
+                            ...prev,
+                            roles: e.target.checked
+                              ? Array.from(new Set([...prev.roles, role]))
+                              : prev.roles.filter((r) => r !== role),
+                          }));
+                        }} />
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setCreating(false)}>Annuler</Button>
+              <Button onClick={createUser}>Créer</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Total utilisateurs" value={stats.total} Icon={Users} />
@@ -367,6 +492,142 @@ function AdminUsers() {
             <DialogFooter>
               <Button variant="outline" onClick={() => setEditing(null)}>Annuler</Button>
               <Button onClick={saveProfile}>Enregistrer</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {creating && (
+        <Dialog open onOpenChange={(o) => !o && setCreating(false)}>
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+            <DialogHeader><DialogTitle>Nouveau compte</DialogTitle></DialogHeader>
+            <div className="grid gap-3">
+              <label className="text-sm">Email
+                <input className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} />
+              </label>
+              <label className="text-sm">Nom complet
+                <input className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.full_name} onChange={(e) => setNewUser({ ...newUser, full_name: e.target.value })} />
+              </label>
+              <label className="text-sm">Téléphone
+                <input className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.phone} onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })} />
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <label className="text-sm">Département
+                  <select className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.department} onChange={(e) => setNewUser({ ...newUser, department: e.target.value })}>
+                    <option value="">—</option>
+                    {DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}
+                  </select>
+                </label>
+                <label className="text-sm">Poste
+                  <input className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.job_title} onChange={(e) => setNewUser({ ...newUser, job_title: e.target.value })} />
+                </label>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <label className="text-sm">Statut
+                  <select className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.account_status} onChange={(e) => setNewUser({ ...newUser, account_status: e.target.value as AccountStatus })}>
+                    {(Object.keys(STATUS_LABEL) as AccountStatus[]).map((s) => (
+                      <option key={s} value={s}>{STATUS_LABEL[s]}</option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" checked={newUser.mfa_required} onChange={(e) => setNewUser({ ...newUser, mfa_required: e.target.checked })} />
+                  2FA obligatoire
+                </label>
+              </div>
+              <div className="border-t pt-3">
+                <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">Rôles attribués</p>
+                <div className="grid gap-2">
+                  {STAFF_ASSIGNABLE.map((role) => {
+                    const checked = newUser.roles.includes(role);
+                    return (
+                      <label key={role} className="flex items-center justify-between rounded-lg border border-border px-3 py-2">
+                        <span className="text-sm">{ROLE_LABEL[role]}</span>
+                        <input type="checkbox" checked={checked} onChange={(e) => {
+                          setNewUser((prev) => ({
+                            ...prev,
+                            roles: e.target.checked
+                              ? Array.from(new Set([...prev.roles, role]))
+                              : prev.roles.filter((r) => r !== role),
+                          }));
+                        }} />
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setCreating(false)}>Annuler</Button>
+              <Button onClick={createUser}>Créer</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {creating && (
+        <Dialog open onOpenChange={(o) => !o && setCreating(false)}>
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+            <DialogHeader><DialogTitle>Nouveau compte</DialogTitle></DialogHeader>
+            <div className="grid gap-3">
+              <label className="text-sm">Email
+                <input className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} />
+              </label>
+              <label className="text-sm">Nom complet
+                <input className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.full_name} onChange={(e) => setNewUser({ ...newUser, full_name: e.target.value })} />
+              </label>
+              <label className="text-sm">Téléphone
+                <input className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.phone} onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })} />
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <label className="text-sm">Département
+                  <select className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.department} onChange={(e) => setNewUser({ ...newUser, department: e.target.value })}>
+                    <option value="">—</option>
+                    {DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}
+                  </select>
+                </label>
+                <label className="text-sm">Poste
+                  <input className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.job_title} onChange={(e) => setNewUser({ ...newUser, job_title: e.target.value })} />
+                </label>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <label className="text-sm">Statut
+                  <select className="mt-1 w-full rounded-md border px-3 py-2 text-sm" value={newUser.account_status} onChange={(e) => setNewUser({ ...newUser, account_status: e.target.value as AccountStatus })}>
+                    {(Object.keys(STATUS_LABEL) as AccountStatus[]).map((s) => (
+                      <option key={s} value={s}>{STATUS_LABEL[s]}</option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex items-center gap-2 text-sm">
+                  <input type="checkbox" checked={newUser.mfa_required} onChange={(e) => setNewUser({ ...newUser, mfa_required: e.target.checked })} />
+                  2FA obligatoire
+                </label>
+              </div>
+              <div className="border-t pt-3">
+                <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">Rôles attribués</p>
+                <div className="grid gap-2">
+                  {STAFF_ASSIGNABLE.map((role) => {
+                    const checked = newUser.roles.includes(role);
+                    return (
+                      <label key={role} className="flex items-center justify-between rounded-lg border border-border px-3 py-2">
+                        <span className="text-sm">{ROLE_LABEL[role]}</span>
+                        <input type="checkbox" checked={checked} onChange={(e) => {
+                          setNewUser((prev) => ({
+                            ...prev,
+                            roles: e.target.checked
+                              ? Array.from(new Set([...prev.roles, role]))
+                              : prev.roles.filter((r) => r !== role),
+                          }));
+                        }} />
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setCreating(false)}>Annuler</Button>
+              <Button onClick={createUser}>Créer</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

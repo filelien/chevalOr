@@ -6,6 +6,10 @@ export type CmsPageSection = {
   title: string;
   body: string;
   image?: string;
+  visible?: boolean;
+  sort_order?: number;
+  ctaLabel?: string;
+  ctaHref?: string;
 };
 
 export type CmsPage = {
@@ -83,6 +87,27 @@ const DEFAULT_PAGES: CmsPage[] = [
 export async function fetchCmsPages(): Promise<CmsPage[]> {
   const data = await getSiteSetting<CmsPage[]>("cms_pages", DEFAULT_PAGES);
   return data.length ? data : DEFAULT_PAGES;
+}
+
+export function normalizeCmsPagePath(path: string) {
+  if (!path) return "/";
+  const trimmed = path.startsWith("/") ? path : `/${path}`;
+  return trimmed === "/" ? "/" : trimmed.replace(/\/+$/, "");
+}
+
+export function findCmsPageByPath(path: string, pages: CmsPage[] = []) {
+  const normalized = normalizeCmsPagePath(path);
+  return pages.find((page) => {
+    const pagePath = normalizeCmsPagePath(page.path);
+    const slugPath = normalizeCmsPagePath(page.slug);
+    return pagePath === normalized || slugPath === normalized || slugPath === normalizeCmsPagePath(normalized.replace(/^\//, ""));
+  }) ?? null;
+}
+
+export function getVisibleCmsSections(page: CmsPage) {
+  return [...(page.sections ?? [])]
+    .filter((section) => section.visible !== false)
+    .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
 }
 
 export async function saveCmsPages(pages: CmsPage[]) {
