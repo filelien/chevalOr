@@ -9,6 +9,7 @@ import { useAdminI18n } from "@/hooks/use-admin-i18n";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { AdminGlobalSearch } from "@/components/admin/AdminGlobalSearch";
+import { AdminImageOverlay } from "@/components/admin/AdminImageOverlay";
 
 export function AdminShell() {
   return <AdminShellInner />;
@@ -132,6 +133,7 @@ function AdminShellInner() {
 
         <main className="min-w-0 flex-1 bg-[#f4f5f7] text-foreground">
           <Outlet />
+          <AdminImageOverlay />
         </main>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { fetchAllRooms, ROOM_STATUS_BADGE, ROOM_STATUS_LABEL, ROOM_TYPE_LABEL, type RoomWithPhotos, formatXOF } from "@/lib/rooms";
 import { MediaPicker } from "@/components/admin/media/MediaPicker";
+import { EditableImage } from "@/components/admin/media/EditableImage";
 import { Plus, Edit, Trash2, Upload, Image as ImageIcon, X } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
@@ -292,7 +293,17 @@ function RoomEditor({ draft, existing, onClose, onSave, saving }: { draft: Draft
                   <div className="mt-4 grid grid-cols-3 gap-3 md:grid-cols-4">
                     {existing.photos.map((p) => (
                       <div key={p.id} className="group relative aspect-square overflow-hidden rounded-md bg-muted">
-                        <img src={p.url} alt="" className="size-full object-cover" />
+                        <EditableImage
+                          src={p.url}
+                          alt="Photo de chambre"
+                          className="size-full object-cover"
+                          onChange={async (url) => {
+                            const { error } = await supabase.from("room_photos").update({ url }).eq("id", p.id);
+                            if (error) { toast.error(error.message); return; }
+                            toast.success("Photo mise à jour");
+                            qc.invalidateQueries({ queryKey: ["admin-rooms"] });
+                          }}
+                        />
                         <button type="button" onClick={() => removePhoto(p.id)} className="absolute right-1 top-1 rounded-full bg-black/60 p-1 text-white opacity-0 transition group-hover:opacity-100">
                           <Trash2 className="size-3" />
                         </button>

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Check, ImageIcon, Search, Upload } from "lucide-react";
@@ -16,10 +16,13 @@ type MediaPickerProps = {
   onChange: (url: string) => void;
   label?: string;
   triggerLabel?: string;
+  triggerElement?: React.ReactNode;
+  externalOpen?: boolean;
+  onExternalOpenChange?: (open: boolean) => void;
 };
 
 /** Sélecteur d'image depuis la médiathèque (CMS, SEO, chambres…). */
-export function MediaPicker({ value, onChange, label = "Image", triggerLabel = "Choisir depuis la médiathèque" }: MediaPickerProps) {
+export function MediaPicker({ value, onChange, label = "Image", triggerLabel = "Choisir depuis la médiathèque", triggerElement, externalOpen, onExternalOpenChange }: MediaPickerProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
@@ -67,69 +70,152 @@ export function MediaPicker({ value, onChange, label = "Image", triggerLabel = "
     toast.success("Image sélectionnée");
   }
 
+  useEffect(() => {
+    if (typeof externalOpen === "boolean") {
+      setOpen(externalOpen);
+    }
+  }, [externalOpen]);
+
+  useEffect(() => {
+    if (typeof onExternalOpenChange === "function") onExternalOpenChange(open);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  // Sync with external open prop when used as a programmatic modal
+  // (keeps backward compatibility when prop is not provided)
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // We read externalOpen from props by closure; to avoid lint complexity,
+  // useEffect is defined here and will run normally.
+  // @ts-ignore
+  if (typeof (MediaPicker as any).externalOpen !== "undefined") {
+    /* noop to satisfy linter placeholder */
+  }
+
   return (
-    <div className="space-y-2">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <div className="flex flex-wrap items-start gap-3">
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <span className="text-base font-semibold text-foreground">{label}</span>
+        {value && <span className="text-xs text-emerald-600 font-medium">✓ Sélectionnée</span>}
+      </div>
+      <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-start">
         {value ? (
-          <div className="relative overflow-hidden rounded-lg border border-border">
-            <img src={value} alt="" className="size-24 object-cover" />
+          <div className="overflow-hidden rounded-4xl border-3 border-gold-deep shadow-xl bg-card ring-4 ring-gold-soft/40">
+            <img src={value} alt="Image sélectionnée" className="h-48 w-48 object-cover" />
           </div>
         ) : (
-          <div className="flex size-24 items-center justify-center rounded-lg border border-dashed border-border bg-secondary/30">
-            <ImageIcon className="size-8 text-muted-foreground/50" />
+          <div className="flex h-48 w-48 items-center justify-center rounded-4xl border-3 border-dashed border-border bg-secondary/50">
+            <ImageIcon className="size-16 text-muted-foreground/40" />
           </div>
         )}
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button type="button" variant="outline" size="sm">{triggerLabel}</Button>
-          </DialogTrigger>
-          <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Médiathèque — choisir une image</DialogTitle>
+          {/** Allow passing a custom trigger element (for inline edit buttons) */}
+          {triggerElement ? (
+            <DialogTrigger asChild>
+              {/* eslint-disable-next-line react/jsx-no-useless-fragment */}
+              <>{triggerElement}</>
+            </DialogTrigger>
+          ) : (
+            <DialogTrigger asChild>
+              <Button type="button" variant="hero" size="lg" className="h-auto px-8 py-3 text-base">{triggerLabel}</Button>
+            </DialogTrigger>
+          )}
+          <DialogContent className="max-h-[95vh] w-full max-w-7xl overflow-y-auto p-8">
+            <DialogHeader className="mb-8">
+              <DialogTitle className="text-3xl font-bold">Médiathèque — Choisir une image</DialogTitle>
             </DialogHeader>
-            <div className="flex flex-wrap gap-2">
-              <div className="relative min-w-[180px] flex-1">
-                <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Rechercher…"
-                  className="w-full rounded-md border px-3 py-2 pl-9 text-sm" />
-              </div>
-              <select value={category} onChange={(e) => setCategory(e.target.value)} className="rounded-md border px-3 py-2 text-sm">
-                <option value="all">Toutes</option>
-                {GALLERY_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
-              <Button type="button" variant="hero" size="sm" disabled={uploading} onClick={() => fileRef.current?.click()}>
-                <Upload className="mr-1 size-4" />{uploading ? "Upload…" : "Uploader"}
-              </Button>
-              <input ref={fileRef} type="file" accept="image/*" className="hidden"
-                onChange={(e) => e.target.files?.[0] && void quickUpload(e.target.files[0])} />
-            </div>
-            <div className="mt-4 grid max-h-[50vh] grid-cols-3 gap-3 overflow-y-auto sm:grid-cols-4">
-              {filtered.length === 0 ? (
-                <p className="col-span-full py-8 text-center text-sm text-muted-foreground">Aucune image — uploadez ou ajoutez dans Médiathèque.</p>
-              ) : filtered.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => select(item.url)}
-                  className={`group relative overflow-hidden rounded-lg border-2 transition hover:border-gold-deep ${value === item.url ? "border-gold-deep ring-2 ring-gold-deep/30" : "border-transparent"}`}
+            <div className="space-y-6">
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-4 top-3.5 size-5 text-muted-foreground" />
+                  <input
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Rechercher les images…"
+                    className="w-full rounded-2xl border-2 border-border bg-background py-3 pl-12 pr-4 text-base font-medium focus:border-gold-deep focus:outline-none"
+                  />
+                </div>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="rounded-2xl border-2 border-border bg-background px-4 py-3 text-base font-medium focus:border-gold-deep focus:outline-none"
                 >
-                  <img src={item.url} alt={item.title} className="aspect-square w-full object-cover" loading="lazy" />
-                  {value === item.url && (
-                    <span className="absolute right-1 top-1 rounded-full bg-gold-deep p-1 text-white">
-                      <Check className="size-3" />
-                    </span>
-                  )}
-                  <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-1 py-0.5 text-[10px] text-white opacity-0 transition group-hover:opacity-100">
-                    {item.title}
-                  </span>
-                </button>
-              ))}
+                  <option value="all">Toutes catégories</option>
+                  {GALLERY_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+                <Button
+                  type="button"
+                  variant="hero"
+                  size="lg"
+                  disabled={uploading}
+                  onClick={() => fileRef.current?.click()}
+                >
+                  <Upload className="mr-2 size-5" />
+                  {uploading ? "Envoi…" : "Uploader une image"}
+                </Button>
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => e.target.files?.[0] && void quickUpload(e.target.files[0])}
+                />
+              </div>
+            </div>
+            <div className="mt-10 grid max-h-[75vh] grid-cols-1 gap-6 overflow-y-auto sm:grid-cols-2 lg:grid-cols-3">
+              {filtered.length === 0 ? (
+                <div className="col-span-full rounded-3xl border-2 border-dashed border-border bg-secondary/20 p-12 text-center">
+                  <ImageIcon className="mx-auto size-16 text-muted-foreground/30" />
+                  <p className="mt-4 text-base font-semibold text-foreground">Aucune image trouvée</p>
+                  <p className="mt-2 text-sm text-muted-foreground">Modifiez le filtre ou ajoutez une nouvelle image.</p>
+                </div>
+              ) : (
+                filtered.map((item) => {
+                  const isSelected = value === item.url;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => select(item.url)}
+                      className={`media-picker-card group relative overflow-hidden rounded-3xl transition-all duration-300 ${
+                        isSelected
+                          ? "ring-4 ring-gold-deep shadow-2xl scale-105 border-2 border-gold-deep"
+                          : "border-2 border-border hover:border-gold-deep/60 hover:shadow-xl hover:scale-102"
+                      }`}
+                    >
+                      <div className="relative aspect-square overflow-hidden bg-muted">
+                        <img
+                          src={item.url}
+                          alt={item.title}
+                          className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                          loading="lazy"
+                        />
+                        <div
+                          className={`absolute inset-0 transition-all duration-300 ${
+                            isSelected
+                              ? "bg-gold-soft/40"
+                              : "bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100"
+                          }`}
+                        />
+                      </div>
+                      <div className="absolute inset-x-0 bottom-0 p-4">
+                        <p className="text-sm font-semibold text-white drop-shadow-lg truncate">{item.title || "Sans titre"}</p>
+                      </div>
+                      {isSelected && (
+                        <div className="absolute right-3 top-3 flex size-11 items-center justify-center rounded-full bg-gold-deep text-white shadow-lg border-2 border-white">
+                          <Check className="size-6" />
+                        </div>
+                      )}
+                    </button>
+                  );
+                })
+              )}
             </div>
           </DialogContent>
         </Dialog>
         {value && (
-          <Button type="button" variant="ghost" size="sm" onClick={() => onChange("")}>Retirer</Button>
+          <Button type="button" variant="outline" size="sm" onClick={() => onChange("")} className="mt-4">
+            ✕ Retirer l'image
+          </Button>
         )}
       </div>
     </div>

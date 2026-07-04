@@ -15,6 +15,7 @@ import {
   sortGalleryItems, type GalleryItem, type MediaSortBy,
 } from "@/lib/gallery-admin";
 import { uploadGalleryFile } from "@/lib/media-upload";
+import { EditableImage } from "./EditableImage";
 
 type ViewMode = "grid" | "list";
 
@@ -389,7 +390,15 @@ export function MediaLibrary({ compact = false }: { compact?: boolean }) {
                     </button>
                   </td>
                   <td className="p-3 w-28">
-                    <img src={item.url} alt={item.title} className="size-20 rounded-md object-cover" />
+                    <div className="w-20 h-20">
+                      <EditableImage src={item.url} alt={item.title} className="rounded-md" onChange={async (url) => {
+                        try {
+                          await saveGalleryItem({ ...item, url });
+                          toast.success("Image mise à jour");
+                          qc.invalidateQueries({ queryKey: ["admin-gallery"] });
+                        } catch (e: any) { toast.error(e.message); }
+                      }} />
+                    </div>
                   </td>
                   <td className="p-3 font-medium text-foreground">{item.title}</td>
                   <td className="p-3 text-xs text-muted-foreground space-y-1">

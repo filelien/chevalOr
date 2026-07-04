@@ -6,6 +6,7 @@ import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
 import { Button } from "@/components/ui/button";
 import { getSiteSetting, setSiteSetting } from "@/lib/site-settings";
 import { MediaPicker } from "@/components/admin/media/MediaPicker";
+import { EditableImage } from "@/components/admin/media/EditableImage";
 
 export const Route = createFileRoute("/_authenticated/admin/seo")({
   component: AdminSeo,
@@ -87,11 +88,13 @@ function AdminSeo() {
           </div>
           <div className="rounded-xl border border-border bg-card overflow-hidden">
             <p className="border-b border-border px-6 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Aperçu réseaux sociaux</p>
-            {form.ogImage ? (
-              <img src={form.ogImage} alt="" className="aspect-[1.91/1] w-full object-cover" />
-            ) : (
-              <div className="flex aspect-[1.91/1] items-center justify-center bg-secondary text-sm text-muted-foreground">Ajoutez une image OG</div>
-            )}
+            <EditableImage
+              src={form.ogImage}
+              alt={form.title || "Open Graph image"}
+              className="aspect-[1.91/1] w-full"
+              onChange={(url) => setForm((f) => ({ ...f, ogImage: url }))}
+              placeholder={<div className="flex aspect-[1.91/1] items-center justify-center bg-secondary text-sm text-muted-foreground">Ajoutez une image OG</div>}
+            />
             <div className="p-4">
               <p className="font-medium line-clamp-1">{form.title}</p>
               <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{form.description}</p>

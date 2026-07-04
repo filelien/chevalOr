@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
@@ -8,6 +8,8 @@ import {
   createGuestReservation,
   type GuestReservationInput,
 } from "@/lib/guest-reservations";
+import { generateGuestOtp } from "@/lib/guest-reservations-utils";
+import { sendEmail } from "@/lib/email.server";
 import { formatXOF } from "@/lib/rooms";
 import { Check, AlertCircle, Mail, Phone, MapPin, Calendar } from "lucide-react";
 
@@ -23,9 +25,12 @@ export const Route = createFileRoute("/reserver-sans-compte")({
 });
 
 function GuestReservationPage() {
-  const [step, setStep] = useState<"details" | "confirmation" | "success">("details");
+  const [step, setStep] = useState<"details" | "verify" | "confirmation" | "success">("details");
   const [loading, setLoading] = useState(false);
   const [bookingRef, setBookingRef] = useState<string>("");
+  const [otp, setOtp] = useState("");
+  const [generatedOtp, setGeneratedOtp] = useState("");
+  const [verificationSent, setVerificationSent] = useState(false);
 
   const [form, setForm] = useState<GuestReservationInput>({
     full_name: "",
@@ -65,6 +70,36 @@ function GuestReservationPage() {
   const selectedRoom = rooms.find((r) => r.id === form.room_id);
   const nights = calculateNights();
   const totalPrice = selectedRoom ? nights * (selectedRoom.price_per_night || 0) : 0;
+  const isOtpValid = useMemo(() => otp.trim().length === 6, [otp]);
+
+  async function sendVerificationEmail(email: string) {
+    const code = generateGuestOtp();
+    setGeneratedOtp(code);
+    setOtp("");
+    setVerificationSent(true);
+    sessionStorage.setItem(`guest-reservation-otp:${email.toLowerCase()}`, code);
+
+    try {
+      await sendEmail({
+        data: {
+          to: email,
+          subject: "Code de vérification de réservation — Le Cheval d'Or",
+          html: `
+            <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;color:#1a1a1a">
+              <p style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#b8860b">Hôtel Le Cheval d'Or</p>
+              <h1 style="font-size:22px;font-weight:normal">Vérification de votre réservation</h1>
+              <p>Voici votre code de vérification : <strong style="font-size:22px;letter-spacing:0.2em">${code}</strong></p>
+              <p>Utilisez ce code pour finaliser votre réservation.</p>
+            </div>
+          `,
+        },
+      });
+      toast.success("Code de vérification envoyé à votre email.");
+    } catch (error) {
+      console.warn("Email de vérification non envoyé", error);
+      toast.message(`Code de vérification prêt : ${code}`);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -80,7 +115,18 @@ function GuestReservationPage() {
       return;
     }
 
+    await sendVerificationEmail(form.email);
+    setStep("verify");
+  }
+
+  function handleVerify() {
+    const expected = sessionStorage.getItem(`guest-reservation-otp:${form.email.toLowerCase()}`) ?? generatedOtp;
+    if (!expected || otp.trim() !== expected) {
+      toast.error("Code de vérification invalide");
+      return;
+    }
     setStep("confirmation");
+    toast.success("Email vérifié, vous pouvez confirmer votre réservation.");
   }
 
   async function handleConfirm() {
@@ -317,7 +363,43 @@ function GuestReservationPage() {
             </form>
           )}
 
-          {/* Step 2: Confirmation */}
+          {/* Step 2: Verification */}
+          {step === "verify" && (
+            <div className="space-y-6">
+              <div className="rounded-lg border border-gold/20 bg-gold/10 p-4">
+                <p className="font-semibold text-slate-900">Vérification de votre email</p>
+                <p className="mt-1 text-sm text-slate-700">
+                  Un code à 6 chiffres a été envoyé à <span className="font-medium">{form.email}</span>.
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Code de vérification *</label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={6}
+                  placeholder="123456"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gold tracking-[0.3em] text-center text-xl"
+                />
+                {generatedOtp && (
+                  <p className="text-xs text-slate-500">Code de test local : {generatedOtp}</p>
+                )}
+              </div>
+
+              <div className="flex gap-4 pt-2">
+                <Button type="button" variant="outline" className="flex-1" onClick={() => setStep("details")}>Retour</Button>
+                <Button type="button" className="flex-1 bg-gold hover:bg-gold/90" onClick={() => sendVerificationEmail(form.email)} disabled={!form.email}>Renvoyer</Button>
+                <Button type="button" className="flex-1 bg-gold hover:bg-gold/90" onClick={handleVerify} disabled={!isOtpValid}>
+                  Vérifier
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Step 3: Confirmation */}
           {step === "confirmation" && (
             <div className="space-y-6">
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex gap-3">

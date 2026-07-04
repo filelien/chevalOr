@@ -433,12 +433,44 @@ html { scroll-behavior: smooth; }
 .media-card img {
   will-change: transform;
 }
+.media-picker-card {
+  /* Force a large, consistent square thumbnail for clear selection */
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 260px; /* larger size for easier selection when many images */
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+.media-picker-card > .relative,
+.media-picker-card > img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.media-picker-card img {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.25s ease;
+}
+.media-picker-card:hover img {
+  transform: scale(1.06);
+}
+.media-picker-card:focus-visible {
+  box-shadow: 0 0 0 3px var(--gold-soft);
+}
 @media (prefers-reduced-motion: reduce) {
   .animated-bar,
   .occupancy-ring-progress,
   .kanban-card,
   .animated-number,
-  .media-card img {
+  .media-card img,
+  .media-picker-card,
+  .media-picker-card img {
     animation: none !important;
     transition: none !important;
   }

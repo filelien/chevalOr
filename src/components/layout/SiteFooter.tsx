@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo.png";
 import { useI18n } from "@/lib/i18n";
 import { useHotelCms } from "@/hooks/use-hotel-cms";
+import { useSiteImage } from "@/hooks/use-site-image";
 import { NewsletterForm } from "@/components/site/NewsletterForm";
 import { LanguageSwitcherFooter } from "@/components/site/LanguageSwitcher";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
@@ -9,12 +10,13 @@ import { Facebook, Instagram, Linkedin } from "lucide-react";
 export function SiteFooter() {
   const { t } = useI18n();
   const { hotel } = useHotelCms();
+  const siteLogo = useSiteImage("site.logo", logo);
   return (
     <footer className="mt-24 bg-onyx text-[oklch(0.92_0.01_85)]">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-16 md:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
           <div className="flex items-center gap-3">
-            <img src={logo} alt="" className="h-12 w-12" width={48} height={48} loading="lazy" />
+            <img src={siteLogo ?? logo} alt="" data-admin-key="site.logo" className="h-12 w-12" width={48} height={48} loading="lazy" />
             <span className="font-display text-xl">Le Cheval d'Or</span>
           </div>
           <p className="mt-4 text-sm text-white/60 max-w-sm">{t.footer.tagline}</p>

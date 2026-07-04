@@ -1,11 +1,13 @@
 import type { ReactNode } from "react";
+import { useSiteImage } from "@/hooks/use-site-image";
 
 export function PageHero({ image, label, title, subtitle, children }: {
   image: string; label?: string; title: string; subtitle?: string; children?: ReactNode;
 }) {
   return (
     <section className="relative h-[50vh] min-h-[380px] overflow-hidden">
-      <img src={image} alt="" className="absolute inset-0 size-full object-cover" />
+    const siteHero = useSiteImage("site.heroImage", image);
+      <img src={siteHero ?? image} alt="" data-admin-key="site.heroImage" className="absolute inset-0 size-full object-cover" />
       <div className="absolute inset-0 bg-black/50" />
       <div className="absolute inset-0 bg-[image:var(--gradient-hero)]" />
       <div className="relative z-10 mx-auto flex h-full max-w-5xl flex-col items-center justify-center px-6 text-center text-white">

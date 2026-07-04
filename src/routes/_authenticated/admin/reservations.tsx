@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
-import { CheckCircle2, XCircle, FileText, Receipt, Edit3, Search, Plus, Download } from "lucide-react";
+import { CheckCircle2, XCircle, FileText, Receipt, Edit3, Search, Plus, Download, Mail } from "lucide-react";
 import {
   ViewModeToggle, ReservationKanban, ReservationCards, type ViewMode,
 } from "@/components/admin/reservations/ReservationViews";
@@ -45,6 +45,20 @@ function AdminReservations() {
         .from("reservations")
         .select("*, rooms(name, number, price_per_night), profiles(full_name, email, phone, address)")
         .order("check_in", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const { data: pendingGuestReservations = [] } = useQuery({
+    queryKey: ["admin-pending-guest-reservations"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("reservations")
+        .select("id, reference, check_in, check_out, total_price, created_at, status, profiles(full_name, email, phone), rooms(name, number)")
+        .eq("source", "guest_portal")
+        .eq("status", "pending")
+        .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
     },
@@ -122,6 +136,30 @@ function AdminReservations() {
           )}
         </div>
       </AdminPageHeader>
+
+      {pendingGuestReservations.length > 0 && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
+          <div className="flex items-center gap-2 text-amber-900">
+            <Mail className="size-4" />
+            <h3 className="font-semibold">Vérification email en attente</h3>
+          </div>
+          <p className="mt-1 text-sm text-amber-800">
+            {pendingGuestReservations.length} réservation(s) invitée(s) attendent la validation email avant confirmation.
+          </p>
+          <div className="mt-4 space-y-2">
+            {pendingGuestReservations.map((r: any) => (
+              <div key={r.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-200 bg-white/70 p-3">
+                <div>
+                  <div className="font-medium text-slate-900">{r.profiles?.full_name ?? "Client invité"}</div>
+                  <div className="text-sm text-slate-600">{r.profiles?.email} · {r.profiles?.phone ?? "—"}</div>
+                  <div className="text-xs text-slate-500">{r.reference} · {r.rooms?.name ?? "—"} · {r.check_in} → {r.check_out}</div>
+                </div>
+                <Button size="sm" variant="hero" onClick={() => action(() => confirmReservation(r.id), "Réservation confirmée")}>Valider</Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <div className="relative">
