@@ -2,7 +2,25 @@ import { HOTEL } from "@/lib/content";
 import type { SeoHomeCms } from "@/lib/cms";
 import { SITE_URL } from "@/lib/cms";
 import { HOTEL_LOGO_SRC } from "@/components/brand/HotelLogo";
-import hero from "@/assets/hero.jpg";
+
+/** Image Open Graph statique (logo) — URL absolue pour WhatsApp, Facebook, etc. */
+export const OG_IMAGE_PATH = "/og-image.png";
+export const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
+export const OG_IMAGE_ALT = `${HOTEL.name} — logo officiel`;
+
+export function ogImageMeta(image: string = OG_IMAGE_URL, alt: string = OG_IMAGE_ALT) {
+  return [
+    { property: "og:image", content: image },
+    { property: "og:image:secure_url", content: image },
+    { property: "og:image:type", content: "image/png" },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: alt },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:image", content: image },
+    { name: "twitter:image:alt", content: alt },
+  ];
+}
 
 export function hotelJsonLd(hotel: typeof HOTEL = HOTEL) {
   return {
@@ -13,7 +31,7 @@ export function hotelJsonLd(hotel: typeof HOTEL = HOTEL) {
     url: SITE_URL,
     telephone: hotel.phone,
     email: hotel.email,
-    image: `${SITE_URL}/logo.png`,
+    image: `${SITE_URL}${OG_IMAGE_PATH}`,
     logo: `${SITE_URL}/apple-touch-icon.png`,
     address: {
       "@type": "PostalAddress",
@@ -44,7 +62,7 @@ export function buildPageMeta(opts: {
   type?: string;
 }) {
   const url = opts.path ? `${SITE_URL}${opts.path}` : SITE_URL;
-  const image = opts.image ?? `${SITE_URL}${hero}`;
+  const image = opts.image ?? OG_IMAGE_URL;
   return [
     { title: opts.title },
     { name: "description", content: opts.description },
@@ -54,12 +72,10 @@ export function buildPageMeta(opts: {
     { property: "og:description", content: opts.description },
     { property: "og:type", content: opts.type ?? "website" },
     { property: "og:url", content: url },
-    { property: "og:image", content: image },
     { property: "og:site_name", content: HOTEL.name },
-    { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: opts.title },
     { name: "twitter:description", content: opts.description },
-    { name: "twitter:image", content: image },
+    ...ogImageMeta(image),
   ];
 }
 
@@ -72,7 +88,7 @@ export function homeMetaFromCms(seo: SeoHomeCms & { title: string; description: 
   });
 }
 
-export const DEFAULT_OG_IMAGE = hero;
+export const DEFAULT_OG_IMAGE = OG_IMAGE_URL;
 export const SITE_LOGO = HOTEL_LOGO_SRC;
 
 export const PUBLIC_ROUTES = [

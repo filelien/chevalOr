@@ -43,6 +43,20 @@ def extract_horse_mark(transparent: Image.Image) -> Image.Image:
     return padded
 
 
+def build_og_image(transparent: Image.Image) -> Image.Image:
+    """Image 1200×630 pour aperçu WhatsApp / Facebook / Twitter."""
+    width, height = 1200, 630
+    cream = (250, 248, 244, 255)
+    canvas = Image.new("RGBA", (width, height), cream)
+
+    logo = transparent.copy()
+    logo.thumbnail((int(width * 0.78), int(height * 0.62)), Image.Resampling.LANCZOS)
+    x = (width - logo.size[0]) // 2
+    y = (height - logo.size[1]) // 2
+    canvas.paste(logo, (x, y), logo)
+    return canvas
+
+
 def main():
     source = SRC if os.path.exists(SRC) else LEGACY_SRC
     img = Image.open(source).convert("RGB")
@@ -65,7 +79,10 @@ def main():
     mark = extract_horse_mark(transparent)
     mark.save(os.path.join(assets, "logo-mark.png"), optimize=True)
 
-    print(f"OK source={img.size} transparent={transparent.size} mark={mark.size}")
+    og = build_og_image(transparent)
+    og.save(os.path.join(public, "og-image.png"), optimize=True)
+
+    print(f"OK source={img.size} transparent={transparent.size} mark={mark.size} og={og.size}")
 
 
 if __name__ == "__main__":

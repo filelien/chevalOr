@@ -10,8 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import hero from "@/assets/hero.jpg";
-import { hotelJsonLd } from "@/lib/seo";
+import { hotelJsonLd, ogImageMeta, OG_IMAGE_URL } from "@/lib/seo";
 import { SITE_URL } from "@/lib/cms";
 import { FAVICON_LINKS } from "@/lib/favicon";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -88,9 +87,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Hôtel Le Cheval d'Or" },
       { property: "og:description", content: "Une adresse d'exception au cœur du Togo." },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: `${SITE_URL}${hero}` },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: `${SITE_URL}${hero}` },
+      { property: "og:url", content: SITE_URL },
+      ...ogImageMeta(OG_IMAGE_URL),
     ],
     links: [
       ...FAVICON_LINKS,

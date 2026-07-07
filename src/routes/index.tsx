@@ -8,7 +8,7 @@ import {
 } from "@/lib/cms";
 import { useSiteContent } from "@/hooks/use-site-content";
 import { useI18n } from "@/lib/i18n";
-import { homeMetaFromCms } from "@/lib/seo";
+import { homeMetaFromCms, OG_IMAGE_URL } from "@/lib/seo";
 import { QuickBookingBar } from "@/components/site/QuickBookingBar";
 import { Reveal } from "@/components/site/Reveal";
 import { NewsletterForm } from "@/components/site/NewsletterForm";
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/")({
     meta: homeMetaFromCms(loaderData?.seo ?? {
       title: "Hôtel Le Cheval d'Or — Votre référence à Anié, Togo",
       description: "Hôtel à Anié, centre du Togo : chambres climatisées, restaurant, salle de conférence.",
-      ogImage: "https://cheval-or.vercel.app/assets/hero.jpg",
+      ogImage: OG_IMAGE_URL,
     }),
   }),
   component: Index,

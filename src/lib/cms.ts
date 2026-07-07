@@ -102,7 +102,7 @@ export async function fetchSeoHome() {
       cms.description ??
       "Hôtel à Anié, centre du Togo : chambres climatisées, restaurant, salle de conférence, parking sécurisé.",
     keywords: cms.keywords ?? "hôtel Anié, Togo, conférence, séminaire",
-    ogImage: cms.ogImage ?? `${SITE_URL}/assets/hero.jpg`,
+    ogImage: cms.ogImage ?? `${SITE_URL}/og-image.png`,
   };
 }
 
