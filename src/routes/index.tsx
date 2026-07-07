@@ -75,7 +75,7 @@ function Index() {
       <section className="hero-cinematic relative h-[92vh] min-h-[640px] w-full overflow-hidden">
         <img src={hero} alt="" className="absolute inset-0 size-full object-cover" />
         <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center text-white">
-          <HotelLogo size="xl" tone="hero" wrap className="hero-fade-up mb-6" />
+          <HotelLogo size="xl" tone="hero" wrap priority className="hero-fade-up mb-6" />
           <span className="hero-fade-up hero-fade-up-delay-1 mb-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/30 px-5 py-2 text-[11px] font-medium uppercase tracking-[0.35em] text-white backdrop-blur-md">
             <Star className="size-3 fill-gold text-gold" /> {HOME.hero.eyebrow}
           </span>

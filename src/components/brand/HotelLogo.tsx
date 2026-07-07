@@ -31,6 +31,8 @@ type HotelLogoProps = {
   src?: string;
   adminKey?: string;
   wrap?: boolean;
+  /** Chargement prioritaire (hero, above the fold) */
+  priority?: boolean;
 };
 
 export const HOTEL_LOGO_SRC = logo;
@@ -45,6 +47,7 @@ export function HotelLogo({
   src,
   adminKey,
   wrap = false,
+  priority = false,
 }: HotelLogoProps) {
   const img = (
     <img
@@ -55,10 +58,11 @@ export function HotelLogo({
         "w-auto max-w-none object-contain transition-[filter,opacity] duration-300",
         SIZES[size],
         TONES[tone],
-        className,
+        !wrap && className,
       )}
-      loading="lazy"
+      loading={priority ? "eager" : "lazy"}
       decoding="async"
+      fetchPriority={priority ? "high" : undefined}
     />
   );
 
@@ -68,9 +72,10 @@ export function HotelLogo({
     <span
       className={cn(
         "inline-flex items-center justify-center",
-        tone === "hero" && "rounded-2xl bg-black/25 px-5 py-3 ring-1 ring-white/15 backdrop-blur-md",
+        tone === "hero" && "rounded-2xl bg-white/10 px-5 py-3 ring-1 ring-white/25 backdrop-blur-sm",
         tone === "dark" && "rounded-xl bg-white/5 px-3 py-2 ring-1 ring-white/10",
         tone === "light" && "rounded-xl bg-[#faf8f4]/60 px-3 py-1.5 ring-1 ring-[#c9a227]/15",
+        className,
       )}
     >
       {img}

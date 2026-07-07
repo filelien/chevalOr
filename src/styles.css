@@ -285,6 +285,13 @@ html { scroll-behavior: smooth; }
   animation: heroFadeUp 1s ease forwards;
   opacity: 0;
 }
+@media (prefers-reduced-motion: reduce) {
+  .hero-fade-up {
+    opacity: 1;
+    animation: none;
+    transform: none;
+  }
+}
 .hero-fade-up-delay-1 { animation-delay: 0.15s; }
 .hero-fade-up-delay-2 { animation-delay: 0.3s; }
 .hero-fade-up-delay-3 { animation-delay: 0.45s; }
